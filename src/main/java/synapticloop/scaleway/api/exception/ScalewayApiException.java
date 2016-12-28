@@ -1,4 +1,4 @@
-package synapticloop.scaleway.request;
+package synapticloop.scaleway.api.exception;
 
 /*
  * Copyright (c) 2016 synapticloop.
@@ -16,13 +16,27 @@ package synapticloop.scaleway.request;
  * this source code or binaries.
  */
 
-public abstract class BaseRequest {
-	protected static final String BASE_API = "https://api.scaleway.com";
-	protected static final String BASE_ACCOUNT_API = "https://account.scaleway.com";
+public class ScalewayApiException extends Exception {
+	private static final long serialVersionUID = -7535143860328025468L;
 
-
-	public BaseRequest() {
-		// TODO Auto-generated constructor stub
+	public ScalewayApiException() {
+		super();
 	}
 
+	public ScalewayApiException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+		super(message, cause, enableSuppression, writableStackTrace);
+	}
+
+	public ScalewayApiException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+	public ScalewayApiException(String message) {
+		super(message);
+	}
+
+	public ScalewayApiException(Throwable cause) {
+		super(cause);
+	}
 }
+

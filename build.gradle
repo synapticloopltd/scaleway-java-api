@@ -26,47 +26,6 @@ repositories {
 	jcenter()
 }
 
-configurations {
-	generate
-}
-
-sourceSets {
-	generate {
-		java {
-			srcDir 'src/generate/java'
-		}
-		resources {
-			srcDir 'src/generate/resources'
-		}
-		output.resourcesDir = 'build/classes/generate'
-		output.classesDir = 'build/classes/generate'
-
-		compileClasspath += sourceSets.main.output
-	}
-}
-
-eclipse {
-	classpath {
-		plusConfigurations += [ configurations.generateCompile ]
-	}
-}
-
-task generateCompile(type: JavaCompile) {
-	source = sourceSets.generate.java.srcDirs
-	source += sourceSets.main.java.srcDirs
-	classpath = configurations.generateCompile
-	classpath += configurations.compile
-	destinationDir = file("build/classes/generate")
-}
-
-task generate(type: JavaExec) {
-	dependsOn "generateCompile"
-	main = "synapticloop.scaleway.Main"
-	classpath += configurations.generateRuntime
-	classpath += configurations.runtime
-	classpath += sourceSets.generate.output
-	classpath += sourceSets.main.output
-}
 configurations.all {
 	resolutionStrategy {
 		failOnVersionConflict()
@@ -87,29 +46,21 @@ configurations.all {
 dependencies {
 	runtime 'org.apache.httpcomponents:httpclient:4.5.1'
 	runtime 'commons-io:commons-io:2.4'
-	runtime 'org.json:json:20160212'
+	runtime 'com.fasterxml.jackson.core:jackson-databind:2.8.5'
 	runtime 'org.slf4j:slf4j-api:1.7.13'
 
 	compile 'org.apache.httpcomponents:httpclient:4.5.1'
 	compile 'commons-io:commons-io:2.4'
-	compile 'org.json:json:20160212'
+	compile 'com.fasterxml.jackson.core:jackson-databind:2.8.5'
 	compile 'org.slf4j:slf4j-api:1.7.13'
-
-	generateCompile 'synapticloop:templar:1.2.1'
-	generateCompile 'org.jsoup:jsoup:1.8.3'
-
-	generateRuntime 'synapticloop:templar:1.2.1'
-	generateRuntime 'org.jsoup:jsoup:1.8.3'
 
 	testCompile 'junit:junit:4.12'
 	testCompile 'org.apache.logging.log4j:log4j-slf4j-impl:2.5'
 	testCompile 'org.apache.logging.log4j:log4j-core:2.5'
-	testCompile 'org.json:json:20160212'
 
 	testRuntime 'junit:junit:4.12'
 	testRuntime 'org.apache.logging.log4j:log4j-slf4j-impl:2.5'
 	testRuntime 'org.apache.logging.log4j:log4j-core:2.5'
-	testRuntime 'org.json:json:20160212'
 }
 /*
  * COBERTURA

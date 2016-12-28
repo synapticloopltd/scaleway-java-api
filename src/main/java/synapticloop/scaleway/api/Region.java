@@ -1,7 +1,4 @@
-package synapticloop.scaleway;
-
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
+package synapticloop.scaleway.api;
 
 /*
  * Copyright (c) 2016 synapticloop.
@@ -19,19 +16,13 @@ import org.apache.http.impl.client.HttpClients;
  * this source code or binaries.
  */
 
-public class ScalewayApiClient {
-	private final CloseableHttpClient client;
+public enum Region {
+	PARIS1("par1"),
+	AMSTERDAM1("ams1");
+	
+	public final String region;
 
-	public ScalewayApiClient(String username, String password) {
-		this();
-	}
-
-	public ScalewayApiClient() {
-		this(HttpClients.createDefault());
-	}
-
-	public ScalewayApiClient(CloseableHttpClient client) {
-		this.client = client;
-	}
-
+	Region(String region){ this.region=region; }
+	
+	public String toString() { return(region); }
 }
