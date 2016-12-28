@@ -49,13 +49,35 @@ public class ScalewayApiClientTest {
 			System.exit(-1);
 		}
 
-		scalewayApiClient = new ScalewayApiClient(scalewayToken, null, Region.PARIS1);
+		scalewayApiClient = new ScalewayApiClient(scalewayToken, Region.PARIS1);
 	}
 
 	@Test
 	public void testGetAllImages() throws ScalewayApiException {
 		List<Image> images = scalewayApiClient.getAllImages();
 		assertNotNull(images);
+	}
+
+	@Test
+	public void testGetImages() throws ScalewayApiException {
+		List<Image> images = scalewayApiClient.getAllImages();
+		assertNotNull(images);
+		Image image = images.get(0);
+
+		Image singleImage = scalewayApiClient.getImage(image.getId());
+		assertEquals(image.getArch(), singleImage.getArch());
+		assertEquals(image.getCreationDate(), singleImage.getCreationDate());
+		assertEquals(image.getDefaultBootscript().getId(), singleImage.getDefaultBootscript().getId());
+		assertEquals(image.getExtraVolumes(), singleImage.getExtraVolumes());
+		assertEquals(image.getFromImage(), singleImage.getFromImage());
+		assertEquals(image.getFromServer(), singleImage.getFromServer());
+		assertEquals(image.getId(), singleImage.getId());
+		assertEquals(image.getIsPublicImage(), singleImage.getIsPublicImage());
+		assertEquals(image.getMarketplaceKey(), singleImage.getMarketplaceKey());
+		assertEquals(image.getModificationDate(), singleImage.getModificationDate());
+		assertEquals(image.getName(), singleImage.getName());
+		assertEquals(image.getOrganization(), singleImage.getOrganization());
+		assertEquals(image.getRootVolume().getId(), singleImage.getRootVolume().getId());
 	}
 
 	@Test

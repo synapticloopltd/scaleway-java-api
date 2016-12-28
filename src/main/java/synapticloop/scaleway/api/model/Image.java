@@ -33,7 +33,7 @@ public class Image {
 	@JsonProperty("modification_date")   private Date modificationDate;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSX")
 	@JsonProperty("creation_date")       private Date creationDate;
-	@JsonProperty("default_bootscript")  private BootScript defaultbootscript;
+	@JsonProperty("default_bootscript")  private BootScript defaultBootscript;
 	@JsonProperty("organization")        private String organization;
 	@JsonProperty("arch")                private String arch;
 	@JsonProperty("root_volume")         private Volume rootVolume;
@@ -57,7 +57,7 @@ public class Image {
 
 	public String getArch() { return arch; }
 
-	public BootScript getDefaultbootscript() { return defaultbootscript; }
+	public BootScript getDefaultBootscript() { return defaultBootscript; }
 
 	public Volume getRootVolume() { return rootVolume; }
 
@@ -82,6 +82,6 @@ public class Image {
 
 	@Override
 	public String toString() {
-		return "Image [id=" + this.id + ", modificationDate=" + this.modificationDate + ", creationDate=" + this.creationDate + ", defaultbootscript=" + this.defaultbootscript + ", organization=" + this.organization + ", arch=" + this.arch + ", rootVolume=" + this.rootVolume + ", name=" + this.name + ", extraVolumes=" + this.extraVolumes + ", isPublicImage=" + this.isPublicImage + ", fromImage=" + this.fromImage + ", fromServer=" + this.fromServer + ", marketplaceKey=" + this.marketplaceKey + "]";
+		return "Image [id=" + this.id + ", modificationDate=" + this.modificationDate + ", creationDate=" + this.creationDate + ", defaultbootscript=" + this.defaultBootscript + ", organization=" + this.organization + ", arch=" + this.arch + ", rootVolume=" + this.rootVolume + ", name=" + this.name + ", extraVolumes=" + this.extraVolumes + ", isPublicImage=" + this.isPublicImage + ", fromImage=" + this.fromImage + ", fromServer=" + this.fromServer + ", marketplaceKey=" + this.marketplaceKey + "]";
 	}
 }

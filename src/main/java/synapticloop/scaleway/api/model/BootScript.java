@@ -71,4 +71,8 @@ public class BootScript {
 
 	public void setDtb(String dtb) { this.dtb = dtb; }
 
+	@Override
+	public String toString() {
+		return "BootScript [id=" + this.id + ", organization=" + this.organization + ", title=" + this.title + ", bootcmdargs=" + this.bootcmdargs + ", initrd=" + this.initrd + ", architecture=" + this.architecture + ", kernel=" + this.kernel + ", dtb=" + this.dtb + ", isDefault=" + this.isDefault + ", isPublic=" + this.isPublic + "]";
+	}
 }
