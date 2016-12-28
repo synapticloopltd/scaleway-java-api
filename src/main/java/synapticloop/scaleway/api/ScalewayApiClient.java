@@ -71,14 +71,18 @@ public class ScalewayApiClient {
 	private static final String PATH_SERVERS_SLASH_ACTION_SLASH = "servers/%s/action/%s";
 
 	private final String accessToken;
-	private final String organizationToken;
 	private final Region region;
 	private final String computeUrl;
 	private final CloseableHttpClient httpclient;
 
-	public ScalewayApiClient(String accessToken, String organizationToken, Region region) {
+	/**
+	 * 
+	 * @param accessToken
+	 * @param organizationToken
+	 * @param region
+	 */
+	public ScalewayApiClient(String accessToken, Region region) {
 		this.accessToken = accessToken;
-		this.organizationToken = organizationToken;
 		this.region = region;
 		this.computeUrl = String.format(Constants.COMPUTE_URL, region);
 
@@ -102,7 +106,7 @@ public class ScalewayApiClient {
 
 	}
 
-	public Server createServer(String serverName, Image image, ServerType serverType, String... tag) throws ScalewayApiException {
+	public Server createServer(String serverName, Image image, String organizationToken, ServerType serverType, String... tag) throws ScalewayApiException {
 		ServerDefinition serverDefinition = new ServerDefinition();
 		serverDefinition.setName(serverName);
 		serverDefinition.setImage(image.getId());
@@ -117,12 +121,12 @@ public class ScalewayApiClient {
 		deleteServer(server.getId());
 	}
 
-	public void deleteServer(String serverID) throws ScalewayApiException {
-		Server serverToDelete = getServer(serverID);
+	public void deleteServer(String serverId) throws ScalewayApiException {
+		Server serverToDelete = getServer(serverId);
 		if (serverToDelete.getState() != State.STOPPED) {
 			// TODO something
 		}
-		HttpRequestBase request = buildRequest(Constants.HTTP_METHOD_DELETE, computeUrl, String.format(PATH_SERVERS_SLASH, serverID));
+		HttpRequestBase request = buildRequest(Constants.HTTP_METHOD_DELETE, computeUrl, String.format(PATH_SERVERS_SLASH, serverId));
 		executeAndGetResponse(request, 204, null);
 	}
 

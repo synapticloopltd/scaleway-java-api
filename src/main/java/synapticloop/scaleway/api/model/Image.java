@@ -1,5 +1,7 @@
 package synapticloop.scaleway.api.model;
 
+import java.util.ArrayList;
+
 /*
  * Copyright (c) 2016 synapticloop.
  * 
@@ -21,7 +23,10 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+@JsonSerialize
 public class Image {
 	@JsonProperty("id")       private String id;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSX")
@@ -32,7 +37,8 @@ public class Image {
 	@JsonProperty("organization")        private String organization;
 	@JsonProperty("arch")                private String arch;
 	@JsonProperty("root_volume")         private Volume rootVolume;
-	@JsonProperty("name")                private String name;	
+	@JsonProperty("name")                private String name;
+	@JsonDeserialize(contentAs = Volume.class)
 	@JsonProperty("extra_volumes")       private List<Volume> extraVolumes;
 	@JsonProperty("public")              private boolean isPublicImage;
 	@JsonProperty("from_image")          private Image fromImage;
@@ -58,6 +64,15 @@ public class Image {
 	public String getName() { return name; }
 
 	public List<Volume> getExtraVolumes() { return extraVolumes; }
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void setExtraVolumes(Object extraVolumes) {
+		if(extraVolumes instanceof List) {
+			this.extraVolumes = (List)extraVolumes;
+		} else {
+			this.extraVolumes = new ArrayList();
+		}
+	}
 
 	public Image getFromImage() { return fromImage; }
 

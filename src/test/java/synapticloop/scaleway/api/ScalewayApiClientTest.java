@@ -24,7 +24,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import synapticloop.scaleway.api.exception.ScalewayApiException;
-import synapticloop.scaleway.api.model.AccountWarnings;
+import synapticloop.scaleway.api.model.AccountWarning;
 import synapticloop.scaleway.api.model.Image;
 import synapticloop.scaleway.api.model.Organization;
 
@@ -62,10 +62,17 @@ public class ScalewayApiClientTest {
 	public void testGetAccountWarnings() throws ScalewayApiException {
 		List<Organization> organizations = scalewayApiClient.getAllOrganizations();
 		for (Organization organization : organizations) {
-			List<AccountWarnings> warnings = organization.getWarnings();
-			for (AccountWarnings accountWarnings : warnings) {
-				System.out.println(accountWarnings);
-			}
+			// there should always be an account warning - as you need to sign TOS
+			AccountWarning accountWarning = organization.getWarnings().get(0);
+			assertNotNull(accountWarning.getClosedAt());
+			assertNotNull(accountWarning.getId());
+			assertNotNull(accountWarning.getIsClosableByUser());
+			assertNotNull(accountWarning.getIsClosed());
+			assertNotNull(accountWarning.getIsLocking());
+			assertNotNull(accountWarning.getLockedAt());
+			assertNotNull(accountWarning.getOpenedAt());
+			assertNotNull(accountWarning.getReason());
+			assertNotNull(accountWarning.toString());
 		}
 		assertNotNull(organizations);
 	}

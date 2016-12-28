@@ -44,7 +44,7 @@ public class Organization {
 	@JsonProperty("timezone")                  private String timezone;
 	@JsonProperty("vat_number")                private String vatNumber;
 	@JsonProperty("support_pin")               private String supportPin;
-	@JsonProperty("warnings")                  private List<AccountWarnings> warnings;
+	@JsonProperty("warnings")                  private List<AccountWarning> warnings;
 	@JsonProperty("users")                     private List<User> users;
 
 	public String getId() {
@@ -199,11 +199,11 @@ public class Organization {
 		this.supportPin = supportPin;
 	}
 
-	public List<AccountWarnings> getWarnings() {
+	public List<AccountWarning> getWarnings() {
 		return warnings;
 	}
 
-	public void setWarnings(List<AccountWarnings> warnings) {
+	public void setWarnings(List<AccountWarning> warnings) {
 		this.warnings = warnings;
 	}
 

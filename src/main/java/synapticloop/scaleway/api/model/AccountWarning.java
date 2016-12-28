@@ -21,7 +21,7 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class AccountWarnings {
+public class AccountWarning {
 	@JsonProperty("reason")            private String reason;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSX")
 	@JsonProperty("locked_at")         private Date lockedAt;
