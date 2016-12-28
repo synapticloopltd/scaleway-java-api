@@ -49,19 +49,19 @@ import synapticloop.scaleway.api.model.ImageResponse;
 import synapticloop.scaleway.api.model.ImagesResponse;
 import synapticloop.scaleway.api.model.Organization;
 import synapticloop.scaleway.api.model.Organizations;
-import synapticloop.scaleway.api.model.ServerInstance;
-import synapticloop.scaleway.api.model.TaskResponse;
-import synapticloop.scaleway.api.model.ServerInstances;
-import synapticloop.scaleway.api.model.SshPublicKey;
-import synapticloop.scaleway.api.model.SshPublicKeyResponse;
-import synapticloop.scaleway.api.model.UserResponse;
 import synapticloop.scaleway.api.model.Server;
 import synapticloop.scaleway.api.model.ServerActionsResponse;
 import synapticloop.scaleway.api.model.ServerDefinition;
+import synapticloop.scaleway.api.model.ServerInstance;
+import synapticloop.scaleway.api.model.ServerInstances;
 import synapticloop.scaleway.api.model.ServerTask;
 import synapticloop.scaleway.api.model.ServerType;
+import synapticloop.scaleway.api.model.SshPublicKey;
+import synapticloop.scaleway.api.model.SshPublicKeyResponse;
 import synapticloop.scaleway.api.model.State;
+import synapticloop.scaleway.api.model.TaskResponse;
 import synapticloop.scaleway.api.model.User;
+import synapticloop.scaleway.api.model.UserResponse;
 
 public class ScalewayApiClient {
 
@@ -162,7 +162,7 @@ public class ScalewayApiClient {
 
 	public ServerTask executeServerAction(String serverID, Action action) throws ScalewayApiException {
 		HttpPost request = (HttpPost) buildRequest(Constants.HTTP_METHOD_POST, computeUrl, String.format(PATH_SERVERS_SLASH_ACTION_SLASH, serverID, action));
-		return(executeAndGetResponse(request, 202, TaskResponse.class).getTask());
+		return(executeAndGetResponse(request, 202, TaskResponse.class).getServerTask());
 	}
 
 	public ServerTask getTaskStatus(ServerTask task) throws ScalewayApiException {
@@ -171,7 +171,7 @@ public class ScalewayApiClient {
 
 	public ServerTask getTaskStatus(String taskID) throws ScalewayApiException {
 		HttpRequestBase request = buildRequest(Constants.HTTP_METHOD_GET, computeUrl, new StringBuilder("tasks/").append(taskID).toString());
-		return(executeAndGetResponse(request, 200, TaskResponse.class).getTask());
+		return(executeAndGetResponse(request, 200, TaskResponse.class).getServerTask());
 	}
 
 	public List<Organization> getAllOrganizations() throws ScalewayApiException {
