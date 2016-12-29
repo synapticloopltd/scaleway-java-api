@@ -18,11 +18,8 @@ package synapticloop.scaleway.api;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
@@ -34,6 +31,7 @@ import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPatch;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -61,8 +59,6 @@ import synapticloop.scaleway.api.model.ServerResponse;
 import synapticloop.scaleway.api.model.ServerTask;
 import synapticloop.scaleway.api.model.ServerType;
 import synapticloop.scaleway.api.model.ServersResponse;
-import synapticloop.scaleway.api.model.SshPublicKey;
-import synapticloop.scaleway.api.model.SshPublicKeyResponse;
 import synapticloop.scaleway.api.model.TaskResponse;
 import synapticloop.scaleway.api.model.User;
 import synapticloop.scaleway.api.model.UserResponse;
@@ -72,6 +68,14 @@ import synapticloop.scaleway.api.model.VolumeType;
 import synapticloop.scaleway.api.model.VolumesResponse;
 
 public class ScalewayApiClient {
+	private static final String PATH_TASKS_SLASH = "/tasks/%s";
+
+	private static final String PATH_ORGANIZATIONS = "/organizations";
+
+	private static final String PATH_USERS_SLASH = "/users/%s";
+
+	private static final String PATH_VOLUMES = "/volumes";
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(ScalewayApiClient.class);
 
 	private static final String PATH_SERVERS = "/servers";
@@ -108,49 +112,37 @@ public class ScalewayApiClient {
 		return region;
 	}
 
+
 	/**
-	 * Get a list of all of the available images - with the results coming back 
-	 * paginated, pages start at 1, maximum number of results per page is 100.
+	 * List all of the organizations 
 	 * 
-	 * @param numPage the page number that you are requesting (starts at 1)
-	 * @param numPerPage the number of results per page - (maximum value of 100)
+	 * @return a list of all of the organizations
 	 * 
-	 * @return The list of all available images
-	 * 
-	 * @throws ScalewayApiException If there was an error with the call
+	 * @throws ScalewayApiException If there was an error with the API call
 	 */
-	public ImagesResponse getAllImages(int numPage, int numPerPage) throws ScalewayApiException {
-		HttpRequestBase request = buildRequest(Constants.HTTP_METHOD_GET, computeUrl, String.format(Constants.PATH_IMAGES, numPage, numPerPage));
-		HttpResponse response = executeRequest(request);
-		if(response.getStatusLine().getStatusCode() == 200) {
-			Header[] allHeaders = response.getAllHeaders();
-			ImagesResponse imagesResponse = parseResponse(response, ImagesResponse.class);
-			imagesResponse.setPaginationHeaders(allHeaders);
-			return(imagesResponse);
-		} else {
-			try {
-				throw new ScalewayApiException(IOUtils.toString(response.getEntity().getContent()));
-			} catch (UnsupportedOperationException | IOException ex) {
-				throw new ScalewayApiException(ex);
-			}
-		}
+	public List<Organization> getAllOrganizations() throws ScalewayApiException {
+		return(execute(Constants.HTTP_METHOD_GET, 
+				Constants.ACCOUNT_URL, 
+				PATH_ORGANIZATIONS,
+				200, 
+				Organizations.class).getOrganizations());
 	}
 
 	/**
-	 * Get the image details with the specified id
+	 * Get the user information 
 	 * 
-	 * @param imageId The ID of the image
+	 * @param userId the ID of the user to retrieve
 	 * 
-	 * @return The image
+	 * @return the user identified by the ID
 	 * 
-	 * @throws ScalewayApiException If there was an error calling the API
+	 * @throws ScalewayApiException If there was an error in the API call
 	 */
-	public Image getImage(String imageId) throws ScalewayApiException {
+	public User getUser(String userId) throws ScalewayApiException {
 		return(execute(Constants.HTTP_METHOD_GET, 
-				computeUrl, 
-				String.format(Constants.PATH_IMAGES_SLASH, imageId), 
+				Constants.ACCOUNT_URL, 
+				String.format(PATH_USERS_SLASH, userId),
 				200, 
-				ImageResponse.class).getImage());
+				UserResponse.class).getUser());
 	}
 
 	/**
@@ -189,7 +181,7 @@ public class ScalewayApiClient {
 	 * @throws ScalewayApiException If there was an error with the API call
 	 */
 	public Server createServer(ServerDefinition serverDefinition) throws ScalewayApiException {
-		HttpPost request = (HttpPost) buildRequest(Constants.HTTP_METHOD_POST, computeUrl, PATH_SERVERS);
+		HttpPost request = (HttpPost) buildRequest(Constants.HTTP_METHOD_POST, new StringBuilder(computeUrl).append(PATH_SERVERS).toString());
 		try {
 			StringEntity entity = new StringEntity(serializeObject(serverDefinition));
 			request.setEntity(entity);
@@ -228,7 +220,7 @@ public class ScalewayApiClient {
 	 * @throws ScalewayApiException If there was an error with the API call
 	 */
 	public ServersResponse getAllServers(int numPage, int numPerPage) throws ScalewayApiException {
-		HttpRequestBase request = buildRequest(Constants.HTTP_METHOD_GET, computeUrl, String.format(PATH_SERVERS, numPage, numPerPage));
+		HttpRequestBase request = buildRequest(Constants.HTTP_METHOD_GET, new StringBuilder(computeUrl).append(String.format(PATH_SERVERS, numPage, numPerPage)).toString());
 		HttpResponse response = executeRequest(request);
 		if(response.getStatusLine().getStatusCode() == 200) {
 			Header[] allHeaders = response.getAllHeaders();
@@ -243,6 +235,75 @@ public class ScalewayApiClient {
 			}
 		}
 	}
+
+	/*
+	 * Update a server
+	 * 
+	 * @param server The server with the updated information
+	 * 
+	 * @return The returned server object
+	 * 
+	 * @throws ScalewayApiException If there ws an error with the lAPI call
+	 *
+	public Server updateServer(Server server) throws ScalewayApiException {
+		HttpPut request = (HttpPut) buildRequest(Constants.HTTP_METHOD_PUT, computeUrl, String.format(PATH_SERVERS_SLASH, server.getId()));
+
+		try {
+			StringEntity entity = new StringEntity(serializeObject(server));
+			request.setEntity(entity);
+			return(executeAndGetResponse(request, 200, ServerResponse.class).getServer());
+		} catch (UnsupportedEncodingException | JsonProcessingException ex) {
+			throw new ScalewayApiException(ex);
+		}
+	}
+*/
+
+	/**
+	 * Get a list of all of the available images - with the results coming back 
+	 * paginated, pages start at 1, maximum number of results per page is 100.
+	 * 
+	 * @param numPage the page number that you are requesting (starts at 1)
+	 * @param numPerPage the number of results per page - (maximum value of 100)
+	 * 
+	 * @return The list of all available images
+	 * 
+	 * @throws ScalewayApiException If there was an error with the call
+	 */
+	public ImagesResponse getAllImages(int numPage, int numPerPage) throws ScalewayApiException {
+		HttpRequestBase request = buildRequest(Constants.HTTP_METHOD_GET, new StringBuilder(computeUrl).append(String.format(Constants.PATH_IMAGES, numPage, numPerPage)).toString());
+		HttpResponse response = executeRequest(request);
+		if(response.getStatusLine().getStatusCode() == 200) {
+			Header[] allHeaders = response.getAllHeaders();
+			ImagesResponse imagesResponse = parseResponse(response, ImagesResponse.class);
+			imagesResponse.setPaginationHeaders(allHeaders);
+			return(imagesResponse);
+		} else {
+			try {
+				throw new ScalewayApiException(IOUtils.toString(response.getEntity().getContent()));
+			} catch (UnsupportedOperationException | IOException ex) {
+				throw new ScalewayApiException(ex);
+			}
+		}
+	}
+
+	/**
+	 * Get the image details with the specified id
+	 * 
+	 * @param imageId The ID of the image
+	 * 
+	 * @return The image
+	 * 
+	 * @throws ScalewayApiException If there was an error calling the API
+	 */
+	public Image getImage(String imageId) throws ScalewayApiException {
+		return(execute(Constants.HTTP_METHOD_GET, 
+				computeUrl, 
+				String.format(Constants.PATH_IMAGES_SLASH, imageId), 
+				200, 
+				ImageResponse.class).getImage());
+	}
+
+
 
 	/**
 	 * Delete a server - this will only delete the actual server instance, but 
@@ -294,7 +355,8 @@ public class ScalewayApiClient {
 	 * @throws ScalewayApiException If there was an error with the API call
 	 */
 	public Volume createVolume(String name, String organizationId, long size, VolumeType volumeType) throws ScalewayApiException {
-		HttpPost request = (HttpPost) buildRequest(Constants.HTTP_METHOD_POST, computeUrl, "/volumes");
+		HttpPost request = (HttpPost) buildRequest(Constants.HTTP_METHOD_POST, new StringBuilder(computeUrl).append(PATH_VOLUMES).toString());
+
 		Volume volume = new Volume();
 		volume.setName(name);
 		volume.setOrganizationId(organizationId);
@@ -322,8 +384,9 @@ public class ScalewayApiClient {
 	 * @throws ScalewayApiException If there was an error with the call
 	 */
 	public VolumesResponse getAllVolumes(int numPage, int numPerPage) throws ScalewayApiException {
-		HttpRequestBase request = buildRequest(Constants.HTTP_METHOD_GET, computeUrl, String.format(Constants.PATH_VOLUMES, numPage, numPerPage));
+		HttpRequestBase request = buildRequest(Constants.HTTP_METHOD_GET, new StringBuilder(computeUrl).append(String.format(Constants.PATH_VOLUMES, numPage, numPerPage)).toString());
 		HttpResponse response = executeRequest(request);
+
 		if(response.getStatusLine().getStatusCode() == 200) {
 			Header[] allHeaders = response.getAllHeaders();
 			VolumesResponse volumesResponse = parseResponse(response, VolumesResponse.class);
@@ -367,26 +430,11 @@ public class ScalewayApiClient {
 	public void deleteVolume(String volumeId) throws ScalewayApiException {
 		execute(Constants.HTTP_METHOD_DELETE, 
 				computeUrl, 
-				String.format("/volumes/%s", volumeId), 
+				String.format(Constants.PATH_VOLUMES_SLASH, volumeId), 
 				204, 
 				null);
 	}
 
-
-	/**
-	 * List all of the organizations 
-	 * 
-	 * @return a list of all of the organizations
-	 * 
-	 * @throws ScalewayApiException If there was an error with the API call
-	 */
-	public List<Organization> getAllOrganizations() throws ScalewayApiException {
-		return(execute(Constants.HTTP_METHOD_GET, 
-				Constants.ACCOUNT_URL, 
-				"/organizations",
-				200, 
-				Organizations.class).getOrganizations());
-	}
 
 
 	/**
@@ -400,7 +448,7 @@ public class ScalewayApiClient {
 	 * @throws ScalewayApiException If there was an error with the API call
 	 */
 	public ServerTask executeServerAction(String serverId, ServerAction serverAction) throws ScalewayApiException {
-		HttpPost request = (HttpPost) buildRequest(Constants.HTTP_METHOD_POST, computeUrl, String.format(PATH_SERVERS_SLASH_ACTION, serverId));
+		HttpPost request = (HttpPost) buildRequest(Constants.HTTP_METHOD_POST, new StringBuilder(computeUrl).append(String.format(PATH_SERVERS_SLASH_ACTION, serverId)).toString());
 
 		try {
 			StringEntity entity = new StringEntity(String.format("{\"action\": \"%s\"}", serverAction.toString().toLowerCase()));
@@ -423,7 +471,7 @@ public class ScalewayApiClient {
 	public ServerTask getTaskStatus(String taskId) throws ScalewayApiException {
 		return(execute(Constants.HTTP_METHOD_GET, 
 				computeUrl, 
-				new StringBuilder("/tasks/").append(taskId).toString(),
+				String.format(PATH_TASKS_SLASH, taskId),
 				200, 
 				TaskResponse.class).getServerTask());
 	}
@@ -446,7 +494,7 @@ public class ScalewayApiClient {
 	/**
 	 * Execute the request, returning the parsed response object
 	 * 
-	 * @param httpMethod The HTTP method to execute (GET/POST/PATCH/DELETE)
+	 * @param httpMethod The HTTP method to execute (GET/POST/PATCH/DELETE/PUT)
 	 * @param url The URL to hit
 	 * @param path the path to request
 	 * @param allowableStatusCode the allowable return HTTP status code
@@ -458,29 +506,15 @@ public class ScalewayApiClient {
 	 */
 	private <T> T execute(String httpMethod, String url, String path, int allowableStatusCode, Class<T> returnClass) throws ScalewayApiException {
 		String requestPath = new StringBuilder(url).append(path).toString();
-		LOGGER.debug("Executing '{}' for url '{}'", httpMethod, requestPath);
 
-		HttpRequestBase request = null;
-		switch (httpMethod) {
-		case Constants.HTTP_METHOD_POST:
-			request = new HttpPost(requestPath);
-			break;
-		case Constants.HTTP_METHOD_GET:
-			request = new HttpGet(requestPath);
-			break;
-		case Constants.HTTP_METHOD_DELETE:
-			request = new HttpDelete(requestPath);
-			break;
-		case Constants.HTTP_METHOD_PATCH:
-			request = new HttpPatch(requestPath);
-			break;
-		}
+		HttpRequestBase request = buildRequest(httpMethod, requestPath);
 
 		request.setHeader(Constants.HEADER_AUTH_TOKEN, accessToken);
 		request.setHeader(HttpHeaders.CONTENT_TYPE, Constants.JSON_APPLICATION);
 
 		HttpResponse response;
 		try {
+			LOGGER.debug("Executing '{}' for url '{}'", httpMethod, requestPath);
 			response = httpclient.execute(request);
 		} catch (IOException ex) {
 			throw new ScalewayApiException(ex);
@@ -488,16 +522,15 @@ public class ScalewayApiClient {
 
 		int statusCode = response.getStatusLine().getStatusCode();
 
-		LOGGER.debug("Status code recieved: {}, wanted: {}.", statusCode, allowableStatusCode);
-
 		if (statusCode == allowableStatusCode) {
+			LOGGER.debug("Status code received: {}, wanted: {}.", statusCode, allowableStatusCode);
 			if(null != returnClass) {
 				return parseResponse(response, returnClass);
 			} else {
 				return(null);
 			}
 		} else {
-			LOGGER.debug("Invalid status code received: {}, wanted: {}.", statusCode, allowableStatusCode);
+			LOGGER.error("Invalid status code received: {}, wanted: {}.", statusCode, allowableStatusCode);
 			try {
 				throw new ScalewayApiException(IOUtils.toString(response.getEntity().getContent()));
 			} catch (UnsupportedOperationException | IOException ex) {
@@ -506,50 +539,55 @@ public class ScalewayApiClient {
 		}
 	}
 
+	/**
+	 * Build the request for the URI - which just returns a HttpRequestBase Object 
+	 * of the correct matching type for the passed in httpMethod
+	 * 
+	 * @param httpMethod  The HTTP method to build for
+	 * @param requestPath The full URI to build
+	 * 
+	 * @return the base HTTP object
+	 */
+	private HttpRequestBase buildRequest(String httpMethod, String requestPath) {
+		HttpRequestBase request = null;
+		switch (httpMethod) {
+		case Constants.HTTP_METHOD_GET:
+			request = new HttpGet(requestPath);
+			break;
+		case Constants.HTTP_METHOD_POST:
+			request = new HttpPost(requestPath);
+			break;
+		case Constants.HTTP_METHOD_DELETE:
+			request = new HttpDelete(requestPath);
+			break;
+		case Constants.HTTP_METHOD_PATCH:
+			request = new HttpPatch(requestPath);
+			break;
+		case Constants.HTTP_METHOD_PUT:
+			request = new HttpPut(requestPath);
+			break;
+		}
 
+		request.setHeader(Constants.HEADER_AUTH_TOKEN, accessToken);
+		request.setHeader(HttpHeaders.CONTENT_TYPE, Constants.JSON_APPLICATION);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	public User getUser(String userID) throws ScalewayApiException {
-		HttpRequestBase request = buildRequest(Constants.HTTP_METHOD_GET, Constants.ACCOUNT_URL, new StringBuilder("/users/").append(userID).toString());
-		return(executeAndGetResponse(request, 200, UserResponse.class).getUser());
+		return request;
 	}
 
-	//	private <T> T buildAndExecute(String methodType, String url, String apiCall, int allowableStatus, Class<T> responseType) {
-	////		HttpRequestBase request = buildRequest(Constants.HTTP_METHOD_GET, Constants.ACCOUNT_URL, new StringBuilder("users/").append(userID).toString());
-	////		return(executeAndGetResponse(request, 200, ScalewayUserResponse.class).getUser());
-	//
-	////		String requestPath = new StringBuilder(typeUrl).append("/").append(method).toString();
-	////		return buildRequest(type, requestPath);
-	//
-	//	}
 
-	public void addSSHKey(String userID, SshPublicKey userKeyDefinition) throws ScalewayApiException {
-		Set sshKeys = new HashSet(getUser(userID).getSshPublicKeys());
-		sshKeys.add(userKeyDefinition);
-		SshPublicKeyResponse keyDefinitions = new SshPublicKeyResponse();
-		keyDefinitions.setSshPublicKeys(new ArrayList<SshPublicKey>(sshKeys));
-		modifySSHKeys(userID, keyDefinitions);
-	}
 
-	public void modifySSHKeys(String userID, SshPublicKeyResponse userKeysDefinition) throws ScalewayApiException {
-		HttpPatch request = (HttpPatch) buildRequest(Constants.HTTP_METHOD_PATCH, Constants.ACCOUNT_URL, new StringBuilder("users/").append(userID).toString());
-		setResponseObject(request, userKeysDefinition);
-		executeAndGetResponse(request, 200, null);
-	}
+
+
+
+
+
+
+
+
+
+
+
+
 
 	private void setResponseObject(HttpEntityEnclosingRequestBase request, Object responseObject) throws ScalewayApiException {
 		try {
@@ -575,6 +613,7 @@ public class ScalewayApiClient {
 			}
 		}
 	}
+
 	private HttpResponse executeRequest(HttpRequestBase request) throws ScalewayApiException {
 		try {
 			return httpclient.execute(request);
@@ -592,32 +631,6 @@ public class ScalewayApiClient {
 	}
 
 
-	private HttpRequestBase buildRequest(String httpMethod, String url, String path) {
-		String requestPath = new StringBuilder(url).append(path).toString();
-
-		LOGGER.debug("Executing '{}' for url '{}'", httpMethod, requestPath);
-
-		HttpRequestBase request = null;
-		switch (httpMethod) {
-		case Constants.HTTP_METHOD_POST:
-			request = new HttpPost(requestPath);
-			break;
-		case Constants.HTTP_METHOD_GET:
-			request = new HttpGet(requestPath);
-			break;
-		case Constants.HTTP_METHOD_DELETE:
-			request = new HttpDelete(requestPath);
-			break;
-		case Constants.HTTP_METHOD_PATCH:
-			request = new HttpPatch(requestPath);
-			break;
-		}
-
-		request.setHeader(Constants.HEADER_AUTH_TOKEN, accessToken);
-		request.setHeader(HttpHeaders.CONTENT_TYPE, Constants.JSON_APPLICATION);
-
-		return request;
-	}
 
 	private ObjectMapper initializeObjectMapperJson() {
 		ObjectMapper mapper = new ObjectMapper();

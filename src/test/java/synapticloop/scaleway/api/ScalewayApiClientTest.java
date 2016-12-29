@@ -170,6 +170,8 @@ public class ScalewayApiClientTest {
 		assertEquals(server.getPublicIp(), returnedServer.getPublicIp());
 		assertEquals(server.getStateDetail(), returnedServer.getStateDetail());
 
+		scalewayApiClient.deleteServer(server.getId());
+
 		Map<String, Volume> volumes = server.getVolumes();
 		Iterator<String> iterator = volumes.keySet().iterator();
 		while (iterator.hasNext()) {
@@ -178,9 +180,24 @@ public class ScalewayApiClientTest {
 			scalewayApiClient.deleteVolume(volume.getId());
 		}
 
-		scalewayApiClient.deleteServer(server.getId());
 	}
+/*
+	@Test
+	public void testCreateAndUpdateServer() throws ScalewayApiException {
+		String organizationId = getOrganizationId();
 
+		Server server = scalewayApiClient.createServer("scaleway-java-api-test-server", getUbuntuImage(), organizationId, ServerType.VC1S, new String[] {"scaleway", "java", "api", "server"});
+
+		server.setName("scaleway-java-api-test-server-updated");
+
+		Server updatedServer = scalewayApiClient.updateServer(server);
+
+		assertEquals(server.getId(), updatedServer.getId());
+		assertEquals("scaleway-java-api-test-server-updated", updatedServer.getName());
+
+		scalewayApiClient.executeServerAction(server.getId(), ServerAction.TERMINATE);
+	}
+*/
 	@Test
 	public void testGetAllServers() throws ScalewayApiException {
 		ServersResponse serversResponse = scalewayApiClient.getAllServers(1, 2);
@@ -204,8 +221,15 @@ public class ScalewayApiClientTest {
 		assertNotNull(serverActions);
 		assertTrue(serverActions.size() >= 1);
 
-		scalewayApiClient.executeServerAction(server.getId(), ServerAction.TERMINATE);
 		scalewayApiClient.deleteServer(server.getId());
+
+		Map<String, Volume> volumes = server.getVolumes();
+		Iterator<String> iterator = volumes.keySet().iterator();
+		while (iterator.hasNext()) {
+			String key = (String) iterator.next();
+			Volume volume = volumes.get(key);
+			scalewayApiClient.deleteVolume(volume.getId());
+		}
 	}
 
 	@Test

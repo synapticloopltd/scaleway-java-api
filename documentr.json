@@ -1,0 +1,41 @@
+{
+	"context": {
+		"pluginId": "synapticloop.h2zero"
+	},
+	"templates": [
+		{ "type":"inbuilt", "value":"badge-travis-ci" },
+		{ "type":"inbuilt", "value":"badge-bintray" },
+		{ "type":"inbuilt", "value":"badge-shield-io-github-release" },
+
+		{ "type":"inbuilt", "value":"jvm-compatability" },
+
+
+		{ "type": "markup", "value": "\n\n# Table of Contents\n\n" },
+
+		{ "type": "toc", "value": "2" },
+		{ "type": "toclinks", "value": "true" },
+		{ "type": "tocbacktotop", "value": " <sup><sup>[top](#documentr_top)</sup></sup>"},
+
+		{ "type":"inbuilt", "value":"project-name" },
+		{ "type":"inbuilt", "value":"project-description" },
+
+		{ "type":"markup", "value":"\n\n```\n" },
+		{ "type":"file", "value":"src/test/java/synapticloop/scaleway/api/Main.java" },
+		{ "type":"markup", "value":"\n```\n\n" },
+
+		{ "type":"inbuilt", "value":"gradle-build" },
+		{ "type":"inbuilt", "value":"gradle-test" },
+		{ "type":"inbuilt", "value":"test-warn" },
+
+		{ "type":"inbuilt", "value":"logging-slf4j" },
+
+		{ "type":"inbuilt", "value":"publishing-github" },
+		{ "type":"inbuilt", "value":"publishing-bintray" },
+
+		{ "type":"inbuilt", "value":"dependencies" },
+
+		{ "type":"inbuilt", "value":"license-mit" },
+
+		{ "type":"inbuilt", "value":"attribution" }
+	]
+}
