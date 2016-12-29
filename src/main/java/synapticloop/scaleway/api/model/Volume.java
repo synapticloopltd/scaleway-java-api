@@ -25,8 +25,8 @@ public class Volume {
 	@JsonProperty("id")                 private String id;
 	@JsonProperty("name")               private String name;
 	@JsonProperty("volume_type")        private VolumeType volumeType;
-	@JsonProperty("size")               private String size;
-	@JsonProperty("organization")       private String organization;
+	@JsonProperty("size")               private long size;
+	@JsonProperty("organization")       private String organizationId;
 	@JsonProperty("export_uri")         private String exportUri;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSX")
 	@JsonProperty("modification_date")  private Date modificationDate;
@@ -39,17 +39,25 @@ public class Volume {
 	public Server getServer() { return server; }
 
 	public String getName() { return name; }
-
+	
+	public void setName(String name) { this.name = name; }
+	
 	public VolumeType getVolumeType() { return volumeType; }
 
 	public Date getModificationDate() { return modificationDate; }
 
 	public Date getCreationDate() { return creationDate; }
 
-	public String getSize() { return size; }
+	public long getSize() { return size; }
 
-	public String getOrganization() { return organization; }
+	public void setSize(long size) { this.size = size; }
+
+	public String getOrganizationId() { return organizationId; }
+
+	public void setOrganizationId(String organizationId) { this.organizationId = organizationId; }
 
 	public String getExportUri() { return exportUri; }
+
+	public void setVolumeType(VolumeType volumeType) { this.volumeType = volumeType; }
 
 }

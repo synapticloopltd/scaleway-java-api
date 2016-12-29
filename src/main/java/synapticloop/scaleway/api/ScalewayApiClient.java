@@ -66,6 +66,10 @@ import synapticloop.scaleway.api.model.SshPublicKeyResponse;
 import synapticloop.scaleway.api.model.TaskResponse;
 import synapticloop.scaleway.api.model.User;
 import synapticloop.scaleway.api.model.UserResponse;
+import synapticloop.scaleway.api.model.Volume;
+import synapticloop.scaleway.api.model.VolumeResponse;
+import synapticloop.scaleway.api.model.VolumeType;
+import synapticloop.scaleway.api.model.VolumesResponse;
 
 public class ScalewayApiClient {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ScalewayApiClient.class);
@@ -276,6 +280,82 @@ public class ScalewayApiClient {
 				ServerActionsResponse.class).getServerActions());
 	}
 
+	/**
+	 * Create a volume 
+	 * 
+	 * @param name The name of the volume to create
+	 * @param organizationId The organization ID
+	 * @param size the size of the volume which must be more than 1000000000 (1GB) 
+	 *     and less than 150000000000 (150GB).
+	 * @param volumeType the type of the volume
+	 * 
+	 * @return The newly created volume
+	 * 
+	 * @throws ScalewayApiException If there was an error with the API call
+	 */
+	public Volume createVolume(String name, String organizationId, long size, VolumeType volumeType) throws ScalewayApiException {
+		HttpPost request = (HttpPost) buildRequest(Constants.HTTP_METHOD_POST, computeUrl, "/volumes");
+		Volume volume = new Volume();
+		volume.setName(name);
+		volume.setOrganizationId(organizationId);
+		volume.setSize(size);
+		volume.setVolumeType(volumeType);
+
+		try {
+			StringEntity entity = new StringEntity(serializeObject(volume));
+			request.setEntity(entity);
+			return(executeAndGetResponse(request, 201, VolumeResponse.class).getVolume());
+		} catch (UnsupportedEncodingException | JsonProcessingException ex) {
+			throw new ScalewayApiException(ex);
+		}
+	}
+
+	/**
+	 * Get a list of all of the available volumes - with the results coming back 
+	 * paginated, pages start at 1, maximum number of results per page is 100.
+	 * 
+	 * @param numPage the page number that you are requesting (starts at 1)
+	 * @param numPerPage the number of results per page - (maximum value of 100)
+	 * 
+	 * @return The list of all available volumes
+	 * 
+	 * @throws ScalewayApiException If there was an error with the call
+	 */
+	public VolumesResponse getAllVolumes(int numPage, int numPerPage) throws ScalewayApiException {
+		HttpRequestBase request = buildRequest(Constants.HTTP_METHOD_GET, computeUrl, String.format(Constants.PATH_VOLUMES, numPage, numPerPage));
+		HttpResponse response = executeRequest(request);
+		if(response.getStatusLine().getStatusCode() == 200) {
+			Header[] allHeaders = response.getAllHeaders();
+			VolumesResponse volumesResponse = parseResponse(response, VolumesResponse.class);
+			volumesResponse.setPaginationHeaders(allHeaders);
+			return(volumesResponse);
+		} else {
+			try {
+				throw new ScalewayApiException(IOUtils.toString(response.getEntity().getContent()));
+			} catch (UnsupportedOperationException | IOException ex) {
+				throw new ScalewayApiException(ex);
+			}
+		}
+
+	}
+
+	/**
+	 * Get a volume from the passed in volume ID
+	 * 
+	 * @param volumeId The ID of the volume
+	 * 
+	 * @return the volume for the passed in ID
+	 * 
+	 * @throws ScalewayApiException If there was an error with the API call
+	 */
+	public Volume getVolume(String volumeId) throws ScalewayApiException {
+		return(execute(Constants.HTTP_METHOD_GET, 
+				computeUrl, 
+				String.format(Constants.PATH_VOLUMES_SLASH, volumeId), 
+				200, 
+				VolumeResponse.class).getVolume());
+
+	}
 
 	/**
 	 * Delete a volume by its ID
@@ -336,7 +416,7 @@ public class ScalewayApiClient {
 	 * 
 	 * @param taskId The id of the task
 	 * 
-	 * @return The servertask which includes the status
+	 * @return The server task which includes the status
 	 * 
 	 * @throws ScalewayApiException If there was an error with the API call
 	 */

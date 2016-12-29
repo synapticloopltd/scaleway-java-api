@@ -41,7 +41,7 @@ import synapticloop.scaleway.api.model.ServersResponse;
 import synapticloop.scaleway.api.model.Volume;
 
 public class ScalewayApiClientTest {
-		private static final Logger LOGGER = LoggerFactory.getLogger(ScalewayApiClientTest.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ScalewayApiClientTest.class);
 
 	private static final String SCALEWAY_API_KEY = "SCALEWAY_API_KEY";
 
@@ -249,5 +249,5 @@ public class ScalewayApiClientTest {
 
 	}
 
-	
+
 }
