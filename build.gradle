@@ -139,7 +139,7 @@ bintray {
 }
 
 github {
-	owner = group
+	owner = "synapticloopltd"
 	repo = archivesBaseName
 	if(System.getenv('GITHUB_TOKEN')) {
 		token = System.getenv('GITHUB_TOKEN')

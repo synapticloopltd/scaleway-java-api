@@ -1,4 +1,4 @@
-<a name="documentr_top"></a>[![Build Status](https://travis-ci.org/synapticloop/scaleway-java-api.svg?branch=master)](https://travis-ci.org/synapticloop/scaleway-java-api) [![Download](https://api.bintray.com/packages/synapticloop/maven/scaleway-java-api/images/download.svg)](https://bintray.com/synapticloop/maven/scaleway-java-api/_latestVersion) [![GitHub Release](https://img.shields.io/github/release/synapticloop/scaleway-java-api.svg)](https://github.com/synapticloop/scaleway-java-api/releases) 
+<a name="documentr_top"></a>[![Build Status](https://travis-ci.org/synapticloopltd/scaleway-java-api.svg?branch=master)](https://travis-ci.org/synapticloopltd/scaleway-java-api) [![Download](https://api.bintray.com/packages/synapticloop/maven/scaleway-java-api/images/download.svg)](https://bintray.com/synapticloop/maven/scaleway-java-api/_latestVersion) [![GitHub Release](https://img.shields.io/github/release/synapticloopltd/scaleway-java-api.svg)](https://github.com/synapticloopltd/scaleway-java-api/releases) 
 
 > **This project requires JVM version of at least 1.7**
 
@@ -15,22 +15,23 @@
 
  - [Table of Contents](#documentr_heading_0)
  - [scaleway-java-api](#documentr_heading_1)
- - [Building the Package](#documentr_heading_2)
-   - [*NIX/Mac OS X](#documentr_heading_3)
-   - [Windows](#documentr_heading_4)
- - [Running the Tests](#documentr_heading_5)
-   - [*NIX/Mac OS X](#documentr_heading_6)
-   - [Windows](#documentr_heading_7)
- - [Logging - slf4j](#documentr_heading_8)
-   - [Log4j](#documentr_heading_9)
- - [Artefact Publishing - Github](#documentr_heading_14)
- - [Artefact Publishing - Bintray](#documentr_heading_15)
-   - [maven setup](#documentr_heading_16)
-   - [gradle setup](#documentr_heading_17)
-   - [Dependencies - Gradle](#documentr_heading_18)
-   - [Dependencies - Maven](#documentr_heading_19)
-   - [Dependencies - Downloads](#documentr_heading_20)
- - [License](#documentr_heading_26)
+ - [Overview](#documentr_heading_2)
+ - [Building the Package](#documentr_heading_3)
+   - [*NIX/Mac OS X](#documentr_heading_4)
+   - [Windows](#documentr_heading_5)
+ - [Running the Tests](#documentr_heading_6)
+   - [*NIX/Mac OS X](#documentr_heading_7)
+   - [Windows](#documentr_heading_8)
+ - [Logging - slf4j](#documentr_heading_9)
+   - [Log4j](#documentr_heading_10)
+ - [Artefact Publishing - Github](#documentr_heading_15)
+ - [Artefact Publishing - Bintray](#documentr_heading_16)
+   - [maven setup](#documentr_heading_17)
+   - [gradle setup](#documentr_heading_18)
+   - [Dependencies - Gradle](#documentr_heading_19)
+   - [Dependencies - Maven](#documentr_heading_20)
+   - [Dependencies - Downloads](#documentr_heading_21)
+ - [License](#documentr_heading_27)
 
 
 
@@ -47,6 +48,16 @@
 
 
 
+
+
+<a name="documentr_heading_2"></a>
+
+# Overview <sup><sup>[top](#documentr_top)</sup></sup>
+
+This is a Java implementation of the Scaleway API which allows you to build and
+deploy servers on the Scaleway cloud provider.
+
+a simple example is below:
 
 
 
@@ -156,13 +167,13 @@ public class Main {
 
 
 
-<a name="documentr_heading_2"></a>
+<a name="documentr_heading_3"></a>
 
 # Building the Package <sup><sup>[top](#documentr_top)</sup></sup>
 
 
 
-<a name="documentr_heading_3"></a>
+<a name="documentr_heading_4"></a>
 
 ## *NIX/Mac OS X <sup><sup>[top](#documentr_top)</sup></sup>
 
@@ -173,7 +184,7 @@ From the root of the project, simply run
 
 
 
-<a name="documentr_heading_4"></a>
+<a name="documentr_heading_5"></a>
 
 ## Windows <sup><sup>[top](#documentr_top)</sup></sup>
 
@@ -186,13 +197,13 @@ Note that this may also run tests (if applicable see the Testing notes)
 
 
 
-<a name="documentr_heading_5"></a>
+<a name="documentr_heading_6"></a>
 
 # Running the Tests <sup><sup>[top](#documentr_top)</sup></sup>
 
 
 
-<a name="documentr_heading_6"></a>
+<a name="documentr_heading_7"></a>
 
 ## *NIX/Mac OS X <sup><sup>[top](#documentr_top)</sup></sup>
 
@@ -206,7 +217,7 @@ if you do not have gradle installed, try:
 
 
 
-<a name="documentr_heading_7"></a>
+<a name="documentr_heading_8"></a>
 
 ## Windows <sup><sup>[top](#documentr_top)</sup></sup>
 
@@ -226,7 +237,7 @@ The `--info` switch will also output logging for the tests
 
 
 
-<a name="documentr_heading_8"></a>
+<a name="documentr_heading_9"></a>
 
 # Logging - slf4j <sup><sup>[top](#documentr_top)</sup></sup>
 
@@ -234,7 +245,7 @@ slf4j is the logging framework used for this project.  In order to set up a logg
 
 
 
-<a name="documentr_heading_9"></a>
+<a name="documentr_heading_10"></a>
 
 ## Log4j <sup><sup>[top](#documentr_top)</sup></sup>
 
@@ -319,19 +330,19 @@ A sample `log4j2.xml` is below:
 
 
 
-<a name="documentr_heading_14"></a>
+<a name="documentr_heading_15"></a>
 
 # Artefact Publishing - Github <sup><sup>[top](#documentr_top)</sup></sup>
 
 This project publishes artefacts to [GitHub](https://github.com/)
 
-> Note that the latest version can be found [https://github.com/synapticloop/scaleway-java-api/releases](https://github.com/synapticloop/scaleway-java-api/releases)
+> Note that the latest version can be found [https://github.com/synapticloopltd/scaleway-java-api/releases](https://github.com/synapticloopltd/scaleway-java-api/releases)
 
 As such, this is not a repository, but a location to download files from.
 
 
 
-<a name="documentr_heading_15"></a>
+<a name="documentr_heading_16"></a>
 
 # Artefact Publishing - Bintray <sup><sup>[top](#documentr_top)</sup></sup>
 
@@ -341,7 +352,7 @@ This project publishes artefacts to [bintray](https://bintray.com/)
 
 
 
-<a name="documentr_heading_16"></a>
+<a name="documentr_heading_17"></a>
 
 ## maven setup <sup><sup>[top](#documentr_top)</sup></sup>
 
@@ -387,7 +398,7 @@ this comes from the jcenter bintray, to set up your repository:
 
 
 
-<a name="documentr_heading_17"></a>
+<a name="documentr_heading_18"></a>
 
 ## gradle setup <sup><sup>[top](#documentr_top)</sup></sup>
 
@@ -419,7 +430,7 @@ repositories {
 
 
 
-<a name="documentr_heading_18"></a>
+<a name="documentr_heading_19"></a>
 
 ## Dependencies - Gradle <sup><sup>[top](#documentr_top)</sup></sup>
 
@@ -427,9 +438,9 @@ repositories {
 
 ```
 dependencies {
-	runtime(group: 'synapticloop', name: 'scaleway-java-api', version: '0.5.0', ext: 'jar')
+	runtime(group: 'synapticloopltd', name: 'scaleway-java-api', version: '0.5.0', ext: 'jar')
 
-	compile(group: 'synapticloop', name: 'scaleway-java-api', version: '0.5.0', ext: 'jar')
+	compile(group: 'synapticloopltd', name: 'scaleway-java-api', version: '0.5.0', ext: 'jar')
 }
 ```
 
@@ -441,9 +452,9 @@ or, more simply for versions of gradle greater than 2.1
 
 ```
 dependencies {
-	runtime 'synapticloop:scaleway-java-api:0.5.0'
+	runtime 'synapticloopltd:scaleway-java-api:0.5.0'
 
-	compile 'synapticloop:scaleway-java-api:0.5.0'
+	compile 'synapticloopltd:scaleway-java-api:0.5.0'
 }
 ```
 
@@ -451,7 +462,7 @@ dependencies {
 
 
 
-<a name="documentr_heading_19"></a>
+<a name="documentr_heading_20"></a>
 
 ## Dependencies - Maven <sup><sup>[top](#documentr_top)</sup></sup>
 
@@ -459,7 +470,7 @@ dependencies {
 
 ```
 <dependency>
-	<groupId>synapticloop</groupId>
+	<groupId>synapticloopltd</groupId>
 	<artifactId>scaleway-java-api</artifactId>
 	<version>0.5.0</version>
 	<type>jar</type>
@@ -470,7 +481,7 @@ dependencies {
 
 
 
-<a name="documentr_heading_20"></a>
+<a name="documentr_heading_21"></a>
 
 ## Dependencies - Downloads <sup><sup>[top](#documentr_top)</sup></sup>
 
@@ -517,7 +528,7 @@ You will also need to download the following dependencies:
 
 
 
-<a name="documentr_heading_26"></a>
+<a name="documentr_heading_27"></a>
 
 # License <sup><sup>[top](#documentr_top)</sup></sup>
 
@@ -526,7 +537,7 @@ You will also need to download the following dependencies:
 ```
 The MIT License (MIT)
 
-Copyright (c) 2016 synapticloop
+Copyright (c) 2016 synapticloopltd
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

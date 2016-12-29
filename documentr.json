@@ -1,6 +1,7 @@
 {
 	"context": {
-		"pluginId": "synapticloop.h2zero"
+		"group": "synapticloopltd",
+		"bintrayGroup": "synapticloop"
 	},
 	"templates": [
 		{ "type":"inbuilt", "value":"badge-travis-ci" },
@@ -8,7 +9,6 @@
 		{ "type":"inbuilt", "value":"badge-shield-io-github-release" },
 
 		{ "type":"inbuilt", "value":"jvm-compatability" },
-
 
 		{ "type": "markup", "value": "\n\n# Table of Contents\n\n" },
 
@@ -18,6 +18,8 @@
 
 		{ "type":"inbuilt", "value":"project-name" },
 		{ "type":"inbuilt", "value":"project-description" },
+
+		{ "type":"file", "value":"src/docs/overview.md" },
 
 		{ "type":"markup", "value":"\n\n```\n" },
 		{ "type":"file", "value":"src/test/java/synapticloop/scaleway/api/Main.java" },
