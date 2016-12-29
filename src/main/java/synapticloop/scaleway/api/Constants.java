@@ -17,11 +17,11 @@ package synapticloop.scaleway.api;
  */
 
 public class Constants {
-	public static final String PATH_IMAGES = "images";
-	public static final String PATH_IMAGES_SLASH = "images/%s";
+	public static final String PATH_IMAGES = "/images?page=%d&per_page=%d";
+	public static final String PATH_IMAGES_SLASH = "/images/%s";
 
-	public static final String ACCOUNT_URL = "https://account.scaleway.com/";
-	public static final String COMPUTE_URL = "https://cp-%s.scaleway.com/";
+	public static final String ACCOUNT_URL = "https://account.scaleway.com";
+	public static final String COMPUTE_URL = "https://cp-%s.scaleway.com";
 
 	public static final String HEADER_AUTH_TOKEN="X-Auth-Token";
 

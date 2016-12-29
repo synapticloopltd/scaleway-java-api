@@ -17,6 +17,7 @@ package synapticloop.scaleway.api;
  */
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
@@ -40,6 +42,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -54,13 +57,12 @@ import synapticloop.scaleway.api.model.Organizations;
 import synapticloop.scaleway.api.model.Server;
 import synapticloop.scaleway.api.model.ServerActionsResponse;
 import synapticloop.scaleway.api.model.ServerDefinition;
-import synapticloop.scaleway.api.model.ServerInstance;
-import synapticloop.scaleway.api.model.ServerInstances;
+import synapticloop.scaleway.api.model.ServerResponse;
 import synapticloop.scaleway.api.model.ServerTask;
 import synapticloop.scaleway.api.model.ServerType;
+import synapticloop.scaleway.api.model.ServersResponse;
 import synapticloop.scaleway.api.model.SshPublicKey;
 import synapticloop.scaleway.api.model.SshPublicKeyResponse;
-import synapticloop.scaleway.api.model.State;
 import synapticloop.scaleway.api.model.TaskResponse;
 import synapticloop.scaleway.api.model.User;
 import synapticloop.scaleway.api.model.UserResponse;
@@ -68,10 +70,10 @@ import synapticloop.scaleway.api.model.UserResponse;
 public class ScalewayApiClient {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ScalewayApiClient.class);
 
-	private static final String PATH_SERVERS = "servers";
-	private static final String PATH_SERVERS_SLASH = "servers/%s";
-	private static final String PATH_SERVERS_SLASH_ACTION = "servers/%s/action";
-	private static final String PATH_SERVERS_SLASH_ACTION_SLASH = "servers/%s/action/%s";
+	private static final String PATH_SERVERS = "/servers";
+	private static final String PATH_SERVERS_SLASH = "/servers/%s";
+	private static final String PATH_SERVERS_SLASH_ACTION = "/servers/%s/action";
+	private static final String PATH_SERVERS_SLASH_ACTION_SLASH = "/servers/%s/action/%s";
 
 	private final String accessToken;
 	private final Region region;
@@ -104,19 +106,31 @@ public class ScalewayApiClient {
 	}
 
 	/**
-	 * Get a list of all of the available images
+	 * Get a list of all of the available images - with the results coming back 
+	 * paginated, pages start at 1, maximum number of results per page is 100.
+	 * 
+	 * @param numPage the page number that you are requesting (starts at 1)
+	 * @param numPerPage the number of results per page - (maximum value of 100)
 	 * 
 	 * @return The list of all available images
 	 * 
-	 * @throws ScalewayApiException
+	 * @throws ScalewayApiException If there was an error with the call
 	 */
-	public List<Image> getAllImages() throws ScalewayApiException {
-		return(execute(Constants.HTTP_METHOD_GET,
-				computeUrl,
-				Constants.PATH_IMAGES,
-				200, 
-				ImagesResponse.class,
-				true).getImages());
+	public ImagesResponse getAllImages(int numPage, int numPerPage) throws ScalewayApiException {
+		HttpRequestBase request = buildRequest(Constants.HTTP_METHOD_GET, computeUrl, String.format(Constants.PATH_IMAGES, numPage, numPerPage));
+		HttpResponse response = executeRequest(request);
+		if(response.getStatusLine().getStatusCode() == 200) {
+			Header[] allHeaders = response.getAllHeaders();
+			ImagesResponse imagesResponse = parseResponse(response, ImagesResponse.class);
+			imagesResponse.setPaginationHeaders(allHeaders);
+			return(imagesResponse);
+		} else {
+			try {
+				throw new ScalewayApiException(IOUtils.toString(response.getEntity().getContent()));
+			} catch (UnsupportedOperationException | IOException ex) {
+				throw new ScalewayApiException(ex);
+			}
+		}
 	}
 
 	/**
@@ -133,25 +147,148 @@ public class ScalewayApiClient {
 				computeUrl, 
 				String.format(Constants.PATH_IMAGES_SLASH, imageId), 
 				200, 
-				ImageResponse.class,
-				false).getImage());
+				ImageResponse.class).getImage());
+	}
+
+/**
+ * A convenience method to create a server, which has a dynamic IP attached to 
+ * it. 
+ * 
+ * @param serverName The name of the server
+ * @param imageId the ID of the image to use as the base
+ * @param organizationToken the organization token
+ * @param serverType the Type of Server
+ * @param tags The tags to apply to this server
+ * 
+ * @return The newly created server
+ * 
+ * @throws ScalewayApiException If there was an error with the API call
+ */
+	public Server createServer(String serverName, String imageId, String organizationToken, ServerType serverType, String... tags) throws ScalewayApiException {
+		ServerDefinition serverDefinition = new ServerDefinition();
+		serverDefinition.setName(serverName);
+		serverDefinition.setImage(imageId);
+		serverDefinition.setOrganization(organizationToken);
+		serverDefinition.setDynamicIpRequired(true);
+		serverDefinition.setTags(Arrays.asList(tags));
+		serverDefinition.setServerType(serverType);
+		return createServer(serverDefinition);
+	}
+
+
+	/**
+	 * Create a server
+	 * 
+	 * @param serverDefinition The server definition to create
+	 * 
+	 * @return The created server
+	 * 
+	 * @throws ScalewayApiException If there was an error with the API call
+	 */
+	public Server createServer(ServerDefinition serverDefinition) throws ScalewayApiException {
+		HttpPost request = (HttpPost) buildRequest(Constants.HTTP_METHOD_POST, computeUrl, PATH_SERVERS);
+		try {
+			StringEntity entity = new StringEntity(serializeObject(serverDefinition));
+			request.setEntity(entity);
+			return(executeAndGetResponse(request, 201, ServerResponse.class).getServer());
+		} catch (JsonProcessingException | UnsupportedEncodingException ex) {
+			throw new ScalewayApiException(ex);
+		}
 	}
 
 	/**
-	 * Execute the request, returning the response object
+	 * Get the server details with the passed in server ID
+	 * 
+	 * @param serverId The ID of the server to retrieve the details for
+	 * 
+	 * @return The server object
+	 * 
+	 * @throws ScalewayApiException If there was an error with the API call
+	 */
+	public Server getServer(String serverId) throws ScalewayApiException {
+		return(execute(Constants.HTTP_METHOD_GET, 
+				computeUrl, 
+				String.format(PATH_SERVERS_SLASH, serverId), 
+				200, 
+				ServerResponse.class).getServer());
+	}
+
+	/**
+	 * Get a list of all of the servers paginated, pages start at 1, maximum 
+	 * number of results per page is 100.
+	 * 
+	 * @param numPage the page number that you are requesting (starts at 1)
+	 * @param numPerPage the number of results per page - (maximum value of 100)
+	 * 
+	 * @return The list of all avilable servers
+	 *  
+	 * @throws ScalewayApiException If there was an error with the API call
+	 */
+	public ServersResponse getAllServers(int numPage, int numPerPage) throws ScalewayApiException {
+		HttpRequestBase request = buildRequest(Constants.HTTP_METHOD_GET, computeUrl, String.format(PATH_SERVERS, numPage, numPerPage));
+		HttpResponse response = executeRequest(request);
+		if(response.getStatusLine().getStatusCode() == 200) {
+			Header[] allHeaders = response.getAllHeaders();
+			ServersResponse serversResponse = parseResponse(response, ServersResponse.class);
+			serversResponse.setPaginationHeaders(allHeaders);
+			return(serversResponse);
+		} else {
+			try {
+				throw new ScalewayApiException(IOUtils.toString(response.getEntity().getContent()));
+			} catch (UnsupportedOperationException | IOException ex) {
+				throw new ScalewayApiException(ex);
+			}
+		}
+	}
+
+	/**
+	 * Delete a server - this will only delete the actual server instance, but 
+	 * not any of the underlying resources
+	 * 
+	 * @see #deleteServerFully(String)
+	 * 
+	 * @param serverId The ID of the server to delete
+	 * 
+	 * @throws ScalewayApiException If there was an error with the API call
+	 */
+	public void deleteServer(String serverId) throws ScalewayApiException {
+		execute(Constants.HTTP_METHOD_DELETE, 
+				computeUrl, 
+				String.format(PATH_SERVERS_SLASH, serverId), 
+				204, 
+				null);
+	}
+
+
+	/**
+	 * Serialize an object to JSON
+	 * 
+	 * @param object The object to serialize
+	 * 
+	 * @return The object serialized as a JSON String
+	 * 
+	 * @throws JsonProcessingException if there was an error serializing
+	 */
+	private String serializeObject(Object object) throws JsonProcessingException {
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.setSerializationInclusion(Include.NON_NULL);
+		return(objectMapper.writeValueAsString(object));
+	}
+
+	/**
+	 * Execute the request, returning the parsed response object
 	 * 
 	 * @param httpMethod The HTTP method to execute (GET/POST/PATCH/DELETE)
 	 * @param url The URL to hit
 	 * @param path the path to request
 	 * @param allowableStatusCode the allowable return HTTP status code
 	 * @param returnClass the return class type
-	 * @param addPagingHeaders whether to add the paging headers
 	 * 
 	 * @return The returned and parsed response
 	 * 
 	 * @throws ScalewayApiException If there was an error calling the api
 	 */
-	private <T> T execute(String httpMethod, String url, String path, int allowableStatusCode, Class<T> returnClass, boolean addPagingHeaders) throws ScalewayApiException {
+	private <T> T execute(String httpMethod, String url, String path, int allowableStatusCode, Class<T> returnClass) throws ScalewayApiException {
 		String requestPath = new StringBuilder(url).append(path).toString();
 		LOGGER.debug("Executing '{}' for url '{}'", httpMethod, requestPath);
 
@@ -200,44 +337,20 @@ public class ScalewayApiClient {
 		}
 	}
 
-	public Server createServer(String serverName, Image image, String organizationToken, ServerType serverType, String... tag) throws ScalewayApiException {
-		ServerDefinition serverDefinition = new ServerDefinition();
-		serverDefinition.setName(serverName);
-		serverDefinition.setImage(image.getId());
-		serverDefinition.setOrganization(organizationToken);
-		serverDefinition.setDynamicIpRequired(true);
-		serverDefinition.setTags(Arrays.asList(tag));
-		serverDefinition.setServerType(serverType);
-		return createServer(serverDefinition);
-	}
 
-	public void deleteServer(Server server) throws ScalewayApiException {
-		deleteServer(server.getId());
-	}
+	
+	
+	
+	
+	
+	
+	
+	
 
-	public void deleteServer(String serverId) throws ScalewayApiException {
-		Server serverToDelete = getServer(serverId);
-		if (serverToDelete.getState() != State.STOPPED) {
-			// TODO something
-		}
-		HttpRequestBase request = buildRequest(Constants.HTTP_METHOD_DELETE, computeUrl, String.format(PATH_SERVERS_SLASH, serverId));
-		executeAndGetResponse(request, 204, null);
-	}
 
-	public Server createServer(ServerDefinition serverDefinition) throws ScalewayApiException {
-		HttpPost request = (HttpPost) buildRequest(Constants.HTTP_METHOD_POST, computeUrl, PATH_SERVERS);
-		return(executeAndGetResponse(request, 201, ServerInstance.class).getServer());
-	}
 
-	public List<Server> getAllServers() throws ScalewayApiException {
-		HttpRequestBase request = buildRequest(Constants.HTTP_METHOD_GET, computeUrl, PATH_SERVERS);
-		return(executeAndGetResponse(request, 200, ServerInstances.class).getServers());
-	}
 
-	public Server getServer(String serverID) throws ScalewayApiException {
-		HttpRequestBase request = buildRequest(Constants.HTTP_METHOD_GET, computeUrl, new StringBuilder(PATH_SERVERS_SLASH).append(serverID).toString());
-		return(executeAndGetResponse(request, 200, ServerInstance.class).getServer());
-	}
+
 
 	public List<Action> getServerActions(String serverID) throws ScalewayApiException {
 		HttpRequestBase request = buildRequest(Constants.HTTP_METHOD_GET, computeUrl, String.format(PATH_SERVERS_SLASH_ACTION, serverID));
@@ -268,17 +381,17 @@ public class ScalewayApiClient {
 	}
 
 	public ServerTask getTaskStatus(String taskID) throws ScalewayApiException {
-		HttpRequestBase request = buildRequest(Constants.HTTP_METHOD_GET, computeUrl, new StringBuilder("tasks/").append(taskID).toString());
+		HttpRequestBase request = buildRequest(Constants.HTTP_METHOD_GET, computeUrl, new StringBuilder("/tasks/").append(taskID).toString());
 		return(executeAndGetResponse(request, 200, TaskResponse.class).getServerTask());
 	}
 
 	public List<Organization> getAllOrganizations() throws ScalewayApiException {
-		HttpRequestBase request = buildRequest(Constants.HTTP_METHOD_GET, Constants.ACCOUNT_URL, "organizations");
+		HttpRequestBase request = buildRequest(Constants.HTTP_METHOD_GET, Constants.ACCOUNT_URL, "/organizations");
 		return(executeAndGetResponse(request, 200, Organizations.class).getOrganizations());
 	}
 
 	public User getUser(String userID) throws ScalewayApiException {
-		HttpRequestBase request = buildRequest(Constants.HTTP_METHOD_GET, Constants.ACCOUNT_URL, new StringBuilder("users/").append(userID).toString());
+		HttpRequestBase request = buildRequest(Constants.HTTP_METHOD_GET, Constants.ACCOUNT_URL, new StringBuilder("/users/").append(userID).toString());
 		return(executeAndGetResponse(request, 200, UserResponse.class).getUser());
 	}
 
@@ -353,14 +466,13 @@ public class ScalewayApiClient {
 		return serverTask;
 	}
 
-	private HttpRequestBase buildRequest(String type, String typeUrl, String method) {
-		String requestPath = new StringBuilder(typeUrl).append("/").append(method).toString();
-		return buildRequest(type, requestPath);
-	}
+	private HttpRequestBase buildRequest(String httpMethod, String url, String path) {
+		String requestPath = new StringBuilder(url).append(path).toString();
 
-	private HttpRequestBase buildRequest(String type, String requestPath) {
+		LOGGER.debug("Executing '{}' for url '{}'", httpMethod, requestPath);
+
 		HttpRequestBase request = null;
-		switch (type) {
+		switch (httpMethod) {
 		case Constants.HTTP_METHOD_POST:
 			request = new HttpPost(requestPath);
 			break;
@@ -396,7 +508,7 @@ public class ScalewayApiClient {
 		try {
 			return initializeObjectMapperJson().readValue(jsonString, type);
 		} catch (Exception ex) {
-			System.out.println(jsonString);
+			LOGGER.error("%s", jsonString);
 			throw ex;
 		}
 	}

@@ -18,7 +18,7 @@ package synapticloop.scaleway.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ServerInstance {
+public class ServerResponse {
 	@JsonProperty("server")  public Server server;
 
 	public Server getServer() { return server; }

@@ -16,15 +16,18 @@ package synapticloop.scaleway.api.model;
  * this source code or binaries.
  */
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ImagesResponse extends BasePaginationResponse {
+public class IPv6 {
+	@JsonProperty("netmask")  private String netmask;
+	@JsonProperty("gateway")  private String gateway;
+	@JsonProperty("address")  private String address;
 
-	@JsonProperty("images")  private List<Image> images;
+	public String getNetmask() { return this.netmask; }
 
-	public List<Image> getImages() { return images; }
+	public String getGateway() { return this.gateway; }
 
-	public void setImages(List<Image> images) { this.images = images; }
+	public String getAddress() { return this.address; }
+
+
 }

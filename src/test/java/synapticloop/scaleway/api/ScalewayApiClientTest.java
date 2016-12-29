@@ -26,13 +26,35 @@ import org.junit.Test;
 import synapticloop.scaleway.api.exception.ScalewayApiException;
 import synapticloop.scaleway.api.model.AccountWarning;
 import synapticloop.scaleway.api.model.Image;
+import synapticloop.scaleway.api.model.ImagesResponse;
 import synapticloop.scaleway.api.model.Organization;
+import synapticloop.scaleway.api.model.Server;
+import synapticloop.scaleway.api.model.ServerType;
+import synapticloop.scaleway.api.model.ServersResponse;
 
 public class ScalewayApiClientTest {
 	private static final String SCALEWAY_API_KEY = "SCALEWAY_API_KEY";
 
 	private ScalewayApiClient scalewayApiClient;
 	private String scalewayToken;
+
+	private String ubuntuImageId = null;
+
+	private String getUbuntuImage() throws ScalewayApiException {
+		if(null == ubuntuImageId) {
+			for (int i = 1; i < Integer.MAX_VALUE; i++) {
+				List<Image> images = scalewayApiClient.getAllImages(i, 100).getImages();
+				for (Image image : images) {
+					if("Ubuntu Xenial (16.04 latest)".equals(image.getName())) {
+						ubuntuImageId = image.getId();
+						return(ubuntuImageId);
+					}
+				}
+			}
+		}
+
+		return(ubuntuImageId);
+	}
 
 	@Before
 	public void setup() {
@@ -53,16 +75,11 @@ public class ScalewayApiClientTest {
 	}
 
 	@Test
-	public void testGetAllImages() throws ScalewayApiException {
-		List<Image> images = scalewayApiClient.getAllImages();
-		assertNotNull(images);
-	}
+	public void testGetImage() throws ScalewayApiException {
+		ImagesResponse imagesResponse = scalewayApiClient.getAllImages(1, 50);
+		assertNotNull(imagesResponse);
 
-	@Test
-	public void testGetImages() throws ScalewayApiException {
-		List<Image> images = scalewayApiClient.getAllImages();
-		assertNotNull(images);
-		Image image = images.get(0);
+		Image image = imagesResponse.getImages().get(0);
 
 		Image singleImage = scalewayApiClient.getImage(image.getId());
 		assertEquals(image.getArch(), singleImage.getArch());
@@ -78,6 +95,20 @@ public class ScalewayApiClientTest {
 		assertEquals(image.getName(), singleImage.getName());
 		assertEquals(image.getOrganization(), singleImage.getOrganization());
 		assertEquals(image.getRootVolume().getId(), singleImage.getRootVolume().getId());
+	}
+
+	@Test
+	public void testGetAllImages() throws ScalewayApiException {
+		ImagesResponse imagesResponse = scalewayApiClient.getAllImages(1, 50);
+
+		int numPages = imagesResponse.getNumPages();
+		for(int i = 2; i <= numPages; i++) {
+			ImagesResponse imagesResponseInner = scalewayApiClient.getAllImages(i, 50);
+			assertEquals(i, imagesResponseInner.getCurrentPage());
+			assertEquals(50, imagesResponseInner.getNumPerPage());
+			assertEquals(numPages, imagesResponseInner.getNumPages());
+			assertEquals(imagesResponse.getTotalCount(), imagesResponseInner.getTotalCount());
+		}
 	}
 
 	@Test
@@ -99,4 +130,41 @@ public class ScalewayApiClientTest {
 		assertNotNull(organizations);
 	}
 
+
+	@Test
+	public void testCreateServer() throws ScalewayApiException {
+		String organizationId = scalewayApiClient.getAllOrganizations().get(0).getId();
+
+		Server server = scalewayApiClient.createServer("scaleway-java-api-test-server", getUbuntuImage(), organizationId, ServerType.VC1S, new String[] {"scaleway", "java", "api", "server"});
+
+		Server returnedServer = scalewayApiClient.getServer(server.getId());
+		assertEquals(server.getArch(), returnedServer.getArch());
+		assertEquals(server.getCreationDate(), returnedServer.getCreationDate());
+		assertEquals(server.getHostname(), returnedServer.getHostname());
+		assertEquals(server.getId(), returnedServer.getId());
+		assertEquals(server.getIpv6(), returnedServer.getIpv6());
+		assertEquals(server.getModificationDate(), returnedServer.getModificationDate());
+		assertEquals(server.getName(), returnedServer.getName());
+		assertEquals(server.getOrganization(), returnedServer.getOrganization());
+		assertEquals(server.getPrivateIp(), returnedServer.getPrivateIp());
+		assertEquals(server.getPublicIp(), returnedServer.getPublicIp());
+		assertEquals(server.getStateDetail(), returnedServer.getStateDetail());
+
+		scalewayApiClient.deleteServer(server.getId());
+	}
+
+	@Test
+	public void testGetAllServers() throws ScalewayApiException {
+		ServersResponse serversResponse = scalewayApiClient.getAllServers(1, 2);
+
+		int numPages = serversResponse.getNumPages();
+		for(int i = 2; i <= numPages; i++) {
+			ServersResponse serversResponseInner = scalewayApiClient.getAllServers(i, 2);
+			assertEquals(i, serversResponseInner.getCurrentPage());
+			assertEquals(2, serversResponseInner.getNumPerPage());
+			assertEquals(numPages, serversResponseInner.getNumPages());
+			assertEquals(serversResponse.getTotalCount(), serversResponseInner.getTotalCount());
+		}
+
+	}
 }
