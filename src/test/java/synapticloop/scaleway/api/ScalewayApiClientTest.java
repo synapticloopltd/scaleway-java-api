@@ -18,10 +18,14 @@ package synapticloop.scaleway.api;
 
 import static org.junit.Assert.*;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import synapticloop.scaleway.api.exception.ScalewayApiException;
 import synapticloop.scaleway.api.model.AccountWarning;
@@ -29,16 +33,23 @@ import synapticloop.scaleway.api.model.Image;
 import synapticloop.scaleway.api.model.ImagesResponse;
 import synapticloop.scaleway.api.model.Organization;
 import synapticloop.scaleway.api.model.Server;
+import synapticloop.scaleway.api.model.ServerAction;
+import synapticloop.scaleway.api.model.ServerTask;
+import synapticloop.scaleway.api.model.ServerTaskStatus;
 import synapticloop.scaleway.api.model.ServerType;
 import synapticloop.scaleway.api.model.ServersResponse;
+import synapticloop.scaleway.api.model.Volume;
 
 public class ScalewayApiClientTest {
+		private static final Logger LOGGER = LoggerFactory.getLogger(ScalewayApiClientTest.class);
+
 	private static final String SCALEWAY_API_KEY = "SCALEWAY_API_KEY";
 
 	private ScalewayApiClient scalewayApiClient;
 	private String scalewayToken;
 
 	private String ubuntuImageId = null;
+	private String organizationId = null;
 
 	private String getUbuntuImage() throws ScalewayApiException {
 		if(null == ubuntuImageId) {
@@ -46,14 +57,23 @@ public class ScalewayApiClientTest {
 				List<Image> images = scalewayApiClient.getAllImages(i, 100).getImages();
 				for (Image image : images) {
 					if("Ubuntu Xenial (16.04 latest)".equals(image.getName())) {
-						ubuntuImageId = image.getId();
-						return(ubuntuImageId);
+						this.ubuntuImageId = image.getId();
+						return(this.ubuntuImageId);
 					}
 				}
 			}
 		}
 
-		return(ubuntuImageId);
+		return(this.ubuntuImageId);
+	}
+
+	private String getOrganizationId() throws ScalewayApiException {
+		if(null == organizationId) {
+			this.organizationId = scalewayApiClient.getAllOrganizations().get(0).getId();
+			return(this.organizationId);
+		}
+
+		return(organizationId);
 	}
 
 	@Before
@@ -132,8 +152,8 @@ public class ScalewayApiClientTest {
 
 
 	@Test
-	public void testCreateServer() throws ScalewayApiException {
-		String organizationId = scalewayApiClient.getAllOrganizations().get(0).getId();
+	public void testCreateAndDeleteServer() throws ScalewayApiException {
+		String organizationId = getOrganizationId();
 
 		Server server = scalewayApiClient.createServer("scaleway-java-api-test-server", getUbuntuImage(), organizationId, ServerType.VC1S, new String[] {"scaleway", "java", "api", "server"});
 
@@ -150,6 +170,14 @@ public class ScalewayApiClientTest {
 		assertEquals(server.getPublicIp(), returnedServer.getPublicIp());
 		assertEquals(server.getStateDetail(), returnedServer.getStateDetail());
 
+		Map<String, Volume> volumes = server.getVolumes();
+		Iterator<String> iterator = volumes.keySet().iterator();
+		while (iterator.hasNext()) {
+			String key = (String) iterator.next();
+			Volume volume = volumes.get(key);
+			scalewayApiClient.deleteVolume(volume.getId());
+		}
+
 		scalewayApiClient.deleteServer(server.getId());
 	}
 
@@ -165,6 +193,61 @@ public class ScalewayApiClientTest {
 			assertEquals(numPages, serversResponseInner.getNumPages());
 			assertEquals(serversResponse.getTotalCount(), serversResponseInner.getTotalCount());
 		}
+	}
+
+	@Test
+	public void testGetServerActions() throws ScalewayApiException {
+		String organizationId = getOrganizationId();
+		Server server = scalewayApiClient.createServer("scaleway-java-api-test-server", getUbuntuImage(), organizationId, ServerType.VC1S, new String[] {"scaleway", "java", "api", "server"});
+
+		List<ServerAction> serverActions = scalewayApiClient.getServerActions(server.getId());
+		assertNotNull(serverActions);
+		assertTrue(serverActions.size() >= 1);
+
+		scalewayApiClient.executeServerAction(server.getId(), ServerAction.TERMINATE);
+		scalewayApiClient.deleteServer(server.getId());
+	}
+
+	@Test
+	public void testPowerCycleServer() throws ScalewayApiException {
+		String organizationId = scalewayApiClient.getAllOrganizations().get(0).getId();
+		Server server = scalewayApiClient.createServer("scaleway-java-api-test-server", getUbuntuImage(), organizationId, ServerType.VC1S, new String[] {"scaleway", "java", "api", "server"});
+
+		ServerTask powerOnServerTask = scalewayApiClient.executeServerAction(server.getId(), ServerAction.POWERON);
+
+		boolean isStarted = false;
+		while(!isStarted) {
+			ServerTask taskStatus = scalewayApiClient.getTaskStatus(powerOnServerTask.getId());
+			LOGGER.debug("Server task with id '{}' is in current state '{}' (progress '{}')", taskStatus.getId(), taskStatus.getStatus(), taskStatus.getProgress());
+			try {
+				Thread.sleep(10000);
+			} catch (InterruptedException ex) {
+				LOGGER.warn("The sleeping thread was interrupted, continuing...");
+			}
+			if(taskStatus.getStatus() == ServerTaskStatus.SUCCESS) {
+				isStarted = true;
+			}
+		}
+
+		ServerTask powerOffServerTask = scalewayApiClient.executeServerAction(server.getId(), ServerAction.POWEROFF);
+		boolean isEnded = false;
+		while(!isEnded) {
+			ServerTask taskStatus = scalewayApiClient.getTaskStatus(powerOffServerTask.getId());
+			LOGGER.debug("Server task with id '{}' is in current state '{}' (progress '{}')", taskStatus.getId(), taskStatus.getStatus(), taskStatus.getProgress());
+			try {
+				Thread.sleep(10000);
+			} catch (InterruptedException ex) {
+				LOGGER.warn("The sleeping thread was interrupted, continuing...");
+			}
+
+			if(taskStatus.getStatus() == ServerTaskStatus.SUCCESS) {
+				isEnded = true;
+			}
+		}
+
+		scalewayApiClient.deleteServer(server.getId());
 
 	}
+
+	
 }

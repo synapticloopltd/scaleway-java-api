@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ServerActionRequest {
 
-	@JsonProperty("action")  private Action action;
+	@JsonProperty("action")  private ServerAction action;
 
-	public Action getAction() { return action; }
+	public ServerAction getAction() { return action; }
 }

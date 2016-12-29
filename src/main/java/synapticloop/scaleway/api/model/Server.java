@@ -28,19 +28,17 @@ public class Server extends ServerBase {
 	@JsonProperty("extra_networks")     private String[] extraNetworks;
 	@JsonProperty("state")              private State state;
 	@JsonProperty("arch")               private String arch;
-	@JsonProperty("state_detail")       public String stateDetail;
+	@JsonProperty("state_detail")       private String stateDetail;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSX")
 	@JsonProperty("modification_date")  private Date modificationDate;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSX")
 	@JsonProperty("creation_date")      private Date creationDate;
 	@JsonProperty("location")           private Location location;
-	@JsonProperty("ipv6")               private String ipv6;
-	@JsonProperty("image")              public Image image;
+	@JsonProperty("ipv6")               private IPv6 ipv6;
+	@JsonProperty("image")              private Image image;
 	@JsonProperty("hostname")           private String hostname;
 
-	public String getHostname() {
-		return hostname;
-	}
+	public String getHostname() { return hostname; }
 
 	public void setHostname(String hostname) {
 		this.hostname = hostname;
@@ -110,13 +108,7 @@ public class Server extends ServerBase {
 		this.location = location;
 	}
 
-	public String getIpv6() {
-		return ipv6;
-	}
-
-	public void setIpv6(String ipv6) {
-		this.ipv6 = ipv6;
-	}
+	public IPv6 getIpv6() { return ipv6; }
 
 	public String getArch() {
 		return arch;

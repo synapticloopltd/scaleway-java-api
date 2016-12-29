@@ -22,8 +22,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ServerActionsResponse {
 
-	@JsonProperty("actions") private List<Action> actions;
+	@JsonProperty("actions") private List<ServerAction> serverActions;
 
-	public List<Action> getActions() { return actions; }
+	public List<ServerAction> getServerActions() { return serverActions; }
 
 }
