@@ -849,6 +849,7 @@ public class ScalewayApiClient {
 		}
 	}
 
+
 	/**
 	 * Return the rule details from the passed in ID
 	 * 
@@ -884,7 +885,7 @@ public class ScalewayApiClient {
 	 */
 	public Rule updateRule(String securityGroupId, String ruleId, RuleAction ruleAction, RuleDirection ruleDirection, String ipRange, RuleProtocol ruleProtocol, int destPortFrom) throws ScalewayApiException {
 		HttpPut request = (HttpPut) buildRequest(Constants.HTTP_METHOD_PUT, 
-				new StringBuilder(computeUrl).append(String.format(Constants.PATH_SECURITY_GROUPS_RULES, securityGroupId, ruleId)).toString(), 
+				new StringBuilder(computeUrl).append(String.format(Constants.PATH_SECURITY_GROUPS_RULES_SLASH, securityGroupId, ruleId)).toString(), 
 				new RuleRequest(ruleAction, ruleDirection, ipRange, ruleProtocol, destPortFrom));
 
 		return(executeAndGetResponse(request, 200, RuleResponse.class).getRule());

@@ -36,7 +36,7 @@ public class RuleTest extends BaseTestUtils {
 
 		Rule ruleGet = scalewayApiClient.getRule(securityGroup.getId(), ruleUpdate.getId());
 
-		assertEquals(new Integer(1010), ruleGet.getDestPortTo());
+		assertEquals(new Integer(1010), ruleGet.getDestPortFrom());
 
 		scalewayApiClient.deleteRule(securityGroup.getId(), rule.getId());
 
@@ -47,6 +47,7 @@ public class RuleTest extends BaseTestUtils {
 	public void testGetAllRules() throws ScalewayApiException {
 		SecurityGroupsResponse securityGroupsResponse = scalewayApiClient.getAllSecurityGroups(1, 1);
 		List<SecurityGroup> securityGroups = securityGroupsResponse.getSecurityGroups();
+
 		for (SecurityGroup securityGroup : securityGroups) {
 			boolean finished = false;
 			int i = 1;
@@ -56,9 +57,6 @@ public class RuleTest extends BaseTestUtils {
 				List<Rule> rules = rulesResponse.getRules();
 				for (Rule rule : rules) {
 					assertNotNull(rule);
-					Rule ruleInner = scalewayApiClient.getRule(securityGroup.getId(), rule.getId());
-					assertNotNull(ruleInner);
-
 				}
 
 				i++;

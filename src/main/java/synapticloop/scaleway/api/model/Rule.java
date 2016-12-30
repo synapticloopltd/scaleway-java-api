@@ -24,6 +24,7 @@ import synapticloop.scaleway.api.RuleProtocol;
 
 public class Rule {
 
+	@JsonProperty("id")              private String id;
 	@JsonProperty("direction")       private RuleDirection direction;
 	@JsonProperty("protocol")        private RuleProtocol protocol;
 	@JsonProperty("ip_range")         private String ipRange;
@@ -32,7 +33,6 @@ public class Rule {
 	@JsonProperty("position")        private int position;
 	@JsonProperty("dest_port_to")    private Integer destPortTo;
 	@JsonProperty("editable")        private Boolean isEditable;
-	@JsonProperty("id")              private String id;
 
 	public RuleDirection getDirection() { return this.direction; }
 
