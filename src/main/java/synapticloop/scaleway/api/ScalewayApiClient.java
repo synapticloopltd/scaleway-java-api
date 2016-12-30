@@ -62,6 +62,7 @@ import synapticloop.scaleway.api.model.ServersResponse;
 import synapticloop.scaleway.api.model.TaskResponse;
 import synapticloop.scaleway.api.model.Token;
 import synapticloop.scaleway.api.model.TokenResponse;
+import synapticloop.scaleway.api.model.TokensResponse;
 import synapticloop.scaleway.api.model.User;
 import synapticloop.scaleway.api.model.UserResponse;
 import synapticloop.scaleway.api.model.Volume;
@@ -69,7 +70,9 @@ import synapticloop.scaleway.api.model.VolumeResponse;
 import synapticloop.scaleway.api.model.VolumeType;
 import synapticloop.scaleway.api.model.VolumesResponse;
 import synapticloop.scaleway.api.request.ActionRequest;
+import synapticloop.scaleway.api.request.TokenPatchRequest;
 import synapticloop.scaleway.api.request.TokenRequest;
+import synapticloop.scaleway.api.request.VolumeRequest;
 
 /**
  * This is the Scaleway API client to interact with the cloud provider
@@ -265,7 +268,7 @@ public class ScalewayApiClient {
 	 * @throws ScalewayApiException If there was an error with the call
 	 */
 	public ImagesResponse getAllImages(int numPage, int numPerPage) throws ScalewayApiException {
-		HttpRequestBase request = buildRequest(Constants.HTTP_METHOD_GET, new StringBuilder(computeUrl).append(String.format(Constants.PATH_IMAGES, numPage, numPerPage)).toString());
+		HttpRequestBase request = buildRequest(Constants.HTTP_METHOD_GET, new StringBuilder(computeUrl).append(String.format(Constants.PATH_IMAGES_PAGING, numPage, numPerPage)).toString());
 		HttpResponse response = executeRequest(request);
 		if(response.getStatusLine().getStatusCode() == 200) {
 			Header[] allHeaders = response.getAllHeaders();
@@ -352,7 +355,7 @@ public class ScalewayApiClient {
 	public Volume createVolume(String name, String organizationId, long size, VolumeType volumeType) throws ScalewayApiException {
 		HttpPost request = (HttpPost) buildRequest(Constants.HTTP_METHOD_POST, 
 				new StringBuilder(computeUrl).append(Constants.PATH_VOLUMES).toString(),
-				new Volume(name, organizationId, size, volumeType));
+				new VolumeRequest(name, organizationId, size, volumeType));
 
 		return(executeAndGetResponse(request, 201, VolumeResponse.class).getVolume());
 	}
@@ -369,7 +372,7 @@ public class ScalewayApiClient {
 	 * @throws ScalewayApiException If there was an error with the call
 	 */
 	public VolumesResponse getAllVolumes(int numPage, int numPerPage) throws ScalewayApiException {
-		HttpRequestBase request = buildRequest(Constants.HTTP_METHOD_GET, new StringBuilder(computeUrl).append(String.format(Constants.PATH_VOLUMES, numPage, numPerPage)).toString());
+		HttpRequestBase request = buildRequest(Constants.HTTP_METHOD_GET, new StringBuilder(computeUrl).append(String.format(Constants.PATH_VOLUMES_PAGING, numPage, numPerPage)).toString());
 		HttpResponse response = executeRequest(request);
 
 		if(response.getStatusLine().getStatusCode() == 200) {
@@ -470,10 +473,94 @@ public class ScalewayApiClient {
 	 */
 	public Token createToken(String emailAddress, String password, boolean expires) throws ScalewayApiException {
 		HttpPost request = (HttpPost) buildRequest(Constants.HTTP_METHOD_POST, 
-				new StringBuilder(computeUrl).append(Constants.PATH_TOKENS).toString(), 
+				new StringBuilder(Constants.ACCOUNT_URL).append(Constants.PATH_TOKENS).toString(), 
 				new TokenRequest(emailAddress, password, expires));
 
 		return(executeAndGetResponse(request, 201, TokenResponse.class).getToken());
+	}
+
+	/**
+	 * Get the details for a token identified by its token ID
+	 * 
+	 * @param tokenId The unique identifier for the token
+	 * 
+	 * @return The token details
+	 * 
+	 * @throws ScalewayApiException If there was an error with the API call
+	 */
+	public Token getToken(String tokenId) throws ScalewayApiException {
+		return(execute(Constants.HTTP_METHOD_GET, 
+				Constants.ACCOUNT_URL, 
+				String.format(Constants.PATH_TOKENS_SLASH, tokenId),
+				200, 
+				TokenResponse.class).getToken());
+	}
+
+	/**
+	 * Delete a token with the specified ID
+	 * 
+	 * @param tokenId The token id
+	 * 
+	 * @throws ScalewayApiException If there was an error in with the API call
+	 */
+	public void deleteToken(String tokenId) throws ScalewayApiException {
+		execute(Constants.HTTP_METHOD_DELETE, 
+				Constants.ACCOUNT_URL, 
+				String.format(Constants.PATH_TOKENS_SLASH, tokenId), 
+				204, 
+				null);
+	}
+
+	/**
+	 * Update a token to extend its expiration time by 30 minutes
+	 * 
+	 * @param tokenId The ID of the token to update
+	 * @return The updated token with the new expiry date/time
+	 * 
+	 * @throws ScalewayApiException If there was an error with the API call
+	 */
+	public Token updateToken(String tokenId) throws ScalewayApiException {
+		HttpPatch request = (HttpPatch) buildRequest(Constants.HTTP_METHOD_PATCH, 
+				new StringBuilder(Constants.ACCOUNT_URL).append(String.format(Constants.PATH_TOKENS_SLASH, tokenId)).toString(), 
+				new TokenPatchRequest());
+
+		return(executeAndGetResponse(request, 200, TokenResponse.class).getToken());
+	}
+
+	/**
+	 * Retrieve a list of all tokens with pagination, pages start at 1 and the 
+	 * maximum number of results per page is 100.
+	 * 
+	 * <strong>WARNING</strong> - you will get a list of tokens far longer than
+	 * the number of available tokens - some, if not all of the tokens will no
+	 * longer be valid and will return a '410' Gone if you use this token with 
+	 * the getTokens(String tokenId) call.
+	 * 
+	 * @param numPage the page number to retrieve (starting at 1)
+	 * @param numPerPage The number of results per page (maximum 100)
+	 * 
+	 * @return The list of tokens
+	 * 
+	 * @throws ScalewayApiException If there was an error with the API call
+	 */
+	public TokensResponse getAllTokens(int numPage, int numPerPage) throws ScalewayApiException {
+		HttpRequestBase request = buildRequest(Constants.HTTP_METHOD_GET, 
+				new StringBuilder(Constants.ACCOUNT_URL).append(String.format(Constants.PATH_TOKENS_PAGING, numPage, numPerPage)).toString());
+
+		HttpResponse response = executeRequest(request);
+
+		if(response.getStatusLine().getStatusCode() == 200) {
+			Header[] allHeaders = response.getAllHeaders();
+			TokensResponse tokensResponse = parseResponse(response, TokensResponse.class);
+			tokensResponse.setPaginationHeaders(allHeaders);
+			return(tokensResponse);
+		} else {
+			try {
+				throw new ScalewayApiException(IOUtils.toString(response.getEntity().getContent()));
+			} catch (UnsupportedOperationException | IOException ex) {
+				throw new ScalewayApiException(ex);
+			}
+		}
 	}
 
 	/**
@@ -554,6 +641,8 @@ public class ScalewayApiClient {
 	}
 
 	private HttpRequestBase buildRequest(String httpMethod, String requestPath, Object entityContent) throws ScalewayApiException {
+		LOGGER.debug("Building request for method '{}' and URL '{}'", httpMethod, requestPath);
+
 		HttpRequestBase request = null;
 		switch (httpMethod) {
 		case Constants.HTTP_METHOD_GET:

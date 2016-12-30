@@ -21,7 +21,7 @@ package synapticloop.scaleway.api;
  * 
  */
 public class Constants {
-	public static final String PATH_IMAGES = "/images?page=%d&per_page=%d";
+	public static final String PATH_IMAGES_PAGING = "/images?page=%d&per_page=%d";
 	public static final String PATH_IMAGES_SLASH = "/images/%s";
 
 	public static final String PATH_ORGANIZATIONS = "/organizations";
@@ -33,10 +33,13 @@ public class Constants {
 	public static final String PATH_TASKS_SLASH = "/tasks/%s";
 
 	public static final String PATH_TOKENS = "/tokens";
+	public static final String PATH_TOKENS_PAGING = "/tokens?page=%d&per_page=%d";
+	public static final String PATH_TOKENS_SLASH = "/tokens/%s";
 
 	public static final String PATH_USERS_SLASH = "/users/%s";
 
-	public static final String PATH_VOLUMES = "/volumes?page=%d&per_page=%d";
+	public static final String PATH_VOLUMES = "/volumes";
+	public static final String PATH_VOLUMES_PAGING = "/volumes?page=%d&per_page=%d";
 	public static final String PATH_VOLUMES_SLASH = "/volumes/%s";
 
 	public static final String ACCOUNT_URL = "https://account.scaleway.com";

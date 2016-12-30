@@ -18,23 +18,61 @@ package synapticloop.scaleway.api;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import synapticloop.scaleway.api.exception.ScalewayApiException;
+import synapticloop.scaleway.api.model.Token;
+import synapticloop.scaleway.api.model.TokensResponse;
 
 public class TokenTest {
+	private static final String SCALEWAY_API_KEY = "SCALEWAY_API_KEY";
 
 	private ScalewayApiClient scalewayApiClient;
 
 	@Before
 	public void setup() {
-		scalewayApiClient = new ScalewayApiClient(null, Region.AMSTERDAM1);
+		scalewayApiClient = new ScalewayApiClient(System.getenv(SCALEWAY_API_KEY), Region.AMSTERDAM1);
 	}
 
 	@Test
 	public void testCreateToken() throws ScalewayApiException {
-		scalewayApiClient.createToken("a@b.com", "password", true);
-		assertTrue(true);
+		Token createToken = scalewayApiClient.createToken(System.getenv("SCALEWAY_EMAIL_ADDRESS"), System.getenv("SCALEWAY_PASSWORD"), true);
+		assertNotNull(createToken);
+
+		scalewayApiClient.deleteToken(createToken.getId());
+	}
+
+	@Test
+	public void testUpdateToken() throws ScalewayApiException {
+		Token createToken = scalewayApiClient.createToken(System.getenv("SCALEWAY_EMAIL_ADDRESS"), System.getenv("SCALEWAY_PASSWORD"), true);
+		assertNotNull(createToken);
+
+		String tokenId = createToken.getId();
+
+		Token updateToken = scalewayApiClient.updateToken(createToken.getId());
+		assertTrue(updateToken.getExpiresDate().getTime() > createToken.getExpiresDate().getTime());
+		scalewayApiClient.deleteToken(tokenId);
+	}
+
+	@Test
+	public void testGetAllTokens() throws ScalewayApiException {
+		int i = 1;
+		boolean finished = false;
+		while(!finished) {
+			TokensResponse allTokens = scalewayApiClient.getAllTokens(i, 10);
+			List<Token> tokens = allTokens.getTokens();
+			for (Token token : tokens) {
+				assertNotNull(token);
+			}
+
+			if(i > allTokens.getNumPages()) {
+				finished = true;
+			}
+
+			i++;
+		}
 	}
 }

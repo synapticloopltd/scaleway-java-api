@@ -271,7 +271,12 @@ public class ScalewayApiClientTest {
 
 		scalewayApiClient.deleteServer(server.getId());
 
+		Map<String, Volume> volumes = server.getVolumes();
+		Iterator<String> iterator = volumes.keySet().iterator();
+		while (iterator.hasNext()) {
+			String key = (String) iterator.next();
+			Volume volume = volumes.get(key);
+			scalewayApiClient.deleteVolume(volume.getId());
+		}
 	}
-
-
 }

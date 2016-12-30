@@ -16,35 +16,42 @@ package synapticloop.scaleway.api.model;
  * this source code or binaries.
  */
 
+import java.util.Date;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Token {
-	@JsonProperty("dynamic")  private boolean isDynamic;
-	@JsonProperty("id")       private String id;
-	@JsonProperty("address")  private String address;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSX")
+	@JsonProperty("creation_date")        private Date creationDate;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSX")
+	@JsonProperty("expires")              private Date expiresDate;
+	@JsonProperty("id")                   private String id;
+	@JsonProperty("description")          private String description;
+	@JsonProperty("inherits_user_perms")  private boolean inheritsUserPerms;
+	@JsonProperty("permissions")          private List<Permission> permissions;
+	@JsonProperty("roles")                private Role role;
+	@JsonProperty("user_id")              private String userId;
 
-	public boolean getIsDynamic() {
-		return isDynamic;
+	public Date getCreationDate() { return this.creationDate; }
+
+	public Date getExpiresDate() { return this.expiresDate; }
+
+	public String getId() { return this.id; }
+
+	public boolean getInheritsUserPerms() { return this.inheritsUserPerms; }
+
+	public List<Permission> getPermissions() { return this.permissions; }
+
+	public Role getRole() { return this.role; }
+
+	public String getUserId() { return this.userId; }
+
+	public String getDescription() { return this.description; }
+
+	@Override
+	public String toString() {
+		return "Token [creationDate=" + this.creationDate + ", expires=" + this.expiresDate + ", id=" + this.id + ", description=" + this.description + ", inheritsUserPerms=" + this.inheritsUserPerms + ", permissions=" + this.permissions + ", role=" + this.role + ", userId=" + this.userId + "]";
 	}
-
-	public void setIsDynamic(boolean isDynamic) {
-		this.isDynamic = isDynamic;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
 }
