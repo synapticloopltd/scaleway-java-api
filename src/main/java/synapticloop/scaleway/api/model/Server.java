@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Server extends ServerBase {
 
 	@JsonProperty("id")                 private String id;
+	@JsonProperty("public_ip")          private IP publicIp;
 	@JsonProperty("private_ip")         private String privateIp;
 	@JsonProperty("extra_networks")     private String[] extraNetworks;
 	@JsonProperty("state")              private State state;
@@ -108,7 +109,7 @@ public class Server extends ServerBase {
 		this.location = location;
 	}
 
-	public IPv6 getIpv6() { return ipv6; }
+	public IPv6 getIPv6() { return ipv6; }
 
 	public String getArch() {
 		return arch;

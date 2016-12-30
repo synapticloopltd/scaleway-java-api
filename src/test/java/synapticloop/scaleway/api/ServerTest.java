@@ -33,7 +33,7 @@ public class ServerTest extends BaseTestUtils {
 		assertEquals(server.getCreationDate(), returnedServer.getCreationDate());
 		assertEquals(server.getHostname(), returnedServer.getHostname());
 		assertEquals(server.getId(), returnedServer.getId());
-		assertEquals(server.getIpv6(), returnedServer.getIpv6());
+		assertEquals(server.getIPv6(), returnedServer.getIPv6());
 		assertEquals(server.getModificationDate(), returnedServer.getModificationDate());
 		assertEquals(server.getName(), returnedServer.getName());
 		assertEquals(server.getOrganization(), returnedServer.getOrganization());
@@ -113,7 +113,10 @@ public class ServerTest extends BaseTestUtils {
 		boolean isStarted = false;
 		while(!isStarted) {
 			ServerTask taskStatus = scalewayApiClient.getTaskStatus(powerOnServerTask.getId());
-			LOGGER.debug("Server task with id '{}' is in current state '{}' (progress '{}')", taskStatus.getId(), taskStatus.getStatus(), taskStatus.getProgress());
+			LOGGER.debug("Server task with id '{}' is in current state '{}' (progress '{}')", 
+					taskStatus.getId(), 
+					taskStatus.getStatus(), 
+					taskStatus.getProgress());
 			try {
 				Thread.sleep(10000);
 			} catch (InterruptedException ex) {

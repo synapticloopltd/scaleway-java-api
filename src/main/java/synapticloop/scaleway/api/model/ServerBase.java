@@ -30,7 +30,7 @@ public class ServerBase {
 	@JsonProperty("commercial_type")     private ServerType serverType;
 	@JsonProperty("dynamic_ip_required") private boolean dynamicIpRequired;
 	@JsonProperty("enable_ipv6")         private boolean ipv6Enabled;
-	@JsonProperty("public_ip")           private String publicIP;
+	@JsonProperty("public_ip")           private IP publicIP;
 	@JsonProperty("security_group")      private SecurityGroup securityGroup;
 	@JsonProperty("bootscript")          private BootScript bootscript;
 
@@ -91,11 +91,11 @@ public class ServerBase {
 		this.ipv6Enabled = ipv6Enabled;
 	}
 
-	public String getPublicIP() {
+	public IP getPublicIP() {
 		return publicIP;
 	}
 
-	public void setPublicIP(String publicIP) {
+	public void setPublicIP(IP publicIP) {
 		this.publicIP = publicIP;
 	}
 
