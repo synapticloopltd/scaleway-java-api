@@ -1,4 +1,4 @@
-package synapticloop.scaleway.api.model;
+package synapticloop.scaleway.api.response;
 
 /*
  * Copyright (c) 2016 synapticloop.
@@ -18,9 +18,13 @@ package synapticloop.scaleway.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class TaskResponse {
-	@JsonProperty("task")  private ServerTask serverTask;
+import synapticloop.scaleway.api.model.IP;
 
-	public ServerTask getServerTask() { return serverTask; }
+public class IPResponse {
+	@JsonProperty("ip")  private IP ip;
 
+	/**
+	 * @return the IP Address
+	 */
+	public IP getIp() { return ip; }
 }

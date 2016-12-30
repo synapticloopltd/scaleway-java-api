@@ -1,4 +1,4 @@
-package synapticloop.scaleway.api.model;
+package synapticloop.scaleway.api.response;
 
 /*
  * Copyright (c) 2016 synapticloop.

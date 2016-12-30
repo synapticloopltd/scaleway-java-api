@@ -1,4 +1,4 @@
-package synapticloop.scaleway.api.model;
+package synapticloop.scaleway.api.response;
 
 /*
  * Copyright (c) 2016 synapticloop.
@@ -16,15 +16,15 @@ package synapticloop.scaleway.api.model;
  * this source code or binaries.
  */
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class VolumesResponse extends BasePaginationResponse {
-	@JsonProperty("volumes")  private List<Volume> volumes;
+import synapticloop.scaleway.api.model.Volume;
+
+public class VolumeResponse {
+	@JsonProperty("volume")  private Volume volume;
 
 	/**
 	 * @return the volume
 	 */
-	public List<Volume> getVolumes() { return volumes; }
+	public Volume getVolume() { return volume; }
 }

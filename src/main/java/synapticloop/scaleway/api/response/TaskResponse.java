@@ -1,4 +1,4 @@
-package synapticloop.scaleway.api.model;
+package synapticloop.scaleway.api.response;
 
 /*
  * Copyright (c) 2016 synapticloop.
@@ -16,14 +16,13 @@ package synapticloop.scaleway.api.model;
  * this source code or binaries.
  */
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ServerActionsResponse {
+import synapticloop.scaleway.api.model.ServerTask;
 
-	@JsonProperty("actions") private List<ServerAction> serverActions;
+public class TaskResponse {
+	@JsonProperty("task")  private ServerTask serverTask;
 
-	public List<ServerAction> getServerActions() { return serverActions; }
+	public ServerTask getServerTask() { return serverTask; }
 
 }

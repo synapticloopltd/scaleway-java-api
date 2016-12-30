@@ -1,4 +1,4 @@
-package synapticloop.scaleway.api.model;
+package synapticloop.scaleway.api.response;
 
 /*
  * Copyright (c) 2016 synapticloop.
@@ -16,13 +16,22 @@ package synapticloop.scaleway.api.model;
  * this source code or binaries.
  */
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ImageResponse {
+import synapticloop.scaleway.api.model.SshPublicKey;
 
-	@JsonProperty("image")  private Image image;
+public class SshPublicKeyResponse {
 
-	public Image getImage() { return image; }
+	@JsonProperty("ssh_public_keys") private List<SshPublicKey> sshPublicKeys;
 
-	public void setImage(Image image) { this.image = image; }
+	public List<SshPublicKey> getSshPublicKeys() {
+		return sshPublicKeys;
+	}
+
+	public void setSshPublicKeys(List<SshPublicKey> sshPublicKeys) {
+		this.sshPublicKeys = sshPublicKeys;
+	}
+
 }

@@ -1,4 +1,4 @@
-package synapticloop.scaleway.api.model;
+package synapticloop.scaleway.api.response;
 
 /*
  * Copyright (c) 2016 synapticloop.
@@ -16,20 +16,12 @@ package synapticloop.scaleway.api.model;
  * this source code or binaries.
  */
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class SshPublicKeyResponse {
+import synapticloop.scaleway.api.model.User;
 
-	@JsonProperty("ssh_public_keys") private List<SshPublicKey> sshPublicKeys;
+public class UserResponse {
+	@JsonProperty("user")  private User user;
 
-	public List<SshPublicKey> getSshPublicKeys() {
-		return sshPublicKeys;
-	}
-
-	public void setSshPublicKeys(List<SshPublicKey> sshPublicKeys) {
-		this.sshPublicKeys = sshPublicKeys;
-	}
-
+	public User getUser() { return user; }
 }

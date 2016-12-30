@@ -23,6 +23,8 @@ import org.apache.http.message.BasicHeader;
 import org.junit.Before;
 import org.junit.Test;
 
+import synapticloop.scaleway.api.response.ImagesResponse;
+
 public class ImagesResponseTest {
 
 	private ImagesResponse imagesResponse;

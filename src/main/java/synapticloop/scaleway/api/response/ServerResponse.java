@@ -1,4 +1,4 @@
-package synapticloop.scaleway.api.model;
+package synapticloop.scaleway.api.response;
 
 /*
  * Copyright (c) 2016 synapticloop.
@@ -18,11 +18,11 @@ package synapticloop.scaleway.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class VolumeResponse {
-	@JsonProperty("volume")  private Volume volume;
+import synapticloop.scaleway.api.model.Server;
 
-	/**
-	 * @return the volume
-	 */
-	public Volume getVolume() { return volume; }
+public class ServerResponse {
+	@JsonProperty("server")  public Server server;
+
+	public Server getServer() { return server; }
+
 }

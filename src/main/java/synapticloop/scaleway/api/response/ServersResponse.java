@@ -1,6 +1,4 @@
-package synapticloop.scaleway.api.model;
-
-import java.util.List;
+package synapticloop.scaleway.api.response;
 
 /*
  * Copyright (c) 2016 synapticloop.
@@ -18,13 +16,15 @@ import java.util.List;
  * this source code or binaries.
  */
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class TokensResponse extends BasePaginationResponse {
-	@JsonProperty("tokens")  private List<Token> tokens;
+import synapticloop.scaleway.api.model.Server;
 
-	/**
-	 * @return the tokens
-	 */
-	public List<Token> getTokens() { return tokens; }
+public class ServersResponse extends BasePaginationResponse {
+	@JsonProperty("servers")  public List<Server> servers;
+
+	public List<Server> getServers() { return servers; }
+
 }

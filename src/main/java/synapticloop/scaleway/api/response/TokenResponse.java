@@ -1,4 +1,4 @@
-package synapticloop.scaleway.api.model;
+package synapticloop.scaleway.api.response;
 
 /*
  * Copyright (c) 2016 synapticloop.
@@ -17,6 +17,8 @@ package synapticloop.scaleway.api.model;
  */
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import synapticloop.scaleway.api.model.Token;
 
 public class TokenResponse {
 	@JsonProperty("token")  private Token token;

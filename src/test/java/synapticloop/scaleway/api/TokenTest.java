@@ -25,7 +25,7 @@ import org.junit.Test;
 
 import synapticloop.scaleway.api.exception.ScalewayApiException;
 import synapticloop.scaleway.api.model.Token;
-import synapticloop.scaleway.api.model.TokensResponse;
+import synapticloop.scaleway.api.response.TokensResponse;
 
 public class TokenTest {
 	private static final String SCALEWAY_API_KEY = "SCALEWAY_API_KEY";

@@ -19,7 +19,6 @@ package synapticloop.scaleway.api.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ServerActionRequest {
-
 	@JsonProperty("action")  private ServerAction action;
 
 	public ServerAction getAction() { return action; }

@@ -1,4 +1,4 @@
-package synapticloop.scaleway.api.model;
+package synapticloop.scaleway.api.response;
 
 /*
  * Copyright (c) 2016 synapticloop.
@@ -16,14 +16,16 @@ package synapticloop.scaleway.api.model;
  * this source code or binaries.
  */
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class UserResponse {
+import synapticloop.scaleway.api.model.ServerAction;
 
-	@JsonProperty("user")  private User user;
+public class ServerActionsResponse {
 
-	public User getUser() { return user; }
+	@JsonProperty("actions") private List<ServerAction> serverActions;
 
-	public void setUser(User user) { this.user = user; }
+	public List<ServerAction> getServerActions() { return serverActions; }
 
 }

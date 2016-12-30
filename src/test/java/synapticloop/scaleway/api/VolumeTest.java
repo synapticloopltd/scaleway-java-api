@@ -8,7 +8,7 @@ import org.junit.Test;
 import synapticloop.scaleway.api.exception.ScalewayApiException;
 import synapticloop.scaleway.api.model.Volume;
 import synapticloop.scaleway.api.model.VolumeType;
-import synapticloop.scaleway.api.model.VolumesResponse;
+import synapticloop.scaleway.api.response.VolumesResponse;
 
 public class VolumeTest {
 	private static final String SCALEWAY_API_KEY = "SCALEWAY_API_KEY";

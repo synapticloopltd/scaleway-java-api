@@ -30,15 +30,15 @@ import org.slf4j.LoggerFactory;
 import synapticloop.scaleway.api.exception.ScalewayApiException;
 import synapticloop.scaleway.api.model.AccountWarning;
 import synapticloop.scaleway.api.model.Image;
-import synapticloop.scaleway.api.model.ImagesResponse;
 import synapticloop.scaleway.api.model.Organization;
 import synapticloop.scaleway.api.model.Server;
 import synapticloop.scaleway.api.model.ServerAction;
 import synapticloop.scaleway.api.model.ServerTask;
 import synapticloop.scaleway.api.model.ServerTaskStatus;
 import synapticloop.scaleway.api.model.ServerType;
-import synapticloop.scaleway.api.model.ServersResponse;
 import synapticloop.scaleway.api.model.Volume;
+import synapticloop.scaleway.api.response.ImagesResponse;
+import synapticloop.scaleway.api.response.ServersResponse;
 
 public class ScalewayApiClientTest {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ScalewayApiClientTest.class);

@@ -1,4 +1,4 @@
-package synapticloop.scaleway.api.model;
+package synapticloop.scaleway.api.response;
 
 /*
  * Copyright (c) 2016 synapticloop.
@@ -20,9 +20,13 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ServersResponse extends BasePaginationResponse {
-	@JsonProperty("servers")  public List<Server> servers;
+import synapticloop.scaleway.api.model.Image;
 
-	public List<Server> getServers() { return servers; }
+public class ImagesResponse extends BasePaginationResponse {
 
+	@JsonProperty("images")  private List<Image> images;
+
+	public List<Image> getImages() { return images; }
+
+	public void setImages(List<Image> images) { this.images = images; }
 }
