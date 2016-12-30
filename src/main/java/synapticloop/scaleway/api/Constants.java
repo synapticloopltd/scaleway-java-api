@@ -16,9 +16,25 @@ package synapticloop.scaleway.api;
  * this source code or binaries.
  */
 
+/**
+ * Constants for various things
+ * 
+ */
 public class Constants {
 	public static final String PATH_IMAGES = "/images?page=%d&per_page=%d";
 	public static final String PATH_IMAGES_SLASH = "/images/%s";
+
+	public static final String PATH_ORGANIZATIONS = "/organizations";
+
+	public static final String PATH_SERVERS = "/servers";
+	public static final String PATH_SERVERS_SLASH = "/servers/%s";
+	public static final String PATH_SERVERS_SLASH_ACTION = "/servers/%s/action";
+
+	public static final String PATH_TASKS_SLASH = "/tasks/%s";
+
+	public static final String PATH_TOKENS = "/tokens";
+
+	public static final String PATH_USERS_SLASH = "/users/%s";
 
 	public static final String PATH_VOLUMES = "/volumes?page=%d&per_page=%d";
 	public static final String PATH_VOLUMES_SLASH = "/volumes/%s";
@@ -26,10 +42,10 @@ public class Constants {
 	public static final String ACCOUNT_URL = "https://account.scaleway.com";
 	public static final String COMPUTE_URL = "https://cp-%s.scaleway.com";
 
-	public static final String HEADER_AUTH_TOKEN="X-Auth-Token";
-
 	public static final String JSON_APPLICATION="application/json";
 	public static final String USER_AGENT = "synapticloop-scaleway-java-api";
+
+	public static final String HEADER_AUTH_TOKEN="X-Auth-Token";
 
 	public static final String HTTP_METHOD_PATCH = "PATCH";
 	public static final String HTTP_METHOD_PUT = "PUT";

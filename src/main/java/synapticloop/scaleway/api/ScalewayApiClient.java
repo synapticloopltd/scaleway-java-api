@@ -60,27 +60,25 @@ import synapticloop.scaleway.api.model.ServerTask;
 import synapticloop.scaleway.api.model.ServerType;
 import synapticloop.scaleway.api.model.ServersResponse;
 import synapticloop.scaleway.api.model.TaskResponse;
+import synapticloop.scaleway.api.model.Token;
+import synapticloop.scaleway.api.model.TokenResponse;
 import synapticloop.scaleway.api.model.User;
 import synapticloop.scaleway.api.model.UserResponse;
 import synapticloop.scaleway.api.model.Volume;
 import synapticloop.scaleway.api.model.VolumeResponse;
 import synapticloop.scaleway.api.model.VolumeType;
 import synapticloop.scaleway.api.model.VolumesResponse;
+import synapticloop.scaleway.api.request.ActionRequest;
+import synapticloop.scaleway.api.request.TokenRequest;
 
+/**
+ * This is the Scaleway API client to interact with the cloud provider
+ * 
+ * https://www.scaleway.com/
+ *
+ */
 public class ScalewayApiClient {
-	private static final String PATH_TASKS_SLASH = "/tasks/%s";
-
-	private static final String PATH_ORGANIZATIONS = "/organizations";
-
-	private static final String PATH_USERS_SLASH = "/users/%s";
-
-	private static final String PATH_VOLUMES = "/volumes";
-
 	private static final Logger LOGGER = LoggerFactory.getLogger(ScalewayApiClient.class);
-
-	private static final String PATH_SERVERS = "/servers";
-	private static final String PATH_SERVERS_SLASH = "/servers/%s";
-	private static final String PATH_SERVERS_SLASH_ACTION = "/servers/%s/action";
 
 	private final String accessToken;
 	private final Region region;
@@ -123,7 +121,7 @@ public class ScalewayApiClient {
 	public List<Organization> getAllOrganizations() throws ScalewayApiException {
 		return(execute(Constants.HTTP_METHOD_GET, 
 				Constants.ACCOUNT_URL, 
-				PATH_ORGANIZATIONS,
+				Constants.PATH_ORGANIZATIONS,
 				200, 
 				Organizations.class).getOrganizations());
 	}
@@ -140,7 +138,7 @@ public class ScalewayApiClient {
 	public User getUser(String userId) throws ScalewayApiException {
 		return(execute(Constants.HTTP_METHOD_GET, 
 				Constants.ACCOUNT_URL, 
-				String.format(PATH_USERS_SLASH, userId),
+				String.format(Constants.PATH_USERS_SLASH, userId),
 				200, 
 				UserResponse.class).getUser());
 	}
@@ -181,14 +179,11 @@ public class ScalewayApiClient {
 	 * @throws ScalewayApiException If there was an error with the API call
 	 */
 	public Server createServer(ServerDefinition serverDefinition) throws ScalewayApiException {
-		HttpPost request = (HttpPost) buildRequest(Constants.HTTP_METHOD_POST, new StringBuilder(computeUrl).append(PATH_SERVERS).toString());
-		try {
-			StringEntity entity = new StringEntity(serializeObject(serverDefinition));
-			request.setEntity(entity);
-			return(executeAndGetResponse(request, 201, ServerResponse.class).getServer());
-		} catch (JsonProcessingException | UnsupportedEncodingException ex) {
-			throw new ScalewayApiException(ex);
-		}
+		HttpPost request = (HttpPost) buildRequest(Constants.HTTP_METHOD_POST, 
+				new StringBuilder(computeUrl).append(Constants.PATH_SERVERS).toString(), 
+				serverDefinition);
+
+		return(executeAndGetResponse(request, 201, ServerResponse.class).getServer());
 	}
 
 	/**
@@ -203,7 +198,7 @@ public class ScalewayApiClient {
 	public Server getServer(String serverId) throws ScalewayApiException {
 		return(execute(Constants.HTTP_METHOD_GET, 
 				computeUrl, 
-				String.format(PATH_SERVERS_SLASH, serverId), 
+				String.format(Constants.PATH_SERVERS_SLASH, serverId), 
 				200, 
 				ServerResponse.class).getServer());
 	}
@@ -220,7 +215,7 @@ public class ScalewayApiClient {
 	 * @throws ScalewayApiException If there was an error with the API call
 	 */
 	public ServersResponse getAllServers(int numPage, int numPerPage) throws ScalewayApiException {
-		HttpRequestBase request = buildRequest(Constants.HTTP_METHOD_GET, new StringBuilder(computeUrl).append(String.format(PATH_SERVERS, numPage, numPerPage)).toString());
+		HttpRequestBase request = buildRequest(Constants.HTTP_METHOD_GET, new StringBuilder(computeUrl).append(String.format(Constants.PATH_SERVERS, numPage, numPerPage)).toString());
 		HttpResponse response = executeRequest(request);
 		if(response.getStatusLine().getStatusCode() == 200) {
 			Header[] allHeaders = response.getAllHeaders();
@@ -256,7 +251,7 @@ public class ScalewayApiClient {
 			throw new ScalewayApiException(ex);
 		}
 	}
-*/
+	 */
 
 	/**
 	 * Get a list of all of the available images - with the results coming back 
@@ -319,7 +314,7 @@ public class ScalewayApiClient {
 	public void deleteServer(String serverId) throws ScalewayApiException {
 		execute(Constants.HTTP_METHOD_DELETE, 
 				computeUrl, 
-				String.format(PATH_SERVERS_SLASH, serverId), 
+				String.format(Constants.PATH_SERVERS_SLASH, serverId), 
 				204, 
 				null);
 	}
@@ -336,7 +331,7 @@ public class ScalewayApiClient {
 	public List<ServerAction> getServerActions(String serverId) throws ScalewayApiException {
 		return(execute(Constants.HTTP_METHOD_GET, 
 				computeUrl, 
-				String.format(PATH_SERVERS_SLASH_ACTION, serverId),
+				String.format(Constants.PATH_SERVERS_SLASH_ACTION, serverId),
 				200, 
 				ServerActionsResponse.class).getServerActions());
 	}
@@ -355,21 +350,11 @@ public class ScalewayApiClient {
 	 * @throws ScalewayApiException If there was an error with the API call
 	 */
 	public Volume createVolume(String name, String organizationId, long size, VolumeType volumeType) throws ScalewayApiException {
-		HttpPost request = (HttpPost) buildRequest(Constants.HTTP_METHOD_POST, new StringBuilder(computeUrl).append(PATH_VOLUMES).toString());
+		HttpPost request = (HttpPost) buildRequest(Constants.HTTP_METHOD_POST, 
+				new StringBuilder(computeUrl).append(Constants.PATH_VOLUMES).toString(),
+				new Volume(name, organizationId, size, volumeType));
 
-		Volume volume = new Volume();
-		volume.setName(name);
-		volume.setOrganizationId(organizationId);
-		volume.setSize(size);
-		volume.setVolumeType(volumeType);
-
-		try {
-			StringEntity entity = new StringEntity(serializeObject(volume));
-			request.setEntity(entity);
-			return(executeAndGetResponse(request, 201, VolumeResponse.class).getVolume());
-		} catch (UnsupportedEncodingException | JsonProcessingException ex) {
-			throw new ScalewayApiException(ex);
-		}
+		return(executeAndGetResponse(request, 201, VolumeResponse.class).getVolume());
 	}
 
 	/**
@@ -448,15 +433,12 @@ public class ScalewayApiClient {
 	 * @throws ScalewayApiException If there was an error with the API call
 	 */
 	public ServerTask executeServerAction(String serverId, ServerAction serverAction) throws ScalewayApiException {
-		HttpPost request = (HttpPost) buildRequest(Constants.HTTP_METHOD_POST, new StringBuilder(computeUrl).append(String.format(PATH_SERVERS_SLASH_ACTION, serverId)).toString());
 
-		try {
-			StringEntity entity = new StringEntity(String.format("{\"action\": \"%s\"}", serverAction.toString().toLowerCase()));
-			request.setEntity(entity);
-			return(executeAndGetResponse(request, 202, TaskResponse.class).getServerTask());
-		} catch (UnsupportedEncodingException ex) {
-			throw new ScalewayApiException(ex);
-		}
+		HttpPost request = (HttpPost) buildRequest(Constants.HTTP_METHOD_POST, 
+				new StringBuilder(computeUrl).append(String.format(Constants.PATH_SERVERS_SLASH_ACTION, serverId)).toString(),
+				new ActionRequest(serverAction));
+
+		return(executeAndGetResponse(request, 202, TaskResponse.class).getServerTask());
 	}
 
 	/**
@@ -471,9 +453,27 @@ public class ScalewayApiClient {
 	public ServerTask getTaskStatus(String taskId) throws ScalewayApiException {
 		return(execute(Constants.HTTP_METHOD_GET, 
 				computeUrl, 
-				String.format(PATH_TASKS_SLASH, taskId),
+				String.format(Constants.PATH_TASKS_SLASH, taskId),
 				200, 
 				TaskResponse.class).getServerTask());
+	}
+
+	/**
+	 * Create an access token for the Scaleway API
+	 * 
+	 * @param emailAddress the email address
+	 * @param password the passord
+	 * @param expires whether this token expires
+	 * @return 
+	 * 
+	 * @throws ScalewayApiException If there was an error with the API call
+	 */
+	public Token createToken(String emailAddress, String password, boolean expires) throws ScalewayApiException {
+		HttpPost request = (HttpPost) buildRequest(Constants.HTTP_METHOD_POST, 
+				new StringBuilder(computeUrl).append(Constants.PATH_TOKENS).toString(), 
+				new TokenRequest(emailAddress, password, expires));
+
+		return(executeAndGetResponse(request, 201, TokenResponse.class).getToken());
 	}
 
 	/**
@@ -547,8 +547,13 @@ public class ScalewayApiClient {
 	 * @param requestPath The full URI to build
 	 * 
 	 * @return the base HTTP object
+	 * @throws ScalewayApiException If there was an error with the API call
 	 */
-	private HttpRequestBase buildRequest(String httpMethod, String requestPath) {
+	private HttpRequestBase buildRequest(String httpMethod, String requestPath) throws ScalewayApiException {
+		return(buildRequest(httpMethod, requestPath, null));
+	}
+
+	private HttpRequestBase buildRequest(String httpMethod, String requestPath, Object entityContent) throws ScalewayApiException {
 		HttpRequestBase request = null;
 		switch (httpMethod) {
 		case Constants.HTTP_METHOD_GET:
@@ -571,30 +576,19 @@ public class ScalewayApiClient {
 		request.setHeader(Constants.HEADER_AUTH_TOKEN, accessToken);
 		request.setHeader(HttpHeaders.CONTENT_TYPE, Constants.JSON_APPLICATION);
 
-		return request;
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	private void setResponseObject(HttpEntityEnclosingRequestBase request, Object responseObject) throws ScalewayApiException {
-		try {
-			request.setEntity(new StringEntity(formatJson(responseObject), "UTF-8"));
-		} catch (JsonProcessingException ex) {
-			throw new ScalewayApiException(ex);
+		if(null != entityContent) {
+			if(request instanceof HttpEntityEnclosingRequestBase) {
+				try {
+					StringEntity entity = new StringEntity(serializeObject(entityContent));
+					((HttpEntityEnclosingRequestBase)request).setEntity(entity);
+				} catch (UnsupportedEncodingException | JsonProcessingException ex) {
+					throw new ScalewayApiException(ex);
+				}
+			} else {
+				LOGGER.error("Attempting to set entity on non applicable base class of '{}'", request.getClass());
+			}
 		}
+		return request;
 	}
 
 	private <T> T executeAndGetResponse(HttpRequestBase request, int allowableStatusCode, Class<T> returnClass) throws ScalewayApiException {
@@ -650,9 +644,5 @@ public class ScalewayApiClient {
 			LOGGER.error("%s", jsonString);
 			throw ex;
 		}
-	}
-
-	private String formatJson(Object entity) throws JsonProcessingException {
-		return initializeObjectMapperJson().writeValueAsString(entity);
 	}
 }

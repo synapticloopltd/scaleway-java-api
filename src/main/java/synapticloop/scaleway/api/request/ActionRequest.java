@@ -1,4 +1,4 @@
-package synapticloop.scaleway.api;
+package synapticloop.scaleway.api.request;
 
 /*
  * Copyright (c) 2016 synapticloop.
@@ -16,13 +16,23 @@ package synapticloop.scaleway.api;
  * this source code or binaries.
  */
 
-public enum Region {
-	PARIS1("par1"),
-	AMSTERDAM1("ams1");
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-	public final String region;
+import synapticloop.scaleway.api.model.ServerAction;
 
-	Region(String region){ this.region=region; }
+/**
+ * A token request is used to encapsulate the JSON object for creating a token.
+ */
 
-	public String toString() { return(region); }
+public class ActionRequest {
+	@JsonProperty("action")  private String action;
+
+	/**
+	 * Create an action request for server actions Scaleway API
+	 * 
+	 * @param serverAction The action to perform on the server
+	 */
+	public ActionRequest(ServerAction serverAction) {
+		this.action = serverAction.toString().toLowerCase();
+	}
 }

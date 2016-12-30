@@ -1,4 +1,4 @@
-package synapticloop.scaleway.api;
+package synapticloop.scaleway.api.model;
 
 /*
  * Copyright (c) 2016 synapticloop.
@@ -16,13 +16,35 @@ package synapticloop.scaleway.api;
  * this source code or binaries.
  */
 
-public enum Region {
-	PARIS1("par1"),
-	AMSTERDAM1("ams1");
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-	public final String region;
+public class Token {
+	@JsonProperty("dynamic")  private boolean isDynamic;
+	@JsonProperty("id")       private String id;
+	@JsonProperty("address")  private String address;
 
-	Region(String region){ this.region=region; }
+	public boolean getIsDynamic() {
+		return isDynamic;
+	}
 
-	public String toString() { return(region); }
+	public void setIsDynamic(boolean isDynamic) {
+		this.isDynamic = isDynamic;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
 }

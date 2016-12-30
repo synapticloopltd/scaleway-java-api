@@ -1,7 +1,7 @@
 package synapticloop.scaleway.api;
 
 /*
- * Copyright (c) 2016 synapticloop.
+ * Copyright (c) 2016 Synapticloop.
  * 
  * All rights reserved.
  * 
@@ -16,13 +16,25 @@ package synapticloop.scaleway.api;
  * this source code or binaries.
  */
 
-public enum Region {
-	PARIS1("par1"),
-	AMSTERDAM1("ams1");
+import static org.junit.Assert.*;
 
-	public final String region;
+import org.junit.Before;
+import org.junit.Test;
 
-	Region(String region){ this.region=region; }
+import synapticloop.scaleway.api.exception.ScalewayApiException;
 
-	public String toString() { return(region); }
+public class TokenTest {
+
+	private ScalewayApiClient scalewayApiClient;
+
+	@Before
+	public void setup() {
+		scalewayApiClient = new ScalewayApiClient(null, Region.AMSTERDAM1);
+	}
+
+	@Test
+	public void testCreateToken() throws ScalewayApiException {
+		scalewayApiClient.createToken("a@b.com", "password", true);
+		assertTrue(true);
+	}
 }

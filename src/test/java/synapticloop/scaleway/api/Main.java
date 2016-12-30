@@ -89,8 +89,6 @@ public class Main {
 			Volume volume = volumes.get(key);
 			scalewayApiClient.deleteVolume(volume.getId());
 		}
-
-
 	}
 
 }

@@ -1,4 +1,4 @@
-package synapticloop.scaleway.api;
+package synapticloop.scaleway.api.model;
 
 /*
  * Copyright (c) 2016 synapticloop.
@@ -16,13 +16,13 @@ package synapticloop.scaleway.api;
  * this source code or binaries.
  */
 
-public enum Region {
-	PARIS1("par1"),
-	AMSTERDAM1("ams1");
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-	public final String region;
+public class TokenResponse {
+	@JsonProperty("token")  private Token token;
 
-	Region(String region){ this.region=region; }
-
-	public String toString() { return(region); }
+	/**
+	 * @return the volume
+	 */
+	public Token getToken() { return token; }
 }
