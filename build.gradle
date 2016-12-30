@@ -13,7 +13,7 @@ group = 'synapticloop'
 archivesBaseName = 'scaleway-java-api'
 description = """A java api for the scaleway service"""
 
-version = '0.5.0'
+version = '0.6.0'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
