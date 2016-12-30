@@ -49,6 +49,7 @@ import synapticloop.scaleway.api.exception.ScalewayApiException;
 import synapticloop.scaleway.api.model.IP;
 import synapticloop.scaleway.api.model.Image;
 import synapticloop.scaleway.api.model.Organization;
+import synapticloop.scaleway.api.model.Rule;
 import synapticloop.scaleway.api.model.SecurityGroup;
 import synapticloop.scaleway.api.model.Server;
 import synapticloop.scaleway.api.model.ServerAction;
@@ -62,6 +63,7 @@ import synapticloop.scaleway.api.model.VolumeType;
 import synapticloop.scaleway.api.request.ActionRequest;
 import synapticloop.scaleway.api.request.IPPutRequest;
 import synapticloop.scaleway.api.request.IPRequest;
+import synapticloop.scaleway.api.request.RuleRequest;
 import synapticloop.scaleway.api.request.SecurityGroupRequest;
 import synapticloop.scaleway.api.request.TokenPatchRequest;
 import synapticloop.scaleway.api.request.TokenRequest;
@@ -71,6 +73,8 @@ import synapticloop.scaleway.api.response.IPsResponse;
 import synapticloop.scaleway.api.response.ImageResponse;
 import synapticloop.scaleway.api.response.ImagesResponse;
 import synapticloop.scaleway.api.response.OrganizationsResponse;
+import synapticloop.scaleway.api.response.RuleResponse;
+import synapticloop.scaleway.api.response.RulesResponse;
 import synapticloop.scaleway.api.response.SecurityGroupResponse;
 import synapticloop.scaleway.api.response.SecurityGroupsResponse;
 import synapticloop.scaleway.api.response.ServerActionsResponse;
@@ -775,7 +779,112 @@ public class ScalewayApiClient {
 		return(executeAndGetResponse(request, 200, SecurityGroupResponse.class).getSecurityGroup());
 	}
 
+	/**
+	 * Create a new rule
+	 * 
+	 * @param organizationId The organization id
+	 * @param ruleAction The action (DROP/ACCEPT)
+	 * @param ruleDirection The direction (inbound/outbound)
+	 * @param ipRange the IP ranges (i.e. 0.0.0.0/0
+	 * @param ruleProtocol The protocol (TCP/UDP/ICMP)
+	 * @param destPortFrom The destination port from
+	 * 
+	 * @return The newly created rule
+	 * 
+	 * @throws ScalewayApiException If there was an error with the API call
+	 */
+	public Rule createRule(String organizationId, RuleAction ruleAction, RuleDirection ruleDirection, String ipRange, RuleProtocol ruleProtocol, int destPortFrom) throws ScalewayApiException {
+		HttpPost request = (HttpPost) buildRequest(Constants.HTTP_METHOD_POST, 
+				new StringBuilder(computeUrl).append(Constants.PATH_SECURITY_GROUPS_RULES).toString(),
+				new RuleRequest(organizationId, ruleAction, ruleDirection, ipRange, ruleProtocol, destPortFrom));
 
+		return(executeAndGetResponse(request, 201, RuleResponse.class).getRule());
+	}
+
+	/**
+	 * Delete a rule
+	 * 
+	 * @param ruleId The ID of the rule to delete
+	 * 
+	 * @throws ScalewayApiException If there was an error with the API call
+	 */
+	public void deleteRule(String ruleId) throws ScalewayApiException {
+		execute(Constants.HTTP_METHOD_DELETE, 
+				computeUrl, 
+				String.format(Constants.PATH_SECURITY_GROUPS_RULES_SLASH, ruleId), 
+				204, 
+				null);
+	}
+
+	/**
+	 * Return a paginated list of the rules associated with the account
+	 * 
+	 * @param numPage the page number to retrieve (starting at 1)
+	 * @param numPerPage The number of results per page (maximum 100)
+	 * 
+	 * @return The list of security groups associated with the account
+	 * 
+	 * @throws ScalewayApiException If there was an error with the API call
+	 */
+	public RulesResponse getAllRules(int numPage, int numPerPage) throws ScalewayApiException {
+		HttpRequestBase request = buildRequest(Constants.HTTP_METHOD_GET, 
+				new StringBuilder(computeUrl).append(String.format(Constants.PATH_SECURITY_GROUPS_RULES_PAGING, numPage, numPerPage)).toString());
+
+		HttpResponse response = executeRequest(request);
+
+		if(response.getStatusLine().getStatusCode() == 200) {
+			Header[] allHeaders = response.getAllHeaders();
+			RulesResponse rulesResponse = parseResponse(response, RulesResponse.class);
+			rulesResponse.parsePaginationHeaders(allHeaders);
+			return(rulesResponse);
+		} else {
+			try {
+				throw new ScalewayApiException(IOUtils.toString(response.getEntity().getContent()));
+			} catch (UnsupportedOperationException | IOException ex) {
+				throw new ScalewayApiException(ex);
+			}
+		}
+	}
+
+	/**
+	 * Return the rule details from the passed in ID
+	 * 
+	 * @param ruleId The ID of the rule to look up
+	 * 
+	 * @return The details for the rule
+	 * 
+	 * @throws ScalewayApiException If there was an error with the API call
+	 */
+	public Rule getRule(String ruleId) throws ScalewayApiException {
+		return(execute(Constants.HTTP_METHOD_GET, 
+				computeUrl, 
+				String.format(Constants.PATH_SECURITY_GROUPS_RULES_SLASH, ruleId),
+				200, 
+				RuleResponse.class).getRule());
+	}
+
+	/**
+	 * Update a rule with new details
+	 * 
+	 * @param ruleId The ID of the rule to update
+	 * @param organizationId The organization id
+	 * @param ruleAction The action (DROP/ACCEPT)
+	 * @param ruleDirection The direction (inbound/outbound)
+	 * @param ipRange the IP ranges (i.e. 0.0.0.0/0
+	 * @param ruleProtocol The protocol (TCP/UDP/ICMP)
+	 * @param destPortFrom The destination port from
+	 * 
+	 * @return The newly created rule
+	 * 
+	 * @throws ScalewayApiException If there was an error with the API call
+	 */
+	public Rule updateRule(String ruleId, String organizationId, RuleAction ruleAction, RuleDirection ruleDirection, String ipRange, RuleProtocol ruleProtocol, int destPortFrom) throws ScalewayApiException {
+		HttpPut request = (HttpPut) buildRequest(Constants.HTTP_METHOD_PUT, 
+				new StringBuilder(computeUrl).append(String.format(Constants.PATH_SECURITY_GROUPS_RULES, ruleId)).toString(), 
+				new RuleRequest(organizationId, ruleAction, ruleDirection, ipRange, ruleProtocol, destPortFrom));
+
+		return(executeAndGetResponse(request, 200, RuleResponse.class).getRule());
+	}
 
 
 
