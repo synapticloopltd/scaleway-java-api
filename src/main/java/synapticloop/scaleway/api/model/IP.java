@@ -17,6 +17,7 @@ package synapticloop.scaleway.api.model;
  */
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 public class IP {
 	@JsonProperty("id")            private String id;
@@ -24,8 +25,12 @@ public class IP {
 	@JsonProperty("reverse")       private String ipAddressReverse;
 	@JsonProperty("organization")  private String organizationId;
 	@JsonProperty("server")        private Server server;
+	@JsonProperty("dynamic")       private boolean isDynamic = false;
 
 	public String getId() { return id; }
+
+	@JsonSetter("public_ip")
+	private void setPublicIP(String publicIp) { this.ipAddress = publicIp; }
 
 	public String getIpAddress() { return ipAddress; }
 
@@ -34,4 +39,6 @@ public class IP {
 	public Server getServer() { return this.server; }
 
 	public String getIpAddressReverse() { return this.ipAddressReverse; }
+	
+	public boolean getIsDynamic() { return this.isDynamic; }
 }
