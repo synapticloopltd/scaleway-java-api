@@ -12,15 +12,13 @@ import synapticloop.scaleway.api.RuleProtocol;
  */
 
 public class RuleRequest {
-	@JsonProperty("organization")    private String organizationId;
 	@JsonProperty("action")          private RuleAction ruleAction;
 	@JsonProperty("direction")       private RuleDirection ruleDirection;
 	@JsonProperty("protocol")        private RuleProtocol ruleProtocol;
 	@JsonProperty("ip_range")        private String ipRange;
 	@JsonProperty("dest_port_from")  private String destPortFrom;
 
-	public RuleRequest(String organizationId, RuleAction ruleAction, RuleDirection ruleDirection, String ipRange, RuleProtocol ruleProtocol, int destPortFrom) {
-		this.organizationId = organizationId;
+	public RuleRequest(RuleAction ruleAction, RuleDirection ruleDirection, String ipRange, RuleProtocol ruleProtocol, int destPortFrom) {
 		this.ruleAction = ruleAction;
 		this.ruleDirection = ruleDirection;
 		this.ipRange = ipRange;

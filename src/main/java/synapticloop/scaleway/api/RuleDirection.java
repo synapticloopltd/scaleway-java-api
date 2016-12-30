@@ -1,5 +1,7 @@
 package synapticloop.scaleway.api;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /*
  * Copyright (c) 2016 synapticloop.
  * 
@@ -17,8 +19,8 @@ package synapticloop.scaleway.api;
  */
 
 public enum RuleDirection {
-	INBOUND("inbound"),
-	OUTBOUND("outbound");
+	@JsonProperty("inbound")   INBOUND("inbound"),
+	@JsonProperty("outbound")  OUTBOUND("outbound");
 
 	public final String direction;
 

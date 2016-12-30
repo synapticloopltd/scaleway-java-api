@@ -60,9 +60,9 @@ public class Constants {
 	public static final String PATH_SECURITY_GROUPS_PAGING = "/security_groups?page=%d&per_page=%d";
 	public static final String PATH_SECURITY_GROUPS_SLASH = "/security_groups/%s";
 
-	public static final String PATH_SECURITY_GROUPS_RULES = "/security_groups/rules";
-	public static final String PATH_SECURITY_GROUPS_RULES_PAGING = "/security_groups/rules?page=%d&per_page=%d";
-	public static final String PATH_SECURITY_GROUPS_RULES_SLASH = "/security_groups/rules/%s";
+	public static final String PATH_SECURITY_GROUPS_RULES = "/security_groups/%s/rules";
+	public static final String PATH_SECURITY_GROUPS_RULES_PAGING = "/security_groups/%s/rules?page=%d&per_page=%d";
+	public static final String PATH_SECURITY_GROUPS_RULES_SLASH = "/security_groups/%s/rules/%s";
 
 	public static final String PATH_SERVERS = "/servers";
 	public static final String PATH_SERVERS_SLASH = "/servers/%s";

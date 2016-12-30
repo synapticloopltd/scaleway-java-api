@@ -782,6 +782,7 @@ public class ScalewayApiClient {
 	/**
 	 * Create a new rule
 	 * 
+	 * @param securityGroupId The security group that this rule will be attached to
 	 * @param organizationId The organization id
 	 * @param ruleAction The action (DROP/ACCEPT)
 	 * @param ruleDirection The direction (inbound/outbound)
@@ -793,10 +794,10 @@ public class ScalewayApiClient {
 	 * 
 	 * @throws ScalewayApiException If there was an error with the API call
 	 */
-	public Rule createRule(String organizationId, RuleAction ruleAction, RuleDirection ruleDirection, String ipRange, RuleProtocol ruleProtocol, int destPortFrom) throws ScalewayApiException {
+	public Rule createRule(String securityGroupId, RuleAction ruleAction, RuleDirection ruleDirection, String ipRange, RuleProtocol ruleProtocol, int destPortFrom) throws ScalewayApiException {
 		HttpPost request = (HttpPost) buildRequest(Constants.HTTP_METHOD_POST, 
-				new StringBuilder(computeUrl).append(Constants.PATH_SECURITY_GROUPS_RULES).toString(),
-				new RuleRequest(organizationId, ruleAction, ruleDirection, ipRange, ruleProtocol, destPortFrom));
+				new StringBuilder(computeUrl).append(String.format(Constants.PATH_SECURITY_GROUPS_RULES, securityGroupId)).toString(),
+				new RuleRequest(ruleAction, ruleDirection, ipRange, ruleProtocol, destPortFrom));
 
 		return(executeAndGetResponse(request, 201, RuleResponse.class).getRule());
 	}
@@ -804,21 +805,23 @@ public class ScalewayApiClient {
 	/**
 	 * Delete a rule
 	 * 
+	 * @param securityGroupId The security group that this rule will be attached to
 	 * @param ruleId The ID of the rule to delete
 	 * 
 	 * @throws ScalewayApiException If there was an error with the API call
 	 */
-	public void deleteRule(String ruleId) throws ScalewayApiException {
+	public void deleteRule(String securityGroupId, String ruleId) throws ScalewayApiException {
 		execute(Constants.HTTP_METHOD_DELETE, 
 				computeUrl, 
-				String.format(Constants.PATH_SECURITY_GROUPS_RULES_SLASH, ruleId), 
+				String.format(Constants.PATH_SECURITY_GROUPS_RULES_SLASH, securityGroupId, ruleId), 
 				204, 
 				null);
 	}
 
 	/**
-	 * Return a paginated list of the rules associated with the account
+	 * Return a paginated list of the rules associated with the security group
 	 * 
+	 * @param securityGroupId The security group that this rule will be attached to
 	 * @param numPage the page number to retrieve (starting at 1)
 	 * @param numPerPage The number of results per page (maximum 100)
 	 * 
@@ -826,9 +829,9 @@ public class ScalewayApiClient {
 	 * 
 	 * @throws ScalewayApiException If there was an error with the API call
 	 */
-	public RulesResponse getAllRules(int numPage, int numPerPage) throws ScalewayApiException {
+	public RulesResponse getAllRules(String securityGroupId, int numPage, int numPerPage) throws ScalewayApiException {
 		HttpRequestBase request = buildRequest(Constants.HTTP_METHOD_GET, 
-				new StringBuilder(computeUrl).append(String.format(Constants.PATH_SECURITY_GROUPS_RULES_PAGING, numPage, numPerPage)).toString());
+				new StringBuilder(computeUrl).append(String.format(Constants.PATH_SECURITY_GROUPS_RULES_PAGING, securityGroupId, numPage, numPerPage)).toString());
 
 		HttpResponse response = executeRequest(request);
 
@@ -849,16 +852,17 @@ public class ScalewayApiClient {
 	/**
 	 * Return the rule details from the passed in ID
 	 * 
+	 * @param securityGroupId The security group that this rule will be attached to
 	 * @param ruleId The ID of the rule to look up
 	 * 
 	 * @return The details for the rule
 	 * 
 	 * @throws ScalewayApiException If there was an error with the API call
 	 */
-	public Rule getRule(String ruleId) throws ScalewayApiException {
+	public Rule getRule(String securityGroupId, String ruleId) throws ScalewayApiException {
 		return(execute(Constants.HTTP_METHOD_GET, 
 				computeUrl, 
-				String.format(Constants.PATH_SECURITY_GROUPS_RULES_SLASH, ruleId),
+				String.format(Constants.PATH_SECURITY_GROUPS_RULES_SLASH, securityGroupId, ruleId),
 				200, 
 				RuleResponse.class).getRule());
 	}
@@ -866,8 +870,8 @@ public class ScalewayApiClient {
 	/**
 	 * Update a rule with new details
 	 * 
+	 * @param securityGroupId The security group that this rule will be attached to
 	 * @param ruleId The ID of the rule to update
-	 * @param organizationId The organization id
 	 * @param ruleAction The action (DROP/ACCEPT)
 	 * @param ruleDirection The direction (inbound/outbound)
 	 * @param ipRange the IP ranges (i.e. 0.0.0.0/0
@@ -878,13 +882,16 @@ public class ScalewayApiClient {
 	 * 
 	 * @throws ScalewayApiException If there was an error with the API call
 	 */
-	public Rule updateRule(String ruleId, String organizationId, RuleAction ruleAction, RuleDirection ruleDirection, String ipRange, RuleProtocol ruleProtocol, int destPortFrom) throws ScalewayApiException {
+	public Rule updateRule(String securityGroupId, String ruleId, RuleAction ruleAction, RuleDirection ruleDirection, String ipRange, RuleProtocol ruleProtocol, int destPortFrom) throws ScalewayApiException {
 		HttpPut request = (HttpPut) buildRequest(Constants.HTTP_METHOD_PUT, 
-				new StringBuilder(computeUrl).append(String.format(Constants.PATH_SECURITY_GROUPS_RULES, ruleId)).toString(), 
-				new RuleRequest(organizationId, ruleAction, ruleDirection, ipRange, ruleProtocol, destPortFrom));
+				new StringBuilder(computeUrl).append(String.format(Constants.PATH_SECURITY_GROUPS_RULES, securityGroupId, ruleId)).toString(), 
+				new RuleRequest(ruleAction, ruleDirection, ipRange, ruleProtocol, destPortFrom));
 
 		return(executeAndGetResponse(request, 200, RuleResponse.class).getRule());
 	}
+
+
+
 
 
 

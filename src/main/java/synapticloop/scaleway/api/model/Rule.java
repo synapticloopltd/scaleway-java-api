@@ -26,7 +26,7 @@ public class Rule {
 
 	@JsonProperty("direction")       private RuleDirection direction;
 	@JsonProperty("protocol")        private RuleProtocol protocol;
-	@JsonProperty("ipRange")         private String ipRange;
+	@JsonProperty("ip_range")         private String ipRange;
 	@JsonProperty("dest_port_from")  private Integer destPortFrom;
 	@JsonProperty("action")          private RuleAction action;
 	@JsonProperty("position")        private int position;

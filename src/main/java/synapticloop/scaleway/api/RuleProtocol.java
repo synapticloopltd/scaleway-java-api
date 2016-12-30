@@ -1,5 +1,7 @@
 package synapticloop.scaleway.api;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /*
  * Copyright (c) 2016 synapticloop.
  * 
@@ -17,9 +19,9 @@ package synapticloop.scaleway.api;
  */
 
 public enum RuleProtocol {
-	TCP("TCP"),
-	ICMP("ICMP"),
-	UDP("UDP");
+	@JsonProperty("TCP")   TCP("TCP"),
+	@JsonProperty("ICMP")  ICMP("ICMP"),
+	@JsonProperty("UDP")   UDP("UDP");
 
 	public final String protocol;
 

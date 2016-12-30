@@ -1,5 +1,7 @@
 package synapticloop.scaleway.api;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /*
  * Copyright (c) 2016 synapticloop.
  * 
@@ -17,8 +19,8 @@ package synapticloop.scaleway.api;
  */
 
 public enum RuleAction {
-	DROP("drop"),
-	ACCEPT("accept");
+	@JsonProperty("drop")    DROP("drop"),
+	@JsonProperty("accept")  ACCEPT("drop");
 
 	public final String rule;
 
