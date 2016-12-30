@@ -49,7 +49,6 @@ import synapticloop.scaleway.api.exception.ScalewayApiException;
 import synapticloop.scaleway.api.model.IP;
 import synapticloop.scaleway.api.model.Image;
 import synapticloop.scaleway.api.model.Organization;
-import synapticloop.scaleway.api.model.Organizations;
 import synapticloop.scaleway.api.model.Server;
 import synapticloop.scaleway.api.model.ServerAction;
 import synapticloop.scaleway.api.model.ServerDefinition;
@@ -69,6 +68,7 @@ import synapticloop.scaleway.api.response.IPResponse;
 import synapticloop.scaleway.api.response.IPsResponse;
 import synapticloop.scaleway.api.response.ImageResponse;
 import synapticloop.scaleway.api.response.ImagesResponse;
+import synapticloop.scaleway.api.response.OrganizationsResponse;
 import synapticloop.scaleway.api.response.ServerActionsResponse;
 import synapticloop.scaleway.api.response.ServerResponse;
 import synapticloop.scaleway.api.response.ServersResponse;
@@ -131,7 +131,7 @@ public class ScalewayApiClient {
 				Constants.ACCOUNT_URL, 
 				Constants.PATH_ORGANIZATIONS,
 				200, 
-				Organizations.class).getOrganizations());
+				OrganizationsResponse.class).getOrganizations());
 	}
 
 	/**
