@@ -60,11 +60,13 @@ import synapticloop.scaleway.api.model.User;
 import synapticloop.scaleway.api.model.Volume;
 import synapticloop.scaleway.api.model.VolumeType;
 import synapticloop.scaleway.api.request.ActionRequest;
+import synapticloop.scaleway.api.request.IPPutRequest;
 import synapticloop.scaleway.api.request.IPRequest;
 import synapticloop.scaleway.api.request.TokenPatchRequest;
 import synapticloop.scaleway.api.request.TokenRequest;
 import synapticloop.scaleway.api.request.VolumeRequest;
 import synapticloop.scaleway.api.response.IPResponse;
+import synapticloop.scaleway.api.response.IPsResponse;
 import synapticloop.scaleway.api.response.ImageResponse;
 import synapticloop.scaleway.api.response.ImagesResponse;
 import synapticloop.scaleway.api.response.ServerActionsResponse;
@@ -575,13 +577,89 @@ public class ScalewayApiClient {
 	 * 
 	 * @throws ScalewayApiException If there was an error with the API call
 	 */
-	public IP createIp(String organizationId) throws ScalewayApiException {
+	public IP createIP(String organizationId) throws ScalewayApiException {
 		HttpPost request = (HttpPost) buildRequest(Constants.HTTP_METHOD_POST, 
 				new StringBuilder(computeUrl).append(Constants.PATH_IPS).toString(),
 				new IPRequest(organizationId));
 
-		return(executeAndGetResponse(request, 201, IPResponse.class).getIp());
-		
+		return(executeAndGetResponse(request, 201, IPResponse.class).getIP());
+
+	}
+
+	/**
+	 * Return a paginated list of the reserved IP addresses associated with the 
+	 * account
+	 * 
+	 * @param numPage the page number to retrieve (starting at 1)
+	 * @param numPerPage The number of results per page (maximum 100)
+	 * 
+	 * @return The list of reserved IP address associated with the account
+	 * 
+	 * @throws ScalewayApiException If there was an error with the API call
+	 */
+	public IPsResponse getAllIPs(int numPage, int numPerPage) throws ScalewayApiException {
+		HttpRequestBase request = buildRequest(Constants.HTTP_METHOD_GET, 
+				new StringBuilder(computeUrl).append(String.format(Constants.PATH_IPS_PAGING, numPage, numPerPage)).toString());
+
+		HttpResponse response = executeRequest(request);
+
+		if(response.getStatusLine().getStatusCode() == 200) {
+			Header[] allHeaders = response.getAllHeaders();
+			IPsResponse ipsResponse = parseResponse(response, IPsResponse.class);
+			ipsResponse.parsePaginationHeaders(allHeaders);
+			return(ipsResponse);
+		} else {
+			try {
+				throw new ScalewayApiException(IOUtils.toString(response.getEntity().getContent()));
+			} catch (UnsupportedOperationException | IOException ex) {
+				throw new ScalewayApiException(ex);
+			}
+		}
+	}
+
+	/**
+	 * Get the reserved IP address details 
+	 * 
+	 * @param ipId the unique identifier for the IP address
+	 * 
+	 * @return The reserved IP address details
+	 * 
+	 * @throws ScalewayApiException If there was an error with the API call
+	 */
+	public IP getIP(String ipId) throws ScalewayApiException {
+		return(execute(Constants.HTTP_METHOD_GET, 
+				computeUrl, 
+				String.format(Constants.PATH_IPS_SLASH, ipId),
+				200, 
+				IPResponse.class).getIP());
+	}
+
+	/**
+	 * Attach an existing reserved IP address to a server
+	 * 
+	 * @param ipId The id of the IP Address
+	 * @param organizationId The ID of the organization
+	 * @param ipAddress The IP Address
+	 * @param serverId The ID of the Server
+	 * 
+	 * @return 
+	 * @throws ScalewayApiException
+	 */
+	public IP attachIP(String ipId, String organizationId, String ipAddress, String serverId) throws ScalewayApiException {
+		HttpPut request = (HttpPut) buildRequest(Constants.HTTP_METHOD_PUT, 
+				new StringBuilder(computeUrl).append(String.format(Constants.PATH_IPS_SLASH, ipId)).toString(), 
+				new IPPutRequest(ipAddress, ipId, serverId, organizationId));
+
+		return(executeAndGetResponse(request, 200, IPResponse.class).getIP());
+	}
+
+
+	public void deleteIP(String ipId) throws ScalewayApiException {
+		execute(Constants.HTTP_METHOD_DELETE, 
+				computeUrl, 
+				String.format(Constants.PATH_IPS_SLASH, ipId), 
+				204, 
+				null);
 	}
 
 

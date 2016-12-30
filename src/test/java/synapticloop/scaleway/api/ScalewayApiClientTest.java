@@ -167,7 +167,7 @@ public class ScalewayApiClientTest {
 		assertEquals(server.getName(), returnedServer.getName());
 		assertEquals(server.getOrganization(), returnedServer.getOrganization());
 		assertEquals(server.getPrivateIp(), returnedServer.getPrivateIp());
-		assertEquals(server.getPublicIp(), returnedServer.getPublicIp());
+		assertEquals(server.getPublicIP(), returnedServer.getPublicIP());
 		assertEquals(server.getStateDetail(), returnedServer.getStateDetail());
 
 		scalewayApiClient.deleteServer(server.getId());

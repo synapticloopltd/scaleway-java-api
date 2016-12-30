@@ -10,21 +10,7 @@ import synapticloop.scaleway.api.model.Volume;
 import synapticloop.scaleway.api.model.VolumeType;
 import synapticloop.scaleway.api.response.VolumesResponse;
 
-public class VolumeTest {
-	private static final String SCALEWAY_API_KEY = "SCALEWAY_API_KEY";
-
-	private ScalewayApiClient scalewayApiClient;
-
-	private String organizationId;
-
-	private String getOrganizationId() throws ScalewayApiException {
-		if(null == organizationId) {
-			this.organizationId = scalewayApiClient.getAllOrganizations().get(0).getId();
-			return(this.organizationId);
-		}
-
-		return(organizationId);
-	}
+public class VolumeTest extends BaseTestUtils {
 
 	@Before
 	public void setup() {
@@ -40,7 +26,7 @@ public class VolumeTest {
 
 		scalewayApiClient.deleteVolume(volume.getId());
 	}
-	
+
 	@Test
 	public void testGetAllVolumes() throws ScalewayApiException {
 		VolumesResponse volumesResponse = scalewayApiClient.getAllVolumes(1, 2);
@@ -53,7 +39,7 @@ public class VolumeTest {
 			assertEquals(numPages, volumesResponseInner.getNumPages());
 			assertEquals(volumesResponse.getTotalCount(), volumesResponseInner.getTotalCount());
 		}
-		
+
 	}
 
 }

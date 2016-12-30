@@ -51,6 +51,8 @@ public class Constants {
 	public static final String PATH_IMAGES_SLASH = "/images/%s";
 
 	public static final Object PATH_IPS = "/ips";
+	public static final String PATH_IPS_PAGING = "/ips?page=%d&per_page=%d";
+	public static final String PATH_IPS_SLASH = "/ips/%s";
 
 	public static final String PATH_ORGANIZATIONS = "/organizations";
 

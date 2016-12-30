@@ -26,5 +26,5 @@ public class IPResponse {
 	/**
 	 * @return the IP Address
 	 */
-	public IP getIp() { return ip; }
+	public IP getIP() { return ip; }
 }
