@@ -34,13 +34,6 @@ public class Volume {
 	@JsonProperty("creation_date")      private Date creationDate;
 	@JsonProperty("server")             private Server server;
 
-	public Volume(String name, String organizationId, long size, VolumeType volumeType) {
-		this.name = name;
-		this.organizationId = organizationId;
-		this.size = size;
-		this.volumeType = volumeType;
-	}
-
 	public String getId() { return id; }
 
 	public Server getServer() { return server; }
