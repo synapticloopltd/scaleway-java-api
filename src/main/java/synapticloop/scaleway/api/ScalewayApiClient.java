@@ -49,6 +49,7 @@ import synapticloop.scaleway.api.exception.ScalewayApiException;
 import synapticloop.scaleway.api.model.IP;
 import synapticloop.scaleway.api.model.Image;
 import synapticloop.scaleway.api.model.Organization;
+import synapticloop.scaleway.api.model.SecurityGroup;
 import synapticloop.scaleway.api.model.Server;
 import synapticloop.scaleway.api.model.ServerAction;
 import synapticloop.scaleway.api.model.ServerDefinition;
@@ -61,6 +62,7 @@ import synapticloop.scaleway.api.model.VolumeType;
 import synapticloop.scaleway.api.request.ActionRequest;
 import synapticloop.scaleway.api.request.IPPutRequest;
 import synapticloop.scaleway.api.request.IPRequest;
+import synapticloop.scaleway.api.request.SecurityGroupRequest;
 import synapticloop.scaleway.api.request.TokenPatchRequest;
 import synapticloop.scaleway.api.request.TokenRequest;
 import synapticloop.scaleway.api.request.VolumeRequest;
@@ -69,6 +71,8 @@ import synapticloop.scaleway.api.response.IPsResponse;
 import synapticloop.scaleway.api.response.ImageResponse;
 import synapticloop.scaleway.api.response.ImagesResponse;
 import synapticloop.scaleway.api.response.OrganizationsResponse;
+import synapticloop.scaleway.api.response.SecurityGroupResponse;
+import synapticloop.scaleway.api.response.SecurityGroupsResponse;
 import synapticloop.scaleway.api.response.ServerActionsResponse;
 import synapticloop.scaleway.api.response.ServerResponse;
 import synapticloop.scaleway.api.response.ServersResponse;
@@ -668,6 +672,111 @@ public class ScalewayApiClient {
 				204, 
 				null);
 	}
+
+
+	/**
+	 * Create a security group
+	 * 
+	 * @param organizationId The ID of the organization to attach this to
+	 * @param name The name of the security group
+	 * @param description The description of the security group
+	 * 
+	 * @return The newly created security group details
+	 * 
+	 * @throws ScalewayApiException If there was an error with the API call
+	 */
+	public SecurityGroup createSecurityGroup(String organizationId, String name, String description) throws ScalewayApiException {
+		HttpPost request = (HttpPost) buildRequest(Constants.HTTP_METHOD_POST, 
+				new StringBuilder(computeUrl).append(Constants.PATH_SECURITY_GROUPS).toString(),
+				new SecurityGroupRequest(organizationId, name, description));
+
+		return(executeAndGetResponse(request, 201, SecurityGroupResponse.class).getSecurityGroup());
+	}
+
+	/**
+	 * Delete a security Group
+	 * 
+	 * @param securityGroupId The ID of the security group to delete
+	 * 
+	 * @throws ScalewayApiException If there was an error with the API call
+	 */
+	public void deleteSecurityGroup(String securityGroupId) throws ScalewayApiException {
+		execute(Constants.HTTP_METHOD_DELETE, 
+				computeUrl, 
+				String.format(Constants.PATH_SECURITY_GROUPS_SLASH, securityGroupId), 
+				204, 
+				null);
+	}
+
+	/**
+	 * Return a paginated list of the security groups associated with the account
+	 * 
+	 * @param numPage the page number to retrieve (starting at 1)
+	 * @param numPerPage The number of results per page (maximum 100)
+	 * 
+	 * @return The list of security groups associated with the account
+	 * 
+	 * @throws ScalewayApiException If there was an error with the API call
+	 */
+	public SecurityGroupsResponse getAllSecurityGroups(int numPage, int numPerPage) throws ScalewayApiException {
+		HttpRequestBase request = buildRequest(Constants.HTTP_METHOD_GET, 
+				new StringBuilder(computeUrl).append(String.format(Constants.PATH_SECURITY_GROUPS_PAGING, numPage, numPerPage)).toString());
+
+		HttpResponse response = executeRequest(request);
+
+		if(response.getStatusLine().getStatusCode() == 200) {
+			Header[] allHeaders = response.getAllHeaders();
+			SecurityGroupsResponse securityGroupsResponse = parseResponse(response, SecurityGroupsResponse.class);
+			securityGroupsResponse.parsePaginationHeaders(allHeaders);
+			return(securityGroupsResponse);
+		} else {
+			try {
+				throw new ScalewayApiException(IOUtils.toString(response.getEntity().getContent()));
+			} catch (UnsupportedOperationException | IOException ex) {
+				throw new ScalewayApiException(ex);
+			}
+		}
+	}
+
+	/**
+	 * Return the security group details from the passed in ID
+	 * 
+	 * @param securityGroupId The ID of the security group to look up
+	 * 
+	 * @return The details for the security group
+	 * 
+	 * @throws ScalewayApiException If there was an error with the API call
+	 */
+	public SecurityGroup getSecurityGroup(String securityGroupId) throws ScalewayApiException {
+		return(execute(Constants.HTTP_METHOD_GET, 
+				computeUrl, 
+				String.format(Constants.PATH_SECURITY_GROUPS_SLASH, securityGroupId),
+				200, 
+				SecurityGroupResponse.class).getSecurityGroup());
+	}
+
+	/**
+	 * Update a security group with new details
+	 * 
+	 * @param securityGroupId The ID of the security group to update
+	 * @param organizationId The ID of the organization
+	 * @param name The updated name to set
+	 * @param description The updated description to set
+	 * 
+	 * @return The updated security group details
+	 * 
+	 * @throws ScalewayApiException If there was an error with the API call
+	 */
+	public SecurityGroup updateSecurityGroup(String securityGroupId, String organizationId, String name, String description) throws ScalewayApiException {
+		HttpPut request = (HttpPut) buildRequest(Constants.HTTP_METHOD_PUT, 
+				new StringBuilder(computeUrl).append(String.format(Constants.PATH_SECURITY_GROUPS_SLASH, securityGroupId)).toString(), 
+				new SecurityGroupRequest(organizationId, name, description));
+
+		return(executeAndGetResponse(request, 200, SecurityGroupResponse.class).getSecurityGroup());
+	}
+
+
+
 
 
 

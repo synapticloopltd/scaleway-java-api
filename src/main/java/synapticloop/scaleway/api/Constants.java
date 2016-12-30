@@ -56,6 +56,10 @@ public class Constants {
 
 	public static final String PATH_ORGANIZATIONS = "/organizations";
 
+	public static final String PATH_SECURITY_GROUPS = "/security_groups";
+	public static final String PATH_SECURITY_GROUPS_PAGING = "/security_groups?page=%d&per_page=%d";
+	public static final String PATH_SECURITY_GROUPS_SLASH = "/security_groups/%s";
+
 	public static final String PATH_SERVERS = "/servers";
 	public static final String PATH_SERVERS_SLASH = "/servers/%s";
 	public static final String PATH_SERVERS_SLASH_ACTION = "/servers/%s/action";
