@@ -1,5 +1,21 @@
 package synapticloop.scaleway.api.model;
 
+/*
+ * Copyright (c) 2016 synapticloop.
+ * 
+ * All rights reserved.
+ * 
+ * This code may contain contributions from other parties which, where 
+ * applicable, will be listed in the default build file for the project 
+ * ~and/or~ in a file named CONTRIBUTORS.txt in the root of the project.
+ * 
+ * This source code and any derived binaries are covered by the terms and 
+ * conditions of the Licence agreement ("the Licence").  You may not use this 
+ * source code or any derived binaries except in compliance with the Licence.  
+ * A copy of the Licence is available in the file named LICENSE.txt shipped with 
+ * this source code or binaries.
+ */
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,6 +39,16 @@ import org.apache.http.Header;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * The base pagination response, for responses which include information from
+ * the returned headers that include pagination results in the form of two 
+ * headers:
+ * <ul>
+ *   <li>HEADER_X_TOTAL_COUNT = "X-Total-Count" - the total count of results</li>
+ *   <li>HEADER_LINK = "Link" - the link which may contain at least one of 'next', 'previous', 'first' or 'last'</li>
+ * </ul>
+ *
+ */
 public abstract class BasePaginationResponse {
 	private static final Logger LOGGER = LoggerFactory.getLogger(BasePaginationResponse.class);
 
@@ -37,7 +63,12 @@ public abstract class BasePaginationResponse {
 	private int numPerPage = 0;
 	private int currentPage = 0;
 
-	public void setPaginationHeaders(Header[] headers) {
+	/**
+	 * Parse the pagination headers extracting the required pagination information
+	 * 
+	 * @param headers The headers received from the request
+	 */
+	public void parsePaginationHeaders(Header[] headers) {
 		for (Header header : headers) {
 			String headerName = header.getName();
 			switch(headerName) {
@@ -49,7 +80,7 @@ public abstract class BasePaginationResponse {
 				LOGGER.debug("Received '{}' header with value '{}'.", header.getName(), header.getValue());
 				// should look something like this:
 				// </images?page=2&per_page=50>; rel="next",</images?page=5&per_page=50>; rel="last"
-				parsePages(header.getValue());
+				parseLinkHeader(header.getValue());
 				break;
 			default:
 				break;
@@ -57,7 +88,13 @@ public abstract class BasePaginationResponse {
 		}
 	}
 
-	private void parsePages(String value) {
+	/**
+	 * Parse the 'Link' header to determine the current page, and the number of 
+	 * results returned per page
+	 * 
+	 * @param value The header value to parse
+	 */
+	private void parseLinkHeader(String value) {
 		// should look something like this:
 		// </images?page=1&per_page=50>; rel="first",</images?page=4&per_page=50>; rel="previous",</images?page=5&per_page=50>; rel="last"
 
@@ -88,11 +125,31 @@ public abstract class BasePaginationResponse {
 		}
 }
 
+	/**
+	 * Return the total count of results for this request
+	 * 
+	 * @return The total count of results for this request
+	 */
 	public int getTotalCount() { return this.totalCount; }
 
+	/**
+	 * Return the number of results returned per page
+	 * 
+	 * @return The number of results returned per page
+	 */
 	public int getNumPerPage() { return this.numPerPage; }
 
+	/**
+	 * Return the number of pages of results that exist for this call
+	 * 
+	 * @return The number of pages of results that exist for this call
+	 */
 	public int getNumPages() { return((int)Math.ceil(((float)totalCount)/((float)numPerPage))); }
 
+	/**
+	 * Return the current page number of results for this request
+	 * 
+	 * @return The current page number of results for this request
+	 */
 	public int getCurrentPage() { return this.currentPage; }
 }

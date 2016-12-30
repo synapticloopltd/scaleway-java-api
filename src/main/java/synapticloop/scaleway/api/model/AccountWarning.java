@@ -21,6 +21,11 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * This is the Account Warning POJO which encapsulates an account warning for
+ * the specified account
+ */
+
 public class AccountWarning {
 	@JsonProperty("reason")            private String reason;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSX")
@@ -34,24 +39,59 @@ public class AccountWarning {
 	@JsonProperty("locking")           private boolean isLocking;
 	@JsonProperty("id")                private String id;
 
+	/**
+	 * Return the reason for the account warning
+	 * 
+	 * @return the reason for the account warning
+	 */
 	public String getReason() { return reason; }
 
+	/**
+	 * Return the date that the account warning was loked at
+	 * 
+	 * @return The date that the account warning was locked at
+	 */
 	public Date getLockedAt() { return lockedAt; }
 
+	/**
+	 * Return the date that the account warning was opened
+	 * 
+	 * @return The date that the account warning was opened at
+	 */
 	public Date getOpenedAt() { return openedAt; }
 
+	/**
+	 * Return whether the account warning is closable by the user
+	 * 
+	 * @return Whether the account warning is closable by the user
+	 */
 	public boolean getIsClosableByUser() { return closableByUser; }
 
+	/**
+	 * Return whether the account warning is closed
+	 * 
+	 * @return Whether the account warning is closed
+	 */
 	public boolean getIsClosed() { return isClosed; }
 
+	/**
+	 * Return the date at which the account warning was closed (or null if not closed)
+	 * 
+	 * @return the date at which the account warning was closed (or null if not closed)
+	 */
 	public Date getClosedAt() { return closedAt; }
 
+	/**
+	 * Return whether this account warning is locking the account
+	 * 
+	 * @return Whether this account warning is loccking the account
+	 */
 	public boolean getIsLocking() { return isLocking; }
 
+	/**
+	 * Return the unique identifier for this account warning
+	 * 
+	 * @return The unique identifier for this account warning
+	 */
 	public String getId() { return id; }
-
-	@Override
-	public String toString() {
-		return "AccountWarnings [reason=" + this.reason + ", lockedAt=" + this.lockedAt + ", openedAt=" + this.openedAt + ", closableByUser=" + this.closableByUser + ", isClosed=" + this.isClosed + ", closedAt=" + this.closedAt + ", isLocking=" + this.isLocking + ", id=" + this.id + "]";
-	}
 }

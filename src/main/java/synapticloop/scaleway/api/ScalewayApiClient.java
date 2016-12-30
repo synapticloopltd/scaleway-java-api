@@ -223,7 +223,7 @@ public class ScalewayApiClient {
 		if(response.getStatusLine().getStatusCode() == 200) {
 			Header[] allHeaders = response.getAllHeaders();
 			ServersResponse serversResponse = parseResponse(response, ServersResponse.class);
-			serversResponse.setPaginationHeaders(allHeaders);
+			serversResponse.parsePaginationHeaders(allHeaders);
 			return(serversResponse);
 		} else {
 			try {
@@ -273,7 +273,7 @@ public class ScalewayApiClient {
 		if(response.getStatusLine().getStatusCode() == 200) {
 			Header[] allHeaders = response.getAllHeaders();
 			ImagesResponse imagesResponse = parseResponse(response, ImagesResponse.class);
-			imagesResponse.setPaginationHeaders(allHeaders);
+			imagesResponse.parsePaginationHeaders(allHeaders);
 			return(imagesResponse);
 		} else {
 			try {
@@ -378,7 +378,7 @@ public class ScalewayApiClient {
 		if(response.getStatusLine().getStatusCode() == 200) {
 			Header[] allHeaders = response.getAllHeaders();
 			VolumesResponse volumesResponse = parseResponse(response, VolumesResponse.class);
-			volumesResponse.setPaginationHeaders(allHeaders);
+			volumesResponse.parsePaginationHeaders(allHeaders);
 			return(volumesResponse);
 		} else {
 			try {
@@ -552,7 +552,7 @@ public class ScalewayApiClient {
 		if(response.getStatusLine().getStatusCode() == 200) {
 			Header[] allHeaders = response.getAllHeaders();
 			TokensResponse tokensResponse = parseResponse(response, TokensResponse.class);
-			tokensResponse.setPaginationHeaders(allHeaders);
+			tokensResponse.parsePaginationHeaders(allHeaders);
 			return(tokensResponse);
 		} else {
 			try {

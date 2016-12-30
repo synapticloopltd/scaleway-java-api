@@ -39,7 +39,7 @@ public class ImagesResponseTest {
 				new BasicHeader("Link", "</images?page=2&per_page=50>; rel=\"next\",</images?page=5&per_page=50>; rel=\"last\"")
 		};
 
-		imagesResponse.setPaginationHeaders(headers);
+		imagesResponse.parsePaginationHeaders(headers);
 
 		assertEquals(223, imagesResponse.getTotalCount());
 		assertEquals(50, imagesResponse.getNumPerPage());
