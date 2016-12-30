@@ -21,8 +21,36 @@ package synapticloop.scaleway.api;
  * 
  */
 public class Constants {
+	//
+	// Scaleway URLs
+	//
+	public static final String ACCOUNT_URL = "https://account.scaleway.com";
+	public static final String COMPUTE_URL = "https://cp-%s.scaleway.com";
+
+	//
+	// Header keys, values and user agent values
+	//
+	public static final String HEADER_KEY_AUTH_TOKEN = "X-Auth-Token";
+	public static final String HEADER_VALUE_JSON_APPLICATION = "application/json";
+	public static final String USER_AGENT = "synapticloop-scaleway-java-api";
+
+
+	//
+	// HTTP Method constants
+	//
+	public static final String HTTP_METHOD_PATCH = "PATCH";
+	public static final String HTTP_METHOD_PUT = "PUT";
+	public static final String HTTP_METHOD_GET = "GET";
+	public static final String HTTP_METHOD_POST = "POST";
+	public static final String HTTP_METHOD_DELETE = "DELETE";
+
+	//
+	// Paths for the various calls
+	//
 	public static final String PATH_IMAGES_PAGING = "/images?page=%d&per_page=%d";
 	public static final String PATH_IMAGES_SLASH = "/images/%s";
+
+	public static final Object PATH_IPS = "/ips";
 
 	public static final String PATH_ORGANIZATIONS = "/organizations";
 
@@ -41,19 +69,5 @@ public class Constants {
 	public static final String PATH_VOLUMES = "/volumes";
 	public static final String PATH_VOLUMES_PAGING = "/volumes?page=%d&per_page=%d";
 	public static final String PATH_VOLUMES_SLASH = "/volumes/%s";
-
-	public static final String ACCOUNT_URL = "https://account.scaleway.com";
-	public static final String COMPUTE_URL = "https://cp-%s.scaleway.com";
-
-	public static final String JSON_APPLICATION="application/json";
-	public static final String USER_AGENT = "synapticloop-scaleway-java-api";
-
-	public static final String HEADER_AUTH_TOKEN="X-Auth-Token";
-
-	public static final String HTTP_METHOD_PATCH = "PATCH";
-	public static final String HTTP_METHOD_PUT = "PUT";
-	public static final String HTTP_METHOD_GET = "GET";
-	public static final String HTTP_METHOD_POST = "POST";
-	public static final String HTTP_METHOD_DELETE = "DELETE";
 
 }

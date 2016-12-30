@@ -46,6 +46,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import synapticloop.scaleway.api.exception.ScalewayApiException;
+import synapticloop.scaleway.api.model.IP;
+import synapticloop.scaleway.api.model.IPResponse;
 import synapticloop.scaleway.api.model.Image;
 import synapticloop.scaleway.api.model.ImageResponse;
 import synapticloop.scaleway.api.model.ImagesResponse;
@@ -70,6 +72,7 @@ import synapticloop.scaleway.api.model.VolumeResponse;
 import synapticloop.scaleway.api.model.VolumeType;
 import synapticloop.scaleway.api.model.VolumesResponse;
 import synapticloop.scaleway.api.request.ActionRequest;
+import synapticloop.scaleway.api.request.IPRequest;
 import synapticloop.scaleway.api.request.TokenPatchRequest;
 import synapticloop.scaleway.api.request.TokenRequest;
 import synapticloop.scaleway.api.request.VolumeRequest;
@@ -89,7 +92,7 @@ public class ScalewayApiClient {
 	private final CloseableHttpClient httpclient;
 
 	/**
-	 * Instantiate a new API Client for Saleway
+	 * Instantiate a new API Client for the Scaleway API Provider
 	 * 
 	 * @param accessToken the access token
 	 * @param region the region that this should point to
@@ -465,7 +468,7 @@ public class ScalewayApiClient {
 	 * Create an access token for the Scaleway API
 	 * 
 	 * @param emailAddress the email address
-	 * @param password the passord
+	 * @param password the password
 	 * @param expires whether this token expires
 	 * @return 
 	 * 
@@ -564,6 +567,33 @@ public class ScalewayApiClient {
 	}
 
 	/**
+	 * Create a new reserved IP Address
+	 * 
+	 * @param organizationId The ID of the organization to attach this IP address to
+	 * 
+	 * @return The newly created IP Address
+	 * 
+	 * @throws ScalewayApiException If there was an error with the API call
+	 */
+	public IP createIp(String organizationId) throws ScalewayApiException {
+		HttpPost request = (HttpPost) buildRequest(Constants.HTTP_METHOD_POST, 
+				new StringBuilder(computeUrl).append(Constants.PATH_IPS).toString(),
+				new IPRequest(organizationId));
+
+		return(executeAndGetResponse(request, 201, IPResponse.class).getIp());
+		
+	}
+
+
+
+
+
+
+
+
+
+
+	/**
 	 * Serialize an object to JSON
 	 * 
 	 * @param object The object to serialize
@@ -596,8 +626,8 @@ public class ScalewayApiClient {
 
 		HttpRequestBase request = buildRequest(httpMethod, requestPath);
 
-		request.setHeader(Constants.HEADER_AUTH_TOKEN, accessToken);
-		request.setHeader(HttpHeaders.CONTENT_TYPE, Constants.JSON_APPLICATION);
+		request.setHeader(Constants.HEADER_KEY_AUTH_TOKEN, accessToken);
+		request.setHeader(HttpHeaders.CONTENT_TYPE, Constants.HEADER_VALUE_JSON_APPLICATION);
 
 		HttpResponse response;
 		try {
@@ -662,8 +692,8 @@ public class ScalewayApiClient {
 			break;
 		}
 
-		request.setHeader(Constants.HEADER_AUTH_TOKEN, accessToken);
-		request.setHeader(HttpHeaders.CONTENT_TYPE, Constants.JSON_APPLICATION);
+		request.setHeader(Constants.HEADER_KEY_AUTH_TOKEN, accessToken);
+		request.setHeader(HttpHeaders.CONTENT_TYPE, Constants.HEADER_VALUE_JSON_APPLICATION);
 
 		if(null != entityContent) {
 			if(request instanceof HttpEntityEnclosingRequestBase) {
@@ -712,8 +742,6 @@ public class ScalewayApiClient {
 			throw new ScalewayApiException(ex);
 		}
 	}
-
-
 
 	private ObjectMapper initializeObjectMapperJson() {
 		ObjectMapper mapper = new ObjectMapper();

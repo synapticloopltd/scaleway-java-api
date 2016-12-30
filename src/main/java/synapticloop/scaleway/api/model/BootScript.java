@@ -19,7 +19,6 @@ package synapticloop.scaleway.api.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class BootScript {
-
 	@JsonProperty("id")            private String id;
 	@JsonProperty("organization")  private String organization;
 	@JsonProperty("title")         private String title;
@@ -33,46 +32,21 @@ public class BootScript {
 
 	public String getId() { return id; }
 
-	public void setId(String id) { this.id = id; }
-
 	public String getOrganization() { return organization; }
-
-	public void setOrganization(String organization) { this.organization = organization; }
 
 	public String getTitle() { return title; }
 
-	public void setTitle(String title) { this.title = title; }
-
 	public boolean getIsDefault() { return isDefault; }
-
-	public void setIsDefault(boolean isDefault) { this.isDefault = isDefault; }
 
 	public boolean getIsPublic() { return isPublic; }
 
-	public void setIsPublic(boolean isPublic) { this.isPublic = isPublic; }
-
 	public String getBootcmdargs() { return bootcmdargs; }
-
-	public void setBootcmdargs(String bootcmdargs) { this.bootcmdargs = bootcmdargs; }
 
 	public String getInitrd() { return initrd; }
 
-	public void setInitrd(String initrd) { this.initrd = initrd; }
-
 	public String getArchitecture() { return architecture; }
-
-	public void setArchitecture(String architecture) { this.architecture = architecture; }
 
 	public String getKernel() { return kernel; }
 
-	public void setKernel(String kernel) { this.kernel = kernel; }
-
 	public String getDtb() { return dtb; }
-
-	public void setDtb(String dtb) { this.dtb = dtb; }
-
-	@Override
-	public String toString() {
-		return "BootScript [id=" + this.id + ", organization=" + this.organization + ", title=" + this.title + ", bootcmdargs=" + this.bootcmdargs + ", initrd=" + this.initrd + ", architecture=" + this.architecture + ", kernel=" + this.kernel + ", dtb=" + this.dtb + ", isDefault=" + this.isDefault + ", isPublic=" + this.isPublic + "]";
-	}
 }
