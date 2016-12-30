@@ -654,6 +654,13 @@ public class ScalewayApiClient {
 	}
 
 
+	/**
+	 * Delete an IP with the associated IP unique identifier
+	 * 
+	 * @param ipId The IP ID of the address
+	 * 
+	 * @throws ScalewayApiException If there was an error with the API call
+	 */
 	public void deleteIP(String ipId) throws ScalewayApiException {
 		execute(Constants.HTTP_METHOD_DELETE, 
 				computeUrl, 

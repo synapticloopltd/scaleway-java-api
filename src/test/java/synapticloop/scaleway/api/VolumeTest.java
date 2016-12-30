@@ -2,7 +2,6 @@ package synapticloop.scaleway.api;
 
 import static org.junit.Assert.*;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import synapticloop.scaleway.api.exception.ScalewayApiException;
@@ -11,11 +10,6 @@ import synapticloop.scaleway.api.model.VolumeType;
 import synapticloop.scaleway.api.response.VolumesResponse;
 
 public class VolumeTest extends BaseTestUtils {
-
-	@Before
-	public void setup() {
-		scalewayApiClient = new ScalewayApiClient(System.getenv(SCALEWAY_API_KEY), Region.PARIS1);
-	}
 
 	@Test
 	public void testCreateAndDeleteVolume() throws ScalewayApiException {
