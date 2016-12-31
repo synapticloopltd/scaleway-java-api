@@ -36,7 +36,7 @@ public class ServerTest extends BaseTestUtils {
 		assertEquals(server.getIPv6(), returnedServer.getIPv6());
 		assertEquals(server.getModificationDate(), returnedServer.getModificationDate());
 		assertEquals(server.getName(), returnedServer.getName());
-		assertEquals(server.getOrganization(), returnedServer.getOrganization());
+		assertEquals(server.getOrganizationId(), returnedServer.getOrganizationId());
 		assertEquals(server.getPrivateIp(), returnedServer.getPrivateIp());
 		assertEquals(server.getPublicIP(), returnedServer.getPublicIP());
 		assertEquals(server.getStateDetail(), returnedServer.getStateDetail());

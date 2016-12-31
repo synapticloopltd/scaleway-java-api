@@ -18,7 +18,6 @@ package synapticloop.scaleway.api;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -50,10 +49,12 @@ import synapticloop.scaleway.api.model.IP;
 import synapticloop.scaleway.api.model.Image;
 import synapticloop.scaleway.api.model.Organization;
 import synapticloop.scaleway.api.model.Rule;
+import synapticloop.scaleway.api.model.RuleAction;
+import synapticloop.scaleway.api.model.RuleDirection;
+import synapticloop.scaleway.api.model.RuleProtocol;
 import synapticloop.scaleway.api.model.SecurityGroup;
 import synapticloop.scaleway.api.model.Server;
 import synapticloop.scaleway.api.model.ServerAction;
-import synapticloop.scaleway.api.model.ServerDefinition;
 import synapticloop.scaleway.api.model.ServerTask;
 import synapticloop.scaleway.api.model.ServerType;
 import synapticloop.scaleway.api.model.Token;
@@ -65,6 +66,7 @@ import synapticloop.scaleway.api.request.IPPutRequest;
 import synapticloop.scaleway.api.request.IPRequest;
 import synapticloop.scaleway.api.request.RuleRequest;
 import synapticloop.scaleway.api.request.SecurityGroupRequest;
+import synapticloop.scaleway.api.request.ServerDefinitionRequest;
 import synapticloop.scaleway.api.request.TokenPatchRequest;
 import synapticloop.scaleway.api.request.TokenRequest;
 import synapticloop.scaleway.api.request.VolumeRequest;
@@ -79,8 +81,8 @@ import synapticloop.scaleway.api.response.SecurityGroupResponse;
 import synapticloop.scaleway.api.response.SecurityGroupsResponse;
 import synapticloop.scaleway.api.response.ServerActionsResponse;
 import synapticloop.scaleway.api.response.ServerResponse;
+import synapticloop.scaleway.api.response.ServerTaskResponse;
 import synapticloop.scaleway.api.response.ServersResponse;
-import synapticloop.scaleway.api.response.TaskResponse;
 import synapticloop.scaleway.api.response.TokenResponse;
 import synapticloop.scaleway.api.response.TokensResponse;
 import synapticloop.scaleway.api.response.UserResponse;
@@ -120,7 +122,7 @@ public class ScalewayApiClient {
 	/**
 	 * get the region that this API is pointing to
 	 * 
-	 * @return
+	 * @return The region that this API is pointing to
 	 */
 	public Region getRegion() {
 		return region;
@@ -165,7 +167,7 @@ public class ScalewayApiClient {
 	 * 
 	 * @param serverName The name of the server
 	 * @param imageId the ID of the image to use as the base
-	 * @param organizationToken the organization token
+	 * @param organizationId the organization id
 	 * @param serverType the Type of Server
 	 * @param tags The tags to apply to this server
 	 * 
@@ -173,31 +175,25 @@ public class ScalewayApiClient {
 	 * 
 	 * @throws ScalewayApiException If there was an error with the API call
 	 */
-	public Server createServer(String serverName, String imageId, String organizationToken, ServerType serverType, String... tags) throws ScalewayApiException {
-		ServerDefinition serverDefinition = new ServerDefinition();
-		serverDefinition.setName(serverName);
-		serverDefinition.setImage(imageId);
-		serverDefinition.setOrganization(organizationToken);
-		serverDefinition.setDynamicIpRequired(true);
-		serverDefinition.setTags(Arrays.asList(tags));
-		serverDefinition.setServerType(serverType);
-		return createServer(serverDefinition);
+	public Server createServer(String serverName, String imageId, String organizationId, ServerType serverType, String... tags) throws ScalewayApiException {
+		ServerDefinitionRequest serverDefinitionRequest = new ServerDefinitionRequest(serverName, imageId, organizationId, serverType, tags);
+		return createServer(serverDefinitionRequest);
 	}
 
 
 	/**
 	 * Create a server
 	 * 
-	 * @param serverDefinition The server definition to create
+	 * @param serverDefinitionRequest The server definition to create
 	 * 
 	 * @return The created server
 	 * 
 	 * @throws ScalewayApiException If there was an error with the API call
 	 */
-	public Server createServer(ServerDefinition serverDefinition) throws ScalewayApiException {
+	public Server createServer(ServerDefinitionRequest serverDefinitionRequest) throws ScalewayApiException {
 		HttpPost request = (HttpPost) buildRequest(Constants.HTTP_METHOD_POST, 
 				new StringBuilder(computeUrl).append(Constants.PATH_SERVERS).toString(), 
-				serverDefinition);
+				serverDefinitionRequest);
 
 		return(executeAndGetResponse(request, 201, ServerResponse.class).getServer());
 	}
@@ -254,7 +250,7 @@ public class ScalewayApiClient {
 	 * 
 	 * @return The returned server object
 	 * 
-	 * @throws ScalewayApiException If there ws an error with the lAPI call
+	 * @throws ScalewayApiException If there was an error with the API call
 	 *
 	public Server updateServer(Server server) throws ScalewayApiException {
 		HttpPut request = (HttpPut) buildRequest(Constants.HTTP_METHOD_PUT, computeUrl, String.format(PATH_SERVERS_SLASH, server.getId()));
@@ -454,7 +450,7 @@ public class ScalewayApiClient {
 				new StringBuilder(computeUrl).append(String.format(Constants.PATH_SERVERS_SLASH_ACTION, serverId)).toString(),
 				new ActionRequest(serverAction));
 
-		return(executeAndGetResponse(request, 202, TaskResponse.class).getServerTask());
+		return(executeAndGetResponse(request, 202, ServerTaskResponse.class).getServerTask());
 	}
 
 	/**
@@ -471,7 +467,7 @@ public class ScalewayApiClient {
 				computeUrl, 
 				String.format(Constants.PATH_TASKS_SLASH, taskId),
 				200, 
-				TaskResponse.class).getServerTask());
+				ServerTaskResponse.class).getServerTask());
 	}
 
 	/**
@@ -480,7 +476,8 @@ public class ScalewayApiClient {
 	 * @param emailAddress the email address
 	 * @param password the password
 	 * @param expires whether this token expires
-	 * @return 
+	 * 
+	 * @return The newly created token details
 	 * 
 	 * @throws ScalewayApiException If there was an error with the API call
 	 */
@@ -650,8 +647,9 @@ public class ScalewayApiClient {
 	 * @param ipAddress The IP Address
 	 * @param serverId The ID of the Server
 	 * 
-	 * @return 
-	 * @throws ScalewayApiException
+	 * @return The IP address that was attached with updated information
+	 *  
+	 * @throws ScalewayApiException If there was an error with the API call
 	 */
 	public IP attachIP(String ipId, String organizationId, String ipAddress, String serverId) throws ScalewayApiException {
 		HttpPut request = (HttpPut) buildRequest(Constants.HTTP_METHOD_PUT, 
@@ -783,7 +781,6 @@ public class ScalewayApiClient {
 	 * Create a new rule
 	 * 
 	 * @param securityGroupId The security group that this rule will be attached to
-	 * @param organizationId The organization id
 	 * @param ruleAction The action (DROP/ACCEPT)
 	 * @param ruleDirection The direction (inbound/outbound)
 	 * @param ipRange the IP ranges (i.e. 0.0.0.0/0
@@ -890,7 +887,6 @@ public class ScalewayApiClient {
 
 		return(executeAndGetResponse(request, 200, RuleResponse.class).getRule());
 	}
-
 
 
 

@@ -22,11 +22,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import synapticloop.scaleway.api.model.Image;
 
+/**
+ * The images response object which encapsulates the paginated list of images
+ *
+ */
 public class ImagesResponse extends BasePaginationResponse {
-
 	@JsonProperty("images")  private List<Image> images;
 
+	/**
+	 * Return the list of paginated images
+	 * 
+	 * @return the list of paginated images
+	 */
 	public List<Image> getImages() { return images; }
-
-	public void setImages(List<Image> images) { this.images = images; }
 }

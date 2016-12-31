@@ -8,6 +8,9 @@ import org.junit.Test;
 
 import synapticloop.scaleway.api.exception.ScalewayApiException;
 import synapticloop.scaleway.api.model.Rule;
+import synapticloop.scaleway.api.model.RuleAction;
+import synapticloop.scaleway.api.model.RuleDirection;
+import synapticloop.scaleway.api.model.RuleProtocol;
 import synapticloop.scaleway.api.model.SecurityGroup;
 import synapticloop.scaleway.api.response.RulesResponse;
 import synapticloop.scaleway.api.response.SecurityGroupsResponse;

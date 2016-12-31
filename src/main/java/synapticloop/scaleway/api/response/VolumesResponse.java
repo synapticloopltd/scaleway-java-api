@@ -26,7 +26,9 @@ public class VolumesResponse extends BasePaginationResponse {
 	@JsonProperty("volumes")  private List<Volume> volumes;
 
 	/**
-	 * @return the volume
+	 * Return the paginated list of volume objects
+	 * 
+	 * @return the paginated list of volume objects
 	 */
 	public List<Volume> getVolumes() { return volumes; }
 }

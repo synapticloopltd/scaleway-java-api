@@ -1,4 +1,4 @@
-package synapticloop.scaleway.api.response;
+package synapticloop.scaleway.api.model;
 
 /*
  * Copyright (c) 2016 synapticloop.
@@ -18,11 +18,13 @@ package synapticloop.scaleway.api.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import synapticloop.scaleway.api.model.ServerTask;
+public enum RuleAction {
+	@JsonProperty("drop")    DROP("drop"),
+	@JsonProperty("accept")  ACCEPT("drop");
 
-public class TaskResponse {
-	@JsonProperty("task")  private ServerTask serverTask;
+	public final String rule;
 
-	public ServerTask getServerTask() { return serverTask; }
+	RuleAction(String rule){ this.rule = rule; }
 
+	public String toString() { return(rule); }
 }

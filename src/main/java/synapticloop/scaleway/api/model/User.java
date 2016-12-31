@@ -23,7 +23,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class User {
-
 	@JsonProperty("id")                 private String id;
 	@JsonProperty("email")              private String email;
 	@JsonProperty("firstname")          private String firstname;

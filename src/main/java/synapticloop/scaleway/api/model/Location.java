@@ -27,52 +27,15 @@ public class Location {
 	@JsonProperty("chassis_id") private String chassisId;
 	@JsonProperty("zone_id") private String zoneId;
 
+	public String getPlatformID() { return platformID; }
 
-	public String getPlatformID() {
-		return platformID;
-	}
+	public String getHypervisorID() { return hypervisorID; }
 
-	public void setPlatformID(String platformID) {
-		this.platformID = platformID;
-	}
+	public String getNodeID() { return nodeID; }
 
-	public String getHypervisorID() {
-		return hypervisorID;
-	}
+	public String getClusterID() { return clusterID; }
 
-	public void setHypervisorID(String hypervisorID) {
-		this.hypervisorID = hypervisorID;
-	}
+	public String getChassisId() { return chassisId; }
 
-	public String getNodeID() {
-		return nodeID;
-	}
-
-	public void setNodeID(String nodeID) {
-		this.nodeID = nodeID;
-	}
-
-	public String getClusterID() {
-		return clusterID;
-	}
-
-	public void setClusterID(String clusterID) {
-		this.clusterID = clusterID;
-	}
-
-	public String getChassisId() {
-		return chassisId;
-	}
-
-	public void setChassisId(String chassisId) {
-		this.chassisId = chassisId;
-	}
-
-	public String getZoneId() {
-		return zoneId;
-	}
-
-	public void setZoneId(String zoneId) {
-		this.zoneId = zoneId;
-	}    
+	public String getZoneId() { return zoneId; }
 }

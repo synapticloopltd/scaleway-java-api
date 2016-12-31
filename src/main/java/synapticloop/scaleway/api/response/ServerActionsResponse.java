@@ -23,7 +23,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import synapticloop.scaleway.api.model.ServerAction;
 
 public class ServerActionsResponse {
-
 	@JsonProperty("actions") private List<ServerAction> serverActions;
 
 	public List<ServerAction> getServerActions() { return serverActions; }

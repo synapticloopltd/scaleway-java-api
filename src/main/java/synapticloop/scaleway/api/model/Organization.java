@@ -47,164 +47,43 @@ public class Organization {
 	@JsonProperty("warnings")                  private List<AccountWarning> warnings;
 	@JsonProperty("users")                     private List<User> users;
 
-	public String getId() {
-		return id;
-	}
+	public String getId() { return id; }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+	public String getName() { return name; }
 
-	public String getName() {
-		return name;
-	}
+	public List<User> getUsers() { return users; }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+	public String getAddressLine() { return addressLine; }
 
-	public List<User> getUsers() {
-		return users;
-	}
+	public String getAddressCountryCode() { return addressCountryCode; }
 
-	public void setUsers(List<User> users) {
-		this.users = users;
-	}
+	public String getAddressLine2() { return addressLine2; }
 
-	public String getAddressLine() {
-		return addressLine;
-	}
+	public String getSupportLevel() { return supportLevel; }
 
-	public void setAddressLine(String addressLine) {
-		this.addressLine = addressLine;
-	}
+	public Date getModificationDate() { return modificationDate; }
 
-	public String getAddressCountryCode() {
-		return addressCountryCode;
-	}
+	public String getCurrency() { return currency; }
 
-	public void setAddressCountryCode(String addressCountryCode) {
-		this.addressCountryCode = addressCountryCode;
-	}
+	public String getLocale() { return locale; }
 
-	public String getAddressLine2() {
-		return addressLine2;
-	}
+	public String getCustomerClass() { return customerClass; }
 
-	public void setAddressLine2(String addressLine2) {
-		this.addressLine2 = addressLine2;
-	}
+	public Date getCreationDate() { return creationDate; }
 
-	public String getSupportLevel() {
-		return supportLevel;
-	}
+	public String getAddressPortalCode() { return addressPortalCode; }
 
-	public void setSupportLevel(String supportLevel) {
-		this.supportLevel = supportLevel;
-	}
+	public String getAddressCityName() { return addressCityName; }
 
-	public Date getModificationDate() {
-		return modificationDate;
-	}
+	public String getAddressSubdivisionCode() { return addressSubdivisionCode; }
 
-	public void setModificationDate(Date modificationDate) {
-		this.modificationDate = modificationDate;
-	}
+	public String getTimezone() { return timezone; }
 
-	public String getCurrency() {
-		return currency;
-	}
+	public String getVatNumber() { return vatNumber; }
 
-	public void setCurrency(String currency) {
-		this.currency = currency;
-	}
+	public String getSupportId() { return supportId; }
 
-	public String getLocale() {
-		return locale;
-	}
+	public String getSupportPin() { return supportPin; }
 
-	public void setLocale(String locale) {
-		this.locale = locale;
-	}
-
-	public String getCustomerClass() {
-		return customerClass;
-	}
-
-	public void setCustomerClass(String customerClass) {
-		this.customerClass = customerClass;
-	}
-
-	public Date getCreationDate() {
-		return creationDate;
-	}
-
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
-	}
-
-	public String getAddressPortalCode() {
-		return addressPortalCode;
-	}
-
-	public void setAddressPortalCode(String addressPortalCode) {
-		this.addressPortalCode = addressPortalCode;
-	}
-
-	public String getAddressCityName() {
-		return addressCityName;
-	}
-
-	public void setAddressCityName(String addressCityName) {
-		this.addressCityName = addressCityName;
-	}
-
-	public String getAddressSubdivisionCode() {
-		return addressSubdivisionCode;
-	}
-
-	public void setAddressSubdivisionCode(String addressSubdivisionCode) {
-		this.addressSubdivisionCode = addressSubdivisionCode;
-	}
-
-	public String getTimezone() {
-		return timezone;
-	}
-
-	public void setTimezone(String timezone) {
-		this.timezone = timezone;
-	}
-
-	public String getVatNumber() {
-		return vatNumber;
-	}
-
-	public void setVatNumber(String vatNumber) {
-		this.vatNumber = vatNumber;
-	}
-
-	public String getSupportId() {
-		return supportId;
-	}
-
-	public void setSupportId(String supportId) {
-		this.supportId = supportId;
-	}
-
-	public String getSupportPin() {
-		return supportPin;
-	}
-
-	public void setSupportPin(String supportPin) {
-		this.supportPin = supportPin;
-	}
-
-	public List<AccountWarning> getWarnings() {
-		return warnings;
-	}
-
-	public void setWarnings(List<AccountWarning> warnings) {
-		this.warnings = warnings;
-	}
-
+	public List<AccountWarning> getWarnings() { return warnings; }
 }

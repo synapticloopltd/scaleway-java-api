@@ -20,11 +20,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import synapticloop.scaleway.api.model.Image;
 
+/**
+ * The image response object which encapsulates the image POJO
+ *
+ */
 public class ImageResponse {
-
 	@JsonProperty("image")  private Image image;
 
+	/**
+	 * Get the image
+	 * 
+	 * @return the image
+	 */
 	public Image getImage() { return image; }
-
-	public void setImage(Image image) { this.image = image; }
 }

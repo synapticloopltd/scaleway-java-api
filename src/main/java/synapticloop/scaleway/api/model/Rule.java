@@ -18,12 +18,7 @@ package synapticloop.scaleway.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import synapticloop.scaleway.api.RuleAction;
-import synapticloop.scaleway.api.RuleDirection;
-import synapticloop.scaleway.api.RuleProtocol;
-
 public class Rule {
-
 	@JsonProperty("id")              private String id;
 	@JsonProperty("direction")       private RuleDirection direction;
 	@JsonProperty("protocol")        private RuleProtocol protocol;

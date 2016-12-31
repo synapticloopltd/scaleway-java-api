@@ -23,15 +23,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import synapticloop.scaleway.api.model.SshPublicKey;
 
 public class SshPublicKeyResponse {
-
 	@JsonProperty("ssh_public_keys") private List<SshPublicKey> sshPublicKeys;
 
-	public List<SshPublicKey> getSshPublicKeys() {
-		return sshPublicKeys;
-	}
-
-	public void setSshPublicKeys(List<SshPublicKey> sshPublicKeys) {
-		this.sshPublicKeys = sshPublicKeys;
-	}
-
+	public List<SshPublicKey> getSshPublicKeys() { return sshPublicKeys; }
 }

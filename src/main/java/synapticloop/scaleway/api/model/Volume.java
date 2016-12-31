@@ -40,8 +40,6 @@ public class Volume {
 
 	public String getName() { return name; }
 	
-	public void setName(String name) { this.name = name; }
-	
 	public VolumeType getVolumeType() { return volumeType; }
 
 	public Date getModificationDate() { return modificationDate; }
@@ -50,14 +48,8 @@ public class Volume {
 
 	public long getSize() { return size; }
 
-	public void setSize(long size) { this.size = size; }
-
 	public String getOrganizationId() { return organizationId; }
 
-	public void setOrganizationId(String organizationId) { this.organizationId = organizationId; }
-
 	public String getExportUri() { return exportUri; }
-
-	public void setVolumeType(VolumeType volumeType) { this.volumeType = volumeType; }
 
 }

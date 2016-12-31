@@ -23,7 +23,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import synapticloop.scaleway.api.model.Organization;
 
 public class OrganizationsResponse {
-
 	@JsonProperty("organizations")  private List<Organization> organizations;
 
 	public List<Organization> getOrganizations() { return organizations; }

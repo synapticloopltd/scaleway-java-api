@@ -1,6 +1,4 @@
-package synapticloop.scaleway.api;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+package synapticloop.scaleway.api.model;
 
 /*
  * Copyright (c) 2016 synapticloop.
@@ -18,13 +16,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * this source code or binaries.
  */
 
-public enum RuleAction {
-	@JsonProperty("drop")    DROP("drop"),
-	@JsonProperty("accept")  ACCEPT("drop");
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-	public final String rule;
+public enum RuleProtocol {
+	@JsonProperty("TCP")   TCP("TCP"),
+	@JsonProperty("ICMP")  ICMP("ICMP"),
+	@JsonProperty("UDP")   UDP("UDP");
 
-	RuleAction(String rule){ this.rule = rule; }
+	public final String protocol;
 
-	public String toString() { return(rule); }
+	RuleProtocol(String protocol){ this.protocol = protocol; }
+
+	public String toString() { return(protocol); }
 }

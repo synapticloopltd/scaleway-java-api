@@ -22,7 +22,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Server extends ServerBase {
-
 	@JsonProperty("id")                 private String id;
 	@JsonProperty("public_ip")          private IP publicIp;
 	@JsonProperty("private_ip")         private String privateIp;
@@ -41,90 +40,26 @@ public class Server extends ServerBase {
 
 	public String getHostname() { return hostname; }
 
-	public void setHostname(String hostname) {
-		this.hostname = hostname;
-	}
+	public String getId() { return id; }
 
-	public String getId() {
-		return id;
-	}
+	public Image getImage() { return image; }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+	public Date getModificationDate() { return modificationDate; }
 
-	public Image getImage() {
-		return image;
-	}
+	public Date getCreationDate() { return creationDate; }
 
-	public void setImage(Image image) {
-		this.image = image;
-	}
+	public String getPrivateIp() { return privateIp; }
 
-	public Date getModificationDate() {
-		return modificationDate;
-	}
+	public State getState() { return state; }
 
-	public void setModificationDate(Date modificationDate) {
-		this.modificationDate = modificationDate;
-	}
+	public String getStateDetail() { return stateDetail; }
 
-	public Date getCreationDate() {
-		return creationDate;
-	}
-
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
-	}
-
-	public String getPrivateIp() {
-		return privateIp;
-	}
-
-	public void setPrivateIp(String privateIp) {
-		this.privateIp = privateIp;
-	}
-
-	public State getState() {
-		return state;
-	}
-
-	public void setState(State state) {
-		this.state = state;
-	}
-
-	public String getStateDetail() {
-		return stateDetail;
-	}
-
-	public void setStateDetail(String stateDetail) {
-		this.stateDetail = stateDetail;
-	}
-
-	public Location getLocation() {
-		return location;
-	}
-
-	public void setLocation(Location location) {
-		this.location = location;
-	}
+	public Location getLocation() { return location; }
 
 	public IPv6 getIPv6() { return ipv6; }
 
-	public String getArch() {
-		return arch;
-	}
+	public String getArch() { return arch; }
 
-	public void setArch(String arch) {
-		this.arch = arch;
-	}
-
-	public String[] getExtraNetworks() {
-		return extraNetworks;
-	}
-
-	public void setExtraNetworks(String[] extraNetworks) {
-		this.extraNetworks = extraNetworks;
-	}
+	public String[] getExtraNetworks() { return extraNetworks; }
 
 }

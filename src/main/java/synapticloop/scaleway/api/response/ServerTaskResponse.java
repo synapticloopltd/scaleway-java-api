@@ -1,6 +1,4 @@
-package synapticloop.scaleway.api;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+package synapticloop.scaleway.api.response;
 
 /*
  * Copyright (c) 2016 synapticloop.
@@ -18,14 +16,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * this source code or binaries.
  */
 
-public enum RuleProtocol {
-	@JsonProperty("TCP")   TCP("TCP"),
-	@JsonProperty("ICMP")  ICMP("ICMP"),
-	@JsonProperty("UDP")   UDP("UDP");
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-	public final String protocol;
+import synapticloop.scaleway.api.model.ServerTask;
 
-	RuleProtocol(String protocol){ this.protocol = protocol; }
+public class ServerTaskResponse {
+	@JsonProperty("task")  private ServerTask serverTask;
 
-	public String toString() { return(protocol); }
+	public ServerTask getServerTask() { return serverTask; }
 }

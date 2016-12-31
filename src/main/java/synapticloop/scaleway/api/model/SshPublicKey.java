@@ -22,9 +22,7 @@ public class SshPublicKey {
 
 	private String key;
 
-	public SshPublicKey(String key) {
-		this.key = key;
-	}
+	public SshPublicKey(String key) { this.key = key; }
 
 	public SshPublicKey() {
 

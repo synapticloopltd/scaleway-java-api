@@ -1,6 +1,4 @@
-package synapticloop.scaleway.api;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+package synapticloop.scaleway.api.model;
 
 /*
  * Copyright (c) 2016 synapticloop.
@@ -17,6 +15,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * A copy of the Licence is available in the file named LICENSE.txt shipped with 
  * this source code or binaries.
  */
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public enum RuleDirection {
 	@JsonProperty("inbound")   INBOUND("inbound"),

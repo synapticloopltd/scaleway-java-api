@@ -22,97 +22,35 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ServerBase {
-
 	@JsonProperty("name")                public String name;
-	@JsonProperty("organization")        public String organization;
+	@JsonProperty("organization")        public String organizationId;
 	@JsonProperty("volumes")             public Map<String, Volume> volumes;
 	@JsonProperty("tags")                public List<String> tags;
 	@JsonProperty("commercial_type")     private ServerType serverType;
-	@JsonProperty("dynamic_ip_required") private boolean dynamicIpRequired;
-	@JsonProperty("enable_ipv6")         private boolean ipv6Enabled;
+	@JsonProperty("dynamic_ip_required") private boolean isDynamicIpRequired;
+	@JsonProperty("enable_ipv6")         private boolean isIPv6Enabled;
 	@JsonProperty("public_ip")           private IP publicIP;
 	@JsonProperty("security_group")      private SecurityGroup securityGroup;
 	@JsonProperty("bootscript")          private BootScript bootscript;
 
-	public String getName() {
-		return name;
-	}
+	public String getName() { return name; }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+	public String getOrganizationId() { return organizationId; }
 
-	public String getOrganization() {
-		return organization;
-	}
+	public BootScript getBootscript() { return bootscript; }
 
-	public void setOrganization(String organization) {
-		this.organization = organization;
-	}
+	public SecurityGroup getSecurityGroup() { return securityGroup; }
 
-	public BootScript getBootscript() {
-		return bootscript;
-	}
+	public ServerType getServerType() { return serverType; }
 
-	public void setBootscript(BootScript bootscript) {
-		this.bootscript = bootscript;
-	}
+	public boolean getIsDynamicIpRequired() { return isDynamicIpRequired; }
 
-	public SecurityGroup getSecurityGroup() {
-		return securityGroup;
-	}
+	public boolean getIsIpv6Enabled() { return isIPv6Enabled; }
 
-	public void setSecurityGroup(SecurityGroup securityGroup) {
-		this.securityGroup = securityGroup;
-	}
+	public IP getPublicIP() { return publicIP; }
 
-	public ServerType getServerType() {
-		return serverType;
-	}
+	public Map<String, Volume> getVolumes() { return volumes; }
 
-
-	public void setServerType(ServerType serverType) {
-		this.serverType = serverType;
-	}
-
-	public boolean isDynamicIpRequired() {
-		return dynamicIpRequired;
-	}
-
-	public void setDynamicIpRequired(boolean dynamicIpRequired) {
-		this.dynamicIpRequired = dynamicIpRequired;
-	}
-
-	public boolean isIpv6Enabled() {
-		return ipv6Enabled;
-	}
-
-	public void setIpv6Enabled(boolean ipv6Enabled) {
-		this.ipv6Enabled = ipv6Enabled;
-	}
-
-	public IP getPublicIP() {
-		return publicIP;
-	}
-
-	public void setPublicIP(IP publicIP) {
-		this.publicIP = publicIP;
-	}
-
-	public Map<String, Volume> getVolumes() {
-		return volumes;
-	}
-
-	public void setVolumes(Map<String, Volume> volumes) {
-		this.volumes = volumes;
-	}
-
-	public List<String> getTags() {
-		return tags;
-	}
-
-	public void setTags(List<String> tags) {
-		this.tags = tags;
-	}
+	public List<String> getTags() { return tags; }
 
 }

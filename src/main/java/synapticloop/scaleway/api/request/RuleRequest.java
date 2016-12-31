@@ -2,9 +2,9 @@ package synapticloop.scaleway.api.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import synapticloop.scaleway.api.RuleAction;
-import synapticloop.scaleway.api.RuleDirection;
-import synapticloop.scaleway.api.RuleProtocol;
+import synapticloop.scaleway.api.model.RuleAction;
+import synapticloop.scaleway.api.model.RuleDirection;
+import synapticloop.scaleway.api.model.RuleProtocol;
 
 /**
  * A rule request is used to encapsulate the JSON object for attaching a rule to

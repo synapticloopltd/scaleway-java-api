@@ -24,7 +24,9 @@ public class TokenResponse {
 	@JsonProperty("token")  private Token token;
 
 	/**
-	 * @return the volume
+	 * Return the token
+	 * 
+	 * @return the token
 	 */
 	public Token getToken() { return token; }
 }

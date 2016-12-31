@@ -79,5 +79,4 @@ public class Constants {
 	public static final String PATH_VOLUMES = "/volumes";
 	public static final String PATH_VOLUMES_PAGING = "/volumes?page=%d&per_page=%d";
 	public static final String PATH_VOLUMES_SLASH = "/volumes/%s";
-
 }
