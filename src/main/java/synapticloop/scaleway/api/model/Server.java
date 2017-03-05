@@ -17,6 +17,7 @@ package synapticloop.scaleway.api.model;
  */
 
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -25,7 +26,7 @@ public class Server extends ServerBase {
 	@JsonProperty("id")                 private String id;
 	@JsonProperty("public_ip")          private IP publicIp;
 	@JsonProperty("private_ip")         private String privateIp;
-	@JsonProperty("extra_networks")     private String[] extraNetworks;
+	@JsonProperty("extra_networks")     private List<Network> extraNetworks;
 	@JsonProperty("state")              private State state;
 	@JsonProperty("arch")               private String arch;
 	@JsonProperty("state_detail")       private String stateDetail;
@@ -60,6 +61,6 @@ public class Server extends ServerBase {
 
 	public String getArch() { return arch; }
 
-	public String[] getExtraNetworks() { return extraNetworks; }
+	public List<Network> getExtraNetworks() { return extraNetworks; }
 
 }
