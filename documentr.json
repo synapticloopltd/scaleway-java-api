@@ -1,6 +1,7 @@
 {
 	"context": {
-		"group": "synapticloop",
+		"githubGroup": "synapticloopltd",
+		"group": "synapticloopltd",
 		"bintrayGroup": "synapticloop"
 	},
 	"templates": [
