@@ -1,7 +1,7 @@
 package synapticloop.scaleway.api;
 
 /*
- * Copyright (c) 2016 synapticloop.
+ * Copyright (c) 2016-2017 synapticloop.
  * 
  * All rights reserved.
  * 

@@ -8,7 +8,7 @@ import synapticloop.scaleway.api.exception.ScalewayApiException;
 import synapticloop.scaleway.api.model.Image;
 
 /*
- * Copyright (c) 2016 Synapticloop.
+ * Copyright (c) 2016-2017 Synapticloop.
  * 
  * All rights reserved.
  * 

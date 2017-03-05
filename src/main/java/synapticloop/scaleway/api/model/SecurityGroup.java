@@ -3,7 +3,7 @@ package synapticloop.scaleway.api.model;
 import java.util.List;
 
 /*
- * Copyright (c) 2016 synapticloop.
+ * Copyright (c) 2016-2017 synapticloop.
  * 
  * All rights reserved.
  * 
