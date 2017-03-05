@@ -1,4 +1,4 @@
-<a name="documentr_top"></a>[![Build Status](https://travis-ci.org/synapticloopltd/scaleway-java-api.svg?branch=master)](https://travis-ci.org/synapticloopltd/scaleway-java-api) [![Download](https://api.bintray.com/packages/synapticloop/maven/scaleway-java-api/images/download.svg)](https://bintray.com/synapticloop/maven/scaleway-java-api/_latestVersion) [![GitHub Release](https://img.shields.io/github/release/synapticloopltd/scaleway-java-api.svg)](https://github.com/synapticloopltd/scaleway-java-api/releases) 
+<a name="documentr_top"></a>[![Build Status](https://travis-ci.org/synapticloop/scaleway-java-api.svg?branch=master)](https://travis-ci.org/synapticloop/scaleway-java-api) [![Download](https://api.bintray.com/packages/synapticloop/maven/scaleway-java-api/images/download.svg)](https://bintray.com/synapticloop/maven/scaleway-java-api/_latestVersion) [![GitHub Release](https://img.shields.io/github/release/synapticloop/scaleway-java-api.svg)](https://github.com/synapticloop/scaleway-java-api/releases) 
 
 > **This project requires JVM version of at least 1.7**
 
@@ -334,7 +334,7 @@ A sample `log4j2.xml` is below:
 
 This project publishes artefacts to [GitHub](https://github.com/)
 
-> Note that the latest version can be found [https://github.com/synapticloopltd/scaleway-java-api/releases](https://github.com/synapticloopltd/scaleway-java-api/releases)
+> Note that the latest version can be found [https://github.com/synapticloop/scaleway-java-api/releases](https://github.com/synapticloop/scaleway-java-api/releases)
 
 As such, this is not a repository, but a location to download files from.
 
@@ -436,9 +436,9 @@ repositories {
 
 ```
 dependencies {
-	runtime(group: 'synapticloopltd', name: 'scaleway-java-api', version: '0.9.0', ext: 'jar')
+	runtime(group: 'synapticloop', name: 'scaleway-java-api', version: '0.9.0', ext: 'jar')
 
-	compile(group: 'synapticloopltd', name: 'scaleway-java-api', version: '0.9.0', ext: 'jar')
+	compile(group: 'synapticloop', name: 'scaleway-java-api', version: '0.9.0', ext: 'jar')
 }
 ```
 
@@ -450,9 +450,9 @@ or, more simply for versions of gradle greater than 2.1
 
 ```
 dependencies {
-	runtime 'synapticloopltd:scaleway-java-api:0.9.0'
+	runtime 'synapticloop:scaleway-java-api:0.9.0'
 
-	compile 'synapticloopltd:scaleway-java-api:0.9.0'
+	compile 'synapticloop:scaleway-java-api:0.9.0'
 }
 ```
 
@@ -468,7 +468,7 @@ dependencies {
 
 ```
 <dependency>
-	<groupId>synapticloopltd</groupId>
+	<groupId>synapticloop</groupId>
 	<artifactId>scaleway-java-api</artifactId>
 	<version>0.9.0</version>
 	<type>jar</type>
@@ -535,7 +535,7 @@ You will also need to download the following dependencies:
 ```
 The MIT License (MIT)
 
-Copyright (c) 2016 synapticloopltd
+Copyright (c) 2017 synapticloop
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
