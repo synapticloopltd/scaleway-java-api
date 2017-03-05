@@ -24,7 +24,7 @@ import synapticloop.scaleway.api.model.ServerAction;
  * A token request is used to encapsulate the JSON object for creating a token.
  */
 
-public class ActionRequest {
+public class ServerActionRequest {
 	@JsonProperty("action")  private String action;
 
 	/**
@@ -32,7 +32,7 @@ public class ActionRequest {
 	 * 
 	 * @param serverAction The action to perform on the server
 	 */
-	public ActionRequest(ServerAction serverAction) {
+	public ServerActionRequest(ServerAction serverAction) {
 		this.action = serverAction.toString().toLowerCase();
 	}
 }

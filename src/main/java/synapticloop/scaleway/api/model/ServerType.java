@@ -24,5 +24,6 @@ public enum ServerType {
 	@JsonProperty("VC1L")  VC1L,
 	@JsonProperty("C2S")   C2S,
 	@JsonProperty("C2M")   C2M,
-	@JsonProperty("C2L")   C2L;
+	@JsonProperty("C2L")   C2L,
+	@JsonProperty("C1")    C1;
 }

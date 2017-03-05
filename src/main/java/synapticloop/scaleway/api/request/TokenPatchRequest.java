@@ -19,7 +19,8 @@ package synapticloop.scaleway.api.request;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * A token request is used to encapsulate the JSON object for creating a token.
+ * A token patch request is used to encapsulate the JSON object for updating a
+ * token
  */
 
 public class TokenPatchRequest {

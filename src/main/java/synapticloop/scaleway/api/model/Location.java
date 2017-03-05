@@ -26,6 +26,7 @@ public class Location {
 	@JsonProperty("cluster_id") private String clusterID;
 	@JsonProperty("chassis_id") private String chassisId;
 	@JsonProperty("zone_id") private String zoneId;
+	@JsonProperty("blade_id") private String bladeId;
 
 	public String getPlatformID() { return platformID; }
 
@@ -38,4 +39,6 @@ public class Location {
 	public String getChassisId() { return chassisId; }
 
 	public String getZoneId() { return zoneId; }
+
+	public String getBladeId() { return bladeId; }
 }

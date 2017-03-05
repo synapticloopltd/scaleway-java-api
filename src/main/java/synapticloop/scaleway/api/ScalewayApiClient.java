@@ -61,11 +61,11 @@ import synapticloop.scaleway.api.model.Token;
 import synapticloop.scaleway.api.model.User;
 import synapticloop.scaleway.api.model.Volume;
 import synapticloop.scaleway.api.model.VolumeType;
-import synapticloop.scaleway.api.request.ActionRequest;
 import synapticloop.scaleway.api.request.IPPutRequest;
 import synapticloop.scaleway.api.request.IPRequest;
 import synapticloop.scaleway.api.request.RuleRequest;
 import synapticloop.scaleway.api.request.SecurityGroupRequest;
+import synapticloop.scaleway.api.request.ServerActionRequest;
 import synapticloop.scaleway.api.request.ServerDefinitionRequest;
 import synapticloop.scaleway.api.request.TokenPatchRequest;
 import synapticloop.scaleway.api.request.TokenRequest;
@@ -104,10 +104,15 @@ public class ScalewayApiClient {
 	private final CloseableHttpClient httpclient;
 
 	/**
-	 * Instantiate a new API Client for the Scaleway API Provider
+	 * Instantiate a new API Client for the Scaleway API Provider, each API 
+	 * client points to a specific Region.  Once this region is set, it cannot 
+	 * be changed.  Instead instantiate a new API client for the new region,
 	 * 
-	 * @param accessToken the access token
-	 * @param region the region that this should point to
+	 * @param accessToken the access token that is authorised to invoke the API - 
+	 *     see the credentials section: <a href="https://cloud.scaleway.com/#/credentials">https://cloud.scaleway.com/#/credentials</a>
+	 *     for access tokens
+	 * @param region the scaleway datacentre region that this API points to (see 
+	 *     {@link Region} for all of the regions available at the moment)
 	 */
 	public ScalewayApiClient(String accessToken, Region region) {
 		this.accessToken = accessToken;
@@ -124,9 +129,7 @@ public class ScalewayApiClient {
 	 * 
 	 * @return The region that this API is pointing to
 	 */
-	public Region getRegion() {
-		return region;
-	}
+	public Region getRegion() { return region; }
 
 
 	/**
@@ -448,7 +451,7 @@ public class ScalewayApiClient {
 
 		HttpPost request = (HttpPost) buildRequest(Constants.HTTP_METHOD_POST, 
 				new StringBuilder(computeUrl).append(String.format(Constants.PATH_SERVERS_SLASH_ACTION, serverId)).toString(),
-				new ActionRequest(serverAction));
+				new ServerActionRequest(serverAction));
 
 		return(executeAndGetResponse(request, 202, ServerTaskResponse.class).getServerTask());
 	}

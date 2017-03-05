@@ -7,13 +7,14 @@ plugins {
 	id "com.jfrog.bintray" version "1.6"
 	id 'co.riiid.gradle' version '0.4.2'
 	id 'synapticloop.documentr' version '2.7.2'
+	id "synapticloop.copyrightr" version "1.1.2"
 }
 
 group = 'synapticloop'
 archivesBaseName = 'scaleway-java-api'
 description = """A java api for the scaleway service"""
 
-version = '0.9.0'
+version = '0.9.1'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
@@ -24,23 +25,6 @@ repositories {
 	mavenLocal()
 	mavenCentral()
 	jcenter()
-}
-
-configurations.all {
-	resolutionStrategy {
-		failOnVersionConflict()
-		force 'org.slf4j:slf4j-api:1.7.13',
-					'xerces:xmlParserAPIs:2.6.2',
-					'xerces:xercesImpl:2.6.2',
-					'xml-apis:xml-apis:1.0.b2'
-
-		eachDependency {
-			DependencyResolveDetails details ->
-				if (details.requested.group == 'junit') {
-					details.useVersion '4.12'
-				}
-		}
-	}
 }
 
 dependencies {
@@ -61,6 +45,23 @@ dependencies {
 	testRuntime 'junit:junit:4.12'
 	testRuntime 'org.apache.logging.log4j:log4j-slf4j-impl:2.5'
 	testRuntime 'org.apache.logging.log4j:log4j-core:2.5'
+}
+
+configurations.all {
+	resolutionStrategy {
+		failOnVersionConflict()
+		force 'org.slf4j:slf4j-api:1.7.13',
+					'xerces:xmlParserAPIs:2.6.2',
+					'xerces:xercesImpl:2.6.2',
+					'xml-apis:xml-apis:1.0.b2'
+
+		eachDependency {
+			DependencyResolveDetails details ->
+				if (details.requested.group == 'junit') {
+					details.useVersion '4.12'
+				}
+		}
+	}
 }
 /*
  * COBERTURA

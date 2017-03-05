@@ -51,7 +51,9 @@ public class BaseTestUtils {
 			for (int i = 1; i < Integer.MAX_VALUE; i++) {
 				List<Image> images = scalewayApiClient.getAllImages(i, 100).getImages();
 				for (Image image : images) {
-					if("Ubuntu Xenial (16.04 latest)".equals(image.getName())) {
+					if("Ubuntu Xenial (16.04 latest)".equals(image.getName()) &&
+							"x86_64".equals(image.getArch())
+							) {
 						this.ubuntuImageId = image.getId();
 						return(this.ubuntuImageId);
 					}
