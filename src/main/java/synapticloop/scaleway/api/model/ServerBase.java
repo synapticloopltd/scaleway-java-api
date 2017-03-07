@@ -29,7 +29,6 @@ public class ServerBase {
 	@JsonProperty("commercial_type")     private ServerType serverType;
 	@JsonProperty("dynamic_ip_required") private boolean isDynamicIpRequired;
 	@JsonProperty("enable_ipv6")         private boolean isIPv6Enabled;
-	@JsonProperty("public_ip")           private IP publicIP;
 	@JsonProperty("security_group")      private SecurityGroup securityGroup;
 	@JsonProperty("bootscript")          private BootScript bootscript;
 
@@ -46,8 +45,6 @@ public class ServerBase {
 	public boolean getIsDynamicIpRequired() { return isDynamicIpRequired; }
 
 	public boolean getIsIpv6Enabled() { return isIPv6Enabled; }
-
-	public IP getPublicIP() { return publicIP; }
 
 	public Map<String, Volume> getVolumes() { return volumes; }
 

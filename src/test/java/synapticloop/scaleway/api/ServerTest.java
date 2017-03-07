@@ -26,7 +26,7 @@ public class ServerTest extends BaseTestUtils {
 	public void testCreateAndDeleteServer() throws ScalewayApiException {
 		String organizationId = getOrganizationId();
 
-		Server server = scalewayApiClient.createServer("scaleway-java-api-test-server", getUbuntuImage(), organizationId, ServerType.VC1S, new String[] {"scaleway", "java", "api", "server"});
+		Server server = scalewayApiClient.createServer("scaleway-java-api-test-server", getUbuntuX86_64Image(), organizationId, ServerType.VC1S, new String[] {"scaleway", "java", "api", "server"});
 
 		Server returnedServer = scalewayApiClient.getServer(server.getId());
 		assertEquals(server.getArch(), returnedServer.getArch());
@@ -38,7 +38,7 @@ public class ServerTest extends BaseTestUtils {
 		assertEquals(server.getName(), returnedServer.getName());
 		assertEquals(server.getOrganizationId(), returnedServer.getOrganizationId());
 		assertEquals(server.getPrivateIp(), returnedServer.getPrivateIp());
-		assertEquals(server.getPublicIP(), returnedServer.getPublicIP());
+		assertEquals(server.getPublicIp(), returnedServer.getPublicIp());
 		assertEquals(server.getStateDetail(), returnedServer.getStateDetail());
 
 		scalewayApiClient.deleteServer(server.getId());
@@ -74,7 +74,7 @@ public class ServerTest extends BaseTestUtils {
 	@Test
 	public void testGetServerActions() throws ScalewayApiException {
 		String organizationId = getOrganizationId();
-		Server server = scalewayApiClient.createServer("scaleway-java-api-test-server", getUbuntuImage(), organizationId, ServerType.VC1S, new String[] {"scaleway", "java", "api", "server"});
+		Server server = scalewayApiClient.createServer("scaleway-java-api-test-server", getUbuntuX86_64Image(), organizationId, ServerType.VC1S, new String[] {"scaleway", "java", "api", "server"});
 
 		List<ServerAction> serverActions = scalewayApiClient.getServerActions(server.getId());
 		assertNotNull(serverActions);
@@ -95,7 +95,7 @@ public class ServerTest extends BaseTestUtils {
 	public void testPowerCycleServer() throws ScalewayApiException {
 		String organizationId = scalewayApiClient.getAllOrganizations().get(0).getId();
 		Server server = scalewayApiClient.createServer("scaleway-java-api-test-server", 
-				getUbuntuImage(), 
+				getUbuntuX86_64Image(), 
 				organizationId, 
 				ServerType.VC1S, 
 				new String[] {"scaleway", "java", "api", "server"});
