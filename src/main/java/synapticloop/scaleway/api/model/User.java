@@ -36,6 +36,7 @@ public class User {
 	@JsonProperty("organizations")      private List<Organization> organizations;
 	@JsonProperty("roles")              private List<Role> roles;
 	@JsonProperty("ssh_public_keys")    private List<UserSshPublicKey> sshPublicKeys;
+	@JsonProperty("double_auth_enabled") private String doubleAuthEnabled;
 
 	public String getId() { return id; }
 
