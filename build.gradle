@@ -14,7 +14,7 @@ group = 'synapticloop'
 archivesBaseName = 'scaleway-java-api'
 description = """A java api for the scaleway service"""
 
-version = '0.11.0'
+version = '0.12.1'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
@@ -30,12 +30,12 @@ repositories {
 dependencies {
 	runtime 'org.apache.httpcomponents:httpclient:4.5.1'
 	runtime 'commons-io:commons-io:2.4'
-	runtime 'com.fasterxml.jackson.core:jackson-databind:2.8.5'
+	runtime 'com.fasterxml.jackson.core:jackson-databind:2.8.8'
 	runtime 'org.slf4j:slf4j-api:1.7.13'
 
 	compile 'org.apache.httpcomponents:httpclient:4.5.1'
 	compile 'commons-io:commons-io:2.4'
-	compile 'com.fasterxml.jackson.core:jackson-databind:2.8.5'
+	compile 'com.fasterxml.jackson.core:jackson-databind:2.8.8'
 	compile 'org.slf4j:slf4j-api:1.7.13'
 
 	testCompile 'junit:junit:4.12'

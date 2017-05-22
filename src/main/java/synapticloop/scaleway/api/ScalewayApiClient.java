@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import com.fasterxml.jackson.core.Version;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -122,6 +123,14 @@ public class ScalewayApiClient {
 		HttpClientBuilder httpBuilder = HttpClients.custom();
 		httpBuilder.setUserAgent(Constants.USER_AGENT);
 		this.httpclient = httpBuilder.build();
+
+		Version currentJacksonVersion = new ObjectMapper().version();
+		Version earliestSupportedVersion = new Version(2, 8, 7, null, currentJacksonVersion.getGroupId(), currentJacksonVersion.getArtifactId());
+		int versionCompared = currentJacksonVersion.compareTo(earliestSupportedVersion);
+		if (versionCompared < 0) {
+			LOGGER.error("Jackson version: {}, version compared: {}", currentJacksonVersion.toString(), versionCompared);
+			throw new RuntimeException("Sorry, scaleway-api-client requires Jackson version 2.8.7 due to bugs in earlier versions.");
+		}
 	}
 
 	/**

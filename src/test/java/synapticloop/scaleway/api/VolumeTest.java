@@ -13,7 +13,7 @@ public class VolumeTest extends BaseTestUtils {
 
 	@Test
 	public void testCreateAndDeleteVolume() throws ScalewayApiException {
-		Volume volume = scalewayApiClient.createVolume("scaleway-java-api-volume", getOrganizationId(), 1000000000, VolumeType.l_ssd);
+		Volume volume = scalewayApiClient.createVolume("scaleway-java-api-volume", getOrganizationId(), 1000000000, VolumeType.L_SSD);
 		Volume volumeInfo = scalewayApiClient.getVolume(volume.getId());
 
 		assertEquals(volume.getId(), volumeInfo.getId());

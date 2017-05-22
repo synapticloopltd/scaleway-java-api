@@ -19,8 +19,8 @@ package synapticloop.scaleway.api.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public enum State {
-	@JsonProperty("running")   running,
-	@JsonProperty("stopped")   stopped,
-	@JsonProperty("stopping")  stopping,
-	@JsonProperty("starting")  starting;
+	@JsonProperty("running")   RUNNING,
+	@JsonProperty("stopped")   STOPPED,
+	@JsonProperty("stopping")  STOPPING,
+	@JsonProperty("starting")  STARTING;
 }
