@@ -46,7 +46,7 @@ public class BaseTestUtils {
 		return(organizationId);
 	}
 
-	protected String getUbuntuImage() throws ScalewayApiException {
+	protected String getUbuntuX86_64Image() throws ScalewayApiException {
 		if(null == ubuntuImageId) {
 			for (int i = 1; i < Integer.MAX_VALUE; i++) {
 				List<Image> images = scalewayApiClient.getAllImages(i, 100).getImages();

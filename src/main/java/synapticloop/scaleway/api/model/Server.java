@@ -51,6 +51,8 @@ public class Server extends ServerBase {
 
 	public String getPrivateIp() { return privateIp; }
 
+	public IP getPublicIp() { return publicIp; }
+
 	public State getState() { return state; }
 
 	public String getStateDetail() { return stateDetail; }

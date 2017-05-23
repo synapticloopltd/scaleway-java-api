@@ -436,9 +436,9 @@ repositories {
 
 ```
 dependencies {
-	runtime(group: 'synapticloopltd', name: 'scaleway-java-api', version: '0.9.2', ext: 'jar')
+	runtime(group: 'synapticloopltd', name: 'scaleway-java-api', version: '0.10.2', ext: 'jar')
 
-	compile(group: 'synapticloopltd', name: 'scaleway-java-api', version: '0.9.2', ext: 'jar')
+	compile(group: 'synapticloopltd', name: 'scaleway-java-api', version: '0.10.2', ext: 'jar')
 }
 ```
 
@@ -450,9 +450,9 @@ or, more simply for versions of gradle greater than 2.1
 
 ```
 dependencies {
-	runtime 'synapticloopltd:scaleway-java-api:0.9.2'
+	runtime 'synapticloopltd:scaleway-java-api:0.10.2'
 
-	compile 'synapticloopltd:scaleway-java-api:0.9.2'
+	compile 'synapticloopltd:scaleway-java-api:0.10.2'
 }
 ```
 
@@ -470,7 +470,7 @@ dependencies {
 <dependency>
 	<groupId>synapticloopltd</groupId>
 	<artifactId>scaleway-java-api</artifactId>
-	<version>0.9.2</version>
+	<version>0.10.2</version>
 	<type>jar</type>
 </dependency>
 ```
