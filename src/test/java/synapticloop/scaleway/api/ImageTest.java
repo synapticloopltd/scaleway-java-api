@@ -20,7 +20,9 @@ public class ImageTest extends BaseTestUtils {
 		Image singleImage = scalewayApiClient.getImage(image.getId());
 		assertEquals(image.getArch(), singleImage.getArch());
 		assertEquals(image.getCreationDate(), singleImage.getCreationDate());
-		assertEquals(image.getDefaultBootscript().getId(), singleImage.getDefaultBootscript().getId());
+		if(null != image.getDefaultBootscript()) {
+			assertEquals(image.getDefaultBootscript().getId(), singleImage.getDefaultBootscript().getId());
+		}
 		assertEquals(image.getExtraVolumes(), singleImage.getExtraVolumes());
 		assertEquals(image.getFromImage(), singleImage.getFromImage());
 		assertEquals(image.getFromServer(), singleImage.getFromServer());

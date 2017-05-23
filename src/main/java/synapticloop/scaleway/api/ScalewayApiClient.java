@@ -1065,6 +1065,9 @@ public class ScalewayApiClient {
 	private <T> T parseJson(HttpEntity responseEntity, Class<T> type) throws IOException {
 		String encoding = responseEntity.getContentEncoding() != null ? responseEntity.getContentEncoding().getValue() : "UTF-8";
 		String jsonString = IOUtils.toString(responseEntity.getContent(), encoding);
+
+		LOGGER.debug("JSON response was '{}'", jsonString);
+
 		try {
 			return initializeObjectMapperJson().readValue(jsonString, type);
 		} catch (Exception ex) {

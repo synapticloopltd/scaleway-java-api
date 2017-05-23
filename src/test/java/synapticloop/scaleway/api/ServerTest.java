@@ -114,7 +114,7 @@ public class ServerTest extends BaseTestUtils {
 			} catch (InterruptedException ex) {
 				LOGGER.warn("The sleeping thread was interrupted, continuing...");
 			}
-			if(taskStatus.getStatus() == ServerTaskStatus.SUCCESS) {
+			if(taskStatus.getStatus() == ServerTaskStatus.success) {
 				isStarted = true;
 			}
 		}
@@ -130,7 +130,7 @@ public class ServerTest extends BaseTestUtils {
 				LOGGER.warn("The sleeping thread was interrupted, continuing...");
 			}
 
-			if(taskStatus.getStatus() == ServerTaskStatus.SUCCESS) {
+			if(taskStatus.getStatus() == ServerTaskStatus.success) {
 				isEnded = true;
 			}
 		}
