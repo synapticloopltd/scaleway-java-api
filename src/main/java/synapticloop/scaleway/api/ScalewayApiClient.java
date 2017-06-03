@@ -247,26 +247,35 @@ public class ScalewayApiClient {
 	}
 
 	/*
-	 * Update a server
-	 * 
-	 * @param server The server with the updated information
-	 * 
-	 * @return The returned server object
-	 * 
-	 * @throws ScalewayApiException If there was an error with the API call
-	 *
+     * Update a server
+     *
+     * @param server The server with the updated information
+     *
+     * @return The returned server object
+     *
+     * @throws ScalewayApiException If there was an error with the API call
+     */
 	public Server updateServer(Server server) throws ScalewayApiException {
-		HttpPut request = (HttpPut) buildRequest(Constants.HTTP_METHOD_PUT, computeUrl, String.format(PATH_SERVERS_SLASH, server.getId()));
+		HttpPut request = (HttpPut) buildRequest(Constants.HTTP_METHOD_PUT, new StringBuilder(computeUrl).append(String.format(Constants.PATH_SERVERS_SLASH, server.getId())).toString());
+
+		// cleanup the server object, since we can't send all keys
+		server.cleanForPut();
+		server.getImage().cleanForPut();
+		for (String volumeKey : server.getVolumes().keySet()) {
+			Volume volume = server.getVolumes().get(volumeKey);
+			volume.cleanForPut();
+		}
+		server.getSecurityGroup().cleanForPut();
+
 
 		try {
 			StringEntity entity = new StringEntity(serializeObject(server));
 			request.setEntity(entity);
-			return(executeAndGetResponse(request, 200, ServerResponse.class).getServer());
+			return (executeAndGetResponse(request, 200, ServerResponse.class).getServer());
 		} catch (UnsupportedEncodingException | JsonProcessingException ex) {
 			throw new ScalewayApiException(ex);
 		}
 	}
-	 */
 
 	/**
 	 * Get a list of all of the available images - with the results coming back 

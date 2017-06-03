@@ -26,11 +26,11 @@ public class ServerBase {
 	@JsonProperty("organization")        public String organizationId;
 	@JsonProperty("volumes")             public Map<String, Volume> volumes;
 	@JsonProperty("tags")                public List<String> tags;
-	@JsonProperty("commercial_type")     private ServerType serverType;
-	@JsonProperty("dynamic_ip_required") private boolean isDynamicIpRequired;
-	@JsonProperty("enable_ipv6")         private boolean isIPv6Enabled;
-	@JsonProperty("security_group")      private SecurityGroup securityGroup;
-	@JsonProperty("bootscript")          private BootScript bootscript;
+	@JsonProperty("commercial_type")     protected ServerType serverType;
+	@JsonProperty("dynamic_ip_required") protected Boolean isDynamicIpRequired;
+	@JsonProperty("enable_ipv6")         protected Boolean isIPv6Enabled;
+	@JsonProperty("security_group")      protected SecurityGroup securityGroup;
+	@JsonProperty("bootscript")          protected BootScript bootscript;
 
 	public String getName() { return name; }
 
@@ -42,9 +42,9 @@ public class ServerBase {
 
 	public ServerType getServerType() { return serverType; }
 
-	public boolean getIsDynamicIpRequired() { return isDynamicIpRequired; }
+	public Boolean getIsDynamicIpRequired() { return isDynamicIpRequired; }
 
-	public boolean getIsIpv6Enabled() { return isIPv6Enabled; }
+	public Boolean getIsIpv6Enabled() { return isIPv6Enabled; }
 
 	public Map<String, Volume> getVolumes() { return volumes; }
 
