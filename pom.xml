@@ -1,59 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
+
+    <version>1.13.0</version>
+
     <groupId>com.github.rpardini</groupId>
     <artifactId>scaleway-java-api</artifactId>
-    <version>0.13.0-SNAPSHOT</version>
 
     <packaging>jar</packaging>
     <description>Full fork of synapticloop</description>
-
-    <!--
-        dependencies {
-        runtime 'org.apache.httpcomponents:httpclient:4.5.1'
-        runtime 'commons-io:commons-io:2.4'
-        runtime 'com.fasterxml.jackson.core:jackson-databind:2.8.8'
-        runtime 'org.slf4j:slf4j-api:1.7.13'
-
-        compile 'org.apache.httpcomponents:httpclient:4.5.1'
-        compile 'commons-io:commons-io:2.4'
-        compile 'com.fasterxml.jackson.core:jackson-databind:2.8.8'
-        compile 'org.slf4j:slf4j-api:1.7.13'
-
-        testCompile 'junit:junit:4.12'
-        testCompile 'org.apache.logging.log4j:log4j-slf4j-impl:2.5'
-        testCompile 'org.apache.logging.log4j:log4j-core:2.5'
-
-        testRuntime 'junit:junit:4.12'
-        testRuntime 'org.apache.logging.log4j:log4j-slf4j-impl:2.5'
-        testRuntime 'org.apache.logging.log4j:log4j-core:2.5'
-        }
-    -->
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.7</java.version>
         <skipTests>true</skipTests>
     </properties>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.1</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.5.1</version>
+            <version>4.5.3</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -68,7 +35,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.13</version>
+            <version>1.7.25</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -78,7 +45,47 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <extensions>
+            <extension>
+                <groupId>org.kuali.maven.wagons</groupId>
+                <artifactId>maven-s3-wagon</artifactId>
+                <version>1.2.1</version>
+            </extension>
+        </extensions>
 
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.6.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.4</version>
+                <executions>
+                    <execution>
+                        <id>create-source-jar</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+
+    <distributionManagement>
+        <repository>
+            <id>s3.release</id>
+            <url>s3://ceapmaven-prod-repo/release</url>
+        </repository>
+    </distributionManagement>
 
 
 </project>
