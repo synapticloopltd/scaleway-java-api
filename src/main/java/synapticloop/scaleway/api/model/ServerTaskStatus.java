@@ -22,5 +22,6 @@ public enum ServerTaskStatus {
 	@JsonProperty("pending")  PENDING,
 	@JsonProperty("running")  RUNNING,
 	@JsonProperty("started")  STARTED,
+	@JsonProperty("failure")  FAILURE,
 	@JsonProperty("success")  SUCCESS;
 }
