@@ -16,10 +16,12 @@ package synapticloop.scaleway.api.response;
  * this source code or binaries.
  */
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import synapticloop.scaleway.api.model.IP;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class IPResponse {
 	@JsonProperty("ip")  private IP ip;
 

@@ -18,10 +18,12 @@ package synapticloop.scaleway.api.response;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import synapticloop.scaleway.api.model.Server;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ServersResponse extends BasePaginationResponse {
 	@JsonProperty("servers")  public List<Server> servers;
 

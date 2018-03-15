@@ -18,10 +18,12 @@ package synapticloop.scaleway.api.response;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import synapticloop.scaleway.api.model.SshPublicKey;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SshPublicKeyResponse {
 	@JsonProperty("ssh_public_keys") private List<SshPublicKey> sshPublicKeys;
 

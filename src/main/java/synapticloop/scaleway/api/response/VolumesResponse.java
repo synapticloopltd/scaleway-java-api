@@ -18,10 +18,12 @@ package synapticloop.scaleway.api.response;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import synapticloop.scaleway.api.model.Volume;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class VolumesResponse extends BasePaginationResponse {
 	@JsonProperty("volumes")  private List<Volume> volumes;
 

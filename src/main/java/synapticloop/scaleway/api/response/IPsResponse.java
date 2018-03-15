@@ -34,10 +34,12 @@ import java.util.List;
  * this source code or binaries.
  */
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import synapticloop.scaleway.api.model.IP;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class IPsResponse extends BasePaginationResponse {
 	@JsonProperty("ips")  private List<IP> ips;
 

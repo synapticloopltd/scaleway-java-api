@@ -35,6 +35,7 @@ import java.util.regex.Pattern;
  * this source code or binaries.
  */
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.http.Header;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +50,7 @@ import org.slf4j.LoggerFactory;
  * </ul>
  *
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class BasePaginationResponse {
 	private static final Logger LOGGER = LoggerFactory.getLogger(BasePaginationResponse.class);
 

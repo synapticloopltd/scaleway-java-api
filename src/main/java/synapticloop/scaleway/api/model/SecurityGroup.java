@@ -24,9 +24,9 @@ public class SecurityGroup {
 	@JsonProperty("id")    private String id;
 	@JsonProperty("name")  private String name;
 	@JsonProperty("description")  private String description;
-	@JsonProperty("enable_default_security")  private boolean enableDefaultSecurity;
+	@JsonProperty("enable_default_security")  private Boolean enableDefaultSecurity;
 	@JsonProperty("organization")  private String organizationId;
-	@JsonProperty("organization_default")  private boolean organizationDefault;
+	@JsonProperty("organization_default")  private Boolean organizationDefault;
 	@JsonProperty("servers")  private List<Server> servers;
 
 	public String getId() { return this.id; }
@@ -35,13 +35,17 @@ public class SecurityGroup {
 
 	public String getDescription() { return this.description; }
 
-	public boolean getEnableDefaultSecurity() { return this.enableDefaultSecurity; }
+	public Boolean getEnableDefaultSecurity() { return this.enableDefaultSecurity; }
 
 	public String getOrganizationId() { return this.organizationId; }
 
-	public boolean getOrganizationDefault() { return this.organizationDefault; }
+	public Boolean getOrganizationDefault() { return this.organizationDefault; }
 
 	public List<Server> getServers() { return this.servers; }
 
 
+	public void cleanForPut() {
+		this.enableDefaultSecurity = null;
+		this.organizationDefault = null;
+	}
 }

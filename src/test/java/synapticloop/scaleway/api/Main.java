@@ -56,7 +56,7 @@ public class Main {
 			} catch (InterruptedException ex) {
 				System.err.println("The sleeping thread was interrupted, continuing...");
 			}
-			if(taskStatus.getStatus() == ServerTaskStatus.success) {
+			if(taskStatus.getStatus() == ServerTaskStatus.SUCCESS) {
 				isStarted = true;
 			}
 		}
@@ -73,7 +73,7 @@ public class Main {
 				System.err.println("The sleeping thread was interrupted, continuing...");
 			}
 
-			if(taskStatus.getStatus() == ServerTaskStatus.success) {
+			if(taskStatus.getStatus() == ServerTaskStatus.SUCCESS) {
 				isEnded = true;
 			}
 		}

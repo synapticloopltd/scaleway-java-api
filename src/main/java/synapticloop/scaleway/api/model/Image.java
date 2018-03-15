@@ -84,4 +84,8 @@ public class Image {
 	public String toString() {
 		return "Image [id=" + this.id + ", modificationDate=" + this.modificationDate + ", creationDate=" + this.creationDate + ", defaultbootscript=" + this.defaultBootscript + ", organization=" + this.organization + ", arch=" + this.arch + ", rootVolume=" + this.rootVolume + ", name=" + this.name + ", extraVolumes=" + this.extraVolumes + ", isPublicImage=" + this.isPublicImage + ", fromImage=" + this.fromImage + ", fromServer=" + this.fromServer + ", marketplaceKey=" + this.marketplaceKey + "]";
 	}
+
+	public void cleanForPut() {
+		this.extraVolumes = null;
+	}
 }

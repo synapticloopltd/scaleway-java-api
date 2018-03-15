@@ -16,6 +16,7 @@ package synapticloop.scaleway.api.response;
  * this source code or binaries.
  */
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import synapticloop.scaleway.api.model.Image;
@@ -24,6 +25,7 @@ import synapticloop.scaleway.api.model.Image;
  * The image response object which encapsulates the image POJO
  *
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ImageResponse {
 	@JsonProperty("image")  private Image image;
 

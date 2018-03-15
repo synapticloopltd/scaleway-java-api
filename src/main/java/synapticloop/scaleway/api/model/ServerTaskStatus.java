@@ -19,8 +19,9 @@ package synapticloop.scaleway.api.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public enum ServerTaskStatus {
-	@JsonProperty("pending")  pending,
-	@JsonProperty("running")  running,
-	@JsonProperty("started")  started,
-	@JsonProperty("success")  success;
+	@JsonProperty("pending")  PENDING,
+	@JsonProperty("running")  RUNNING,
+	@JsonProperty("started")  STARTED,
+	@JsonProperty("failure")  FAILURE,
+	@JsonProperty("success")  SUCCESS;
 }
