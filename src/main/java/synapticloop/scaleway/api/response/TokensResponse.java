@@ -34,10 +34,12 @@ import java.util.List;
  * this source code or binaries.
  */
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import synapticloop.scaleway.api.model.Token;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TokensResponse extends BasePaginationResponse {
 	@JsonProperty("tokens")  private List<Token> tokens;
 

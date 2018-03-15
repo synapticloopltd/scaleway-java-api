@@ -16,10 +16,12 @@ package synapticloop.scaleway.api.response;
  * this source code or binaries.
  */
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import synapticloop.scaleway.api.model.ServerTask;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ServerTaskResponse {
 	@JsonProperty("task")  private ServerTask serverTask;
 

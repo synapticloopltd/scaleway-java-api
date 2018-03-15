@@ -18,6 +18,7 @@ package synapticloop.scaleway.api.response;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import synapticloop.scaleway.api.model.Image;
@@ -26,6 +27,7 @@ import synapticloop.scaleway.api.model.Image;
  * The images response object which encapsulates the paginated list of images
  *
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ImagesResponse extends BasePaginationResponse {
 	@JsonProperty("images")  private List<Image> images;
 

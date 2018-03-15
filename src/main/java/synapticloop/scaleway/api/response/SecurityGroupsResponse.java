@@ -34,10 +34,12 @@ import java.util.List;
  * this source code or binaries.
  */
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import synapticloop.scaleway.api.model.SecurityGroup;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SecurityGroupsResponse extends BasePaginationResponse {
 	@JsonProperty("security_groups")  private List<SecurityGroup> securityGroups;
 
